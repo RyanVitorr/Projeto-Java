@@ -459,7 +459,7 @@ $(document).ready(function() {
                     </tr>
                     <tr class="customer-table" style="display: none;">
                         <td colspan="8">
-                            <table class="customer-list-table">
+                            <table class="table customer-list-table">
                                 <thead>
                                     <tr>
                                         <th>Nome do livro</th>
