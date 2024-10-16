@@ -15,8 +15,11 @@ $(document).ready(function() {
                         <label for="name">Nome:</label>
                         <input type="text" id="name" name="name" required><br>
 
-                        <label for="book-author">Cpf:</label>
-                        <input type="text" id="book-author" name="book-author" required><br>
+                        <label for="cpf">Cpf:</label>
+                        <input type="text" id="cpf" name="cpf" required><br>
+
+                        <label for="telefone">Telefone:</label>
+                        <input type="number" id="book-quantity-available" name="telefone" required><br>
 
                         <label for="genre">Gênero:</label>
                         <input type="text" id="genre" name="genre" required><br>
@@ -25,13 +28,7 @@ $(document).ready(function() {
                         <input type="text" id="age" name="age" required><br>
 
                         <label for="endereco">Endereço:</label>
-                        <input type="text" id="book-description" name="book-description" required><br>
-
-                        <label for="book-quantity-available">Qtd. Disponível:</label>
-                        <input type="number" id="book-quantity-available" name="book-quantity-available" required><br>
-
-                        <label for="book-quantity-total">Qtd. Total:</label>
-                        <input type="number" id="book-quantity-total" name="book-quantity-total" required><br>
+                        <input type="text" id="endereco" name="endereco" required><br>
 
                         <button type="submit">Adicionar</button>
                     </form>
@@ -54,11 +51,10 @@ $(document).ready(function() {
                             <tr>
                                 <th>Nome</th>
                                 <th>Cpf</th>
+                                <th>Telefone</th>
                                 <th>Gênero</th>
                                 <th>Idade</th>
                                 <th>Endereço</th>
-                                <th>Qtd. Disponível</th>
-                                <th>Qtd. Total</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
@@ -135,305 +131,285 @@ $(document).ready(function() {
     let clientDataArrayApi = [
         {
             id: 1,
-            name: 'Livro A',
-            author: 'Autor A',
-            genre: 'Gênero A',
-            age: '12+',
-            description: 'Descrição do Livro A',
-            quantityAvailable: 5,
-            quantityTotal: 10
+            name: 'Ana Silva',
+            cpf: '123.456.789-00',
+            telefone: '(11) 98765-4321',
+            genre: 'Romance',
+            age: '18+',
+            endereco: 'Rua das Flores, 123 - São Paulo, SP',
         },
         {
             id: 2,
-            name: 'Livro B',
-            author: 'Autor B',
-            genre: 'Gênero B',
+            name: 'Bruno Pereira',
+            cpf: '321.654.987-11',
+            telefone: '(21) 98711-1234',
+            genre: 'Ficção',
             age: '16+',
-            description: 'Descrição do Livro B',
-            quantityAvailable: 3,
-            quantityTotal: 7
+            endereco: 'Avenida Paulista, 1000 - São Paulo, SP',
         },
         {
             id: 3,
-            name: 'Livro C',
-            author: 'Autor C',
-            genre: 'Gênero C',
-            age: '16+',
-            description: 'Descrição do Livro C',
-            quantityAvailable: 4,
-            quantityTotal: 9
+            name: 'Carlos Alberto',
+            cpf: '987.654.321-22',
+            telefone: '(11) 91234-5678',
+            genre: 'Biografia',
+            age: '14+',
+            endereco: 'Rua Augusta, 500 - São Paulo, SP',
         },
         {
             id: 4,
-            name: 'Livro D',
-            author: 'Autor D',
-            genre: 'Gênero D',
-            age: '16+',
-            description: 'Descrição do Livro D',
-            quantityAvailable: 2,
-            quantityTotal: 5
+            name: 'Daniela Souza',
+            cpf: '654.321.987-33',
+            telefone: '(31) 98777-5566',
+            genre: 'Mistério',
+            age: '12+',
+            endereco: 'Rua XV de Novembro, 70 - Curitiba, PR',
         },
         {
             id: 5,
-            name: 'Livro E',
-            author: 'Autor E',
-            genre: 'Gênero E',
-            age: '12+',
-            description: 'Descrição do Livro E',
-            quantityAvailable: 6,
-            quantityTotal: 8
+            name: 'Eduardo Martins',
+            cpf: '789.456.123-44',
+            telefone: '(21) 98765-9999',
+            genre: 'Aventura',
+            age: '18+',
+            endereco: 'Avenida Atlântica, 1010 - Rio de Janeiro, RJ',
         },
         {
             id: 6,
-            name: 'Livro F',
-            author: 'Autor F',
-            genre: 'Gênero F',
-            age: '16+',
-            description: 'Descrição do Livro F',
-            quantityAvailable: 1,
-            quantityTotal: 3
+            name: 'Fernanda Castro',
+            cpf: '123.789.456-55',
+            telefone: '(71) 99988-7766',
+            genre: 'História',
+            age: '10+',
+            endereco: 'Rua das Acácias, 33 - Belo Horizonte, MG',
         },
         {
             id: 7,
-            name: 'Livro G',
-            author: 'Autor G',
-            genre: 'Gênero G',
-            age: '12+',
-            description: 'Descrição do Livro G',
-            quantityAvailable: 4,
-            quantityTotal: 6
+            name: 'Gabriel Oliveira',
+            cpf: '321.987.654-66',
+            telefone: '(51) 98765-4321',
+            genre: 'Ciência',
+            age: '16+',
+            endereco: 'Rua São João, 250 - Porto Alegre, RS',
         },
         {
             id: 8,
-            name: 'Livro H',
-            author: 'Autor H',
-            genre: 'Gênero H',
-            age: '16+',
-            description: 'Descrição do Livro H',
-            quantityAvailable: 3,
-            quantityTotal: 4
+            name: 'Helena Costa',
+            cpf: '456.123.789-77',
+            telefone: '(41) 99999-1234',
+            genre: 'Fantasia',
+            age: '18+',
+            endereco: 'Avenida Brasil, 1000 - Brasília, DF',
         },
         {
             id: 9,
-            name: 'Livro I',
-            author: 'Autor I',
-            genre: 'Gênero I',
+            name: 'Isabela Ribeiro',
+            cpf: '789.321.654-88',
+            telefone: '(71) 98888-1111',
+            genre: 'Humor',
             age: '12+',
-            description: 'Descrição do Livro I',
-            quantityAvailable: 5,
-            quantityTotal: 7
+            endereco: 'Rua da Paz, 440 - Salvador, BA',
         },
         {
             id: 10,
-            name: 'Livro J',
-            author: 'Autor J',
-            genre: 'Gênero J',
-            age: '16+',
-            description: 'Descrição do Livro J',
-            quantityAvailable: 2,
-            quantityTotal: 4
+            name: 'João Mendes',
+            cpf: '654.987.321-99',
+            telefone: '(81) 98777-2233',
+            genre: 'Suspense',
+            age: '14+',
+            endereco: 'Avenida Boa Viagem, 300 - Recife, PE',
         },
         {
             id: 11,
-            name: 'Livro K',
-            author: 'Autor K',
-            genre: 'Gênero K',
-            age: '12+',
-            description: 'Descrição do Livro K',
-            quantityAvailable: 6,
-            quantityTotal: 8
+            name: 'Karen Dias',
+            cpf: '123.456.123-00',
+            telefone: '(48) 99888-6677',
+            genre: 'Terror',
+            age: '16+',
+            endereco: 'Rua das Laranjeiras, 720 - Florianópolis, SC',
         },
         {
             id: 12,
-            name: 'Livro L',
-            author: 'Autor L',
-            genre: 'Gênero L',
-            age: '16+',
-            description: 'Descrição do Livro L',
-            quantityAvailable: 1,
-            quantityTotal: 2
+            name: 'Leonardo Nunes',
+            cpf: '123.654.987-01',
+            telefone: '(11) 91122-3344',
+            genre: 'Romance',
+            age: '18+',
+            endereco: 'Rua das Palmeiras, 900 - São Paulo, SP',
         },
         {
             id: 13,
-            name: 'Livro M',
-            author: 'Autor M',
-            genre: 'Gênero M',
+            name: 'Mariana Lima',
+            cpf: '222.333.444-02',
+            telefone: '(61) 99999-4321',
+            genre: 'Ficção',
             age: '12+',
-            description: 'Descrição do Livro M',
-            quantityAvailable: 4,
-            quantityTotal: 5
+            endereco: 'Avenida Central, 100 - Brasília, DF',
         },
         {
             id: 14,
-            name: 'Livro N',
-            author: 'Autor N',
-            genre: 'Gênero N',
-            age: '16+',
-            description: 'Descrição do Livro N',
-            quantityAvailable: 3,
-            quantityTotal: 6
+            name: 'Nicolas Rocha',
+            cpf: '333.444.555-03',
+            telefone: '(51) 91111-8888',
+            genre: 'Biografia',
+            age: '14+',
+            endereco: 'Rua Flores do Campo, 500 - Porto Alegre, RS',
         },
         {
             id: 15,
-            name: 'Livro O',
-            author: 'Autor O',
-            genre: 'Gênero O',
-            age: '12+',
-            description: 'Descrição do Livro O',
-            quantityAvailable: 2,
-            quantityTotal: 3
+            name: 'Olivia Faria',
+            cpf: '444.555.666-04',
+            telefone: '(21) 98766-3322',
+            genre: 'Mistério',
+            age: '16+',
+            endereco: 'Avenida Maracanã, 300 - Rio de Janeiro, RJ',
         },
         {
             id: 16,
-            name: 'Livro P',
-            author: 'Autor P',
-            genre: 'Gênero P',
-            age: '16+',
-            description: 'Descrição do Livro P',
-            quantityAvailable: 5,
-            quantityTotal: 9
+            name: 'Paulo Guedes',
+            cpf: '555.666.777-05',
+            telefone: '(71) 98888-2244',
+            genre: 'Aventura',
+            age: '18+',
+            endereco: 'Rua Nova Esperança, 44 - Salvador, BA',
         },
         {
             id: 17,
-            name: 'Livro Q',
-            author: 'Autor Q',
-            genre: 'Gênero Q',
+            name: 'Quintino Reis',
+            cpf: '666.777.888-06',
+            telefone: '(81) 98711-5566',
+            genre: 'História',
             age: '12+',
-            description: 'Descrição do Livro Q',
-            quantityAvailable: 4,
-            quantityTotal: 7
+            endereco: 'Avenida Principal, 710 - Recife, PE',
         },
         {
             id: 18,
-            name: 'Livro R',
-            author: 'Autor R',
-            genre: 'Gênero R',
+            name: 'Rafaela Azevedo',
+            cpf: '777.888.999-07',
+            telefone: '(48) 91122-6677',
+            genre: 'Ciência',
             age: '16+',
-            description: 'Descrição do Livro R',
-            quantityAvailable: 3,
-            quantityTotal: 5
+            endereco: 'Rua da Alegria, 55 - Florianópolis, SC',
         },
         {
             id: 19,
-            name: 'Livro S',
-            author: 'Autor S',
-            genre: 'Gênero S',
-            age: '12+',
-            description: 'Descrição do Livro S',
-            quantityAvailable: 6,
-            quantityTotal: 8
+            name: 'Sérgio Lopes',
+            cpf: '888.999.111-08',
+            telefone: '(11) 99999-4433',
+            genre: 'Fantasia',
+            age: '18+',
+            endereco: 'Rua do Sol, 777 - São Paulo, SP',
         },
         {
             id: 20,
-            name: 'Livro T',
-            author: 'Autor T',
-            genre: 'Gênero T',
-            age: '16+',
-            description: 'Descrição do Livro T',
-            quantityAvailable: 2,
-            quantityTotal: 4
+            name: 'Tânia Moraes',
+            cpf: '999.111.222-09',
+            telefone: '(31) 98888-5566',
+            genre: 'Humor',
+            age: '10+',
+            endereco: 'Rua da Amizade, 999 - Belo Horizonte, MG',
         },
         {
             id: 21,
-            name: 'Livro U',
-            author: 'Autor U',
-            genre: 'Gênero U',
-            age: '12+',
-            description: 'Descrição do Livro U',
-            quantityAvailable: 5,
-            quantityTotal: 7
+            name: 'Ulisses Gomes',
+            cpf: '111.222.333-10',
+            telefone: '(41) 99988-6677',
+            genre: 'Suspense',
+            age: '14+',
+            endereco: 'Avenida das Árvores, 500 - Curitiba, PR',
         },
         {
             id: 22,
-            name: 'Livro V',
-            author: 'Autor V',
-            genre: 'Gênero V',
-            age: '16+',
-            description: 'Descrição do Livro V',
-            quantityAvailable: 4,
-            quantityTotal: 6
+            name: 'Vera Lúcia',
+            cpf: '222.333.444-11',
+            telefone: '(21) 91122-3344',
+            genre: 'Terror',
+            age: '18+',
+            endereco: 'Rua do Porto, 888 - Rio de Janeiro, RJ',
         },
         {
             id: 23,
-            name: 'Livro W',
-            author: 'Autor W',
-            genre: 'Gênero W',
-            age: '12+',
-            description: 'Descrição do Livro W',
-            quantityAvailable: 3,
-            quantityTotal: 5
+            name: 'Wagner Campos',
+            cpf: '333.444.555-12',
+            telefone: '(81) 98777-5566',
+            genre: 'Romance',
+            age: '16+',
+            endereco: 'Avenida das Estrelas, 200 - Recife, PE',
         },
         {
             id: 24,
-            name: 'Livro X',
-            author: 'Autor X',
-            genre: 'Gênero X',
-            age: '16+',
-            description: 'Descrição do Livro X',
-            quantityAvailable: 6,
-            quantityTotal: 8
+            name: 'Xavier Andrade',
+            cpf: '444.555.666-13',
+            telefone: '(71) 98888-7766',
+            genre: 'Ficção',
+            age: '12+',
+            endereco: 'Rua da Glória, 150 - Salvador, BA',
         },
         {
             id: 25,
-            name: 'Livro Y',
-            author: 'Autor Y',
-            genre: 'Gênero Y',
-            age: '12+',
-            description: 'Descrição do Livro Y',
-            quantityAvailable: 1,
-            quantityTotal: 3
+            name: 'Yasmin Barreto',
+            cpf: '555.666.777-14',
+            telefone: '(48) 91122-1122',
+            genre: 'Biografia',
+            age: '18+',
+            endereco: 'Avenida das Ondas, 400 - Florianópolis, SC',
         },
         {
             id: 26,
-            name: 'Livro Z',
-            author: 'Autor Z',
-            genre: 'Gênero Z',
+            name: 'Zeca Ferreira',
+            cpf: '666.777.888-15',
+            telefone: '(11) 98777-2233',
+            genre: 'Mistério',
             age: '16+',
-            description: 'Descrição do Livro Z',
-            quantityAvailable: 5,
-            quantityTotal: 9
+            endereco: 'Rua Nova Vida, 600 - São Paulo, SP',
         },
         {
             id: 27,
-            name: 'Livro AA',
-            author: 'Autor AA',
-            genre: 'Gênero AA',
-            age: '12+',
-            description: 'Descrição do Livro AA',
-            quantityAvailable: 4,
-            quantityTotal: 8
+            name: 'Amanda Oliveira',
+            cpf: '777.888.999-16',
+            telefone: '(31) 99999-3344',
+            genre: 'Aventura',
+            age: '14+',
+            endereco: 'Rua das Rosas, 70 - Belo Horizonte, MG',
         },
         {
             id: 28,
-            name: 'Livro AB',
-            author: 'Autor AB',
-            genre: 'Gênero AB',
+            name: 'Bernardo Santos',
+            cpf: '888.999.111-17',
+            telefone: '(41) 91122-5566',
+            genre: 'História',
             age: '16+',
-            description: 'Descrição do Livro AB',
-            quantityAvailable: 2,
-            quantityTotal: 5
+            endereco: 'Rua do Farol, 990 - Curitiba, PR',
         },
         {
             id: 29,
-            name: 'Livro AC',
-            author: 'Autor AC',
-            genre: 'Gênero AC',
-            age: '12+',
-            description: 'Descrição do Livro AC',
-            quantityAvailable: 3,
-            quantityTotal: 6
+            name: 'Cláudia Freitas',
+            cpf: '999.111.222-18',
+            telefone: '(21) 98766-7788',
+            genre: 'Ciência',
+            age: '18+',
+            endereco: 'Avenida do Mar, 999 - Rio de Janeiro, RJ',
         },
         {
             id: 30,
-            name: 'Livro AD',
-            author: 'Autor AD',
-            genre: 'Gênero AD',
-            age: '16+',
-            description: 'Descrição do Livro AD',
-            quantityAvailable: 5,
-            quantityTotal: 7
-        }
+            name: 'Diego Gonçalves',
+            cpf: '111.222.333-19',
+            telefone: '(71) 98888-9999',
+            genre: 'Fantasia',
+            age: '10+',
+            endereco: 'Rua da Tranquilidade, 40 - Salvador, BA',
+        },
+        {
+            id: 31,
+            name: 'Estela Cunha',
+            cpf: '222.333.444-20',
+            telefone: '(81) 98777-3344',
+            genre: 'Humor',
+            age: '12+',
+            endereco: 'Rua da Saudade, 800 - Recife, PE',
+        },
     ];
+    
 
     // Função para renderizar os livros na tabela
     function renderClient(clientItems) {
@@ -443,14 +419,14 @@ $(document).ready(function() {
         let totalPages = Math.ceil(totalRows / rowsPerPage);
     
         // Função para buscar os clientes relacionados ao ID do livro
-        function fetchBookForclients(bookId) {
+        function fetchBookForclients(clientId) {
             return new Promise((resolve) => {
                 // Simulação de dados retornados pela API (exemplo)
                 let fakeBooks = [
-                    { name: "João Silva", cpf: "123.456.789-00", telefone: "9999-9999", endereco: "Rua A, 123", preco: "50", qtdAlugada: 1, dataAluguel: "2024-01-10", dataDevolucao: "2024-01-20" },
-                    { name: "Maria Souza", cpf: "987.654.321-00", telefone: "8888-8888", endereco: "Rua B, 456", preco: "60", qtdAlugada: 2, dataAluguel: "2024-01-15", dataDevolucao: "2024-01-25" }
+                    { name: "Livro A", author: 'Autor A', genre: 'Gênero A', description: 'Descrição do Livro A', preco: "50", qtdAlugada: 1, dataAluguel: "2024-01-10", dataDevolucao: "2024-01-20", atrasado: 'não' },
+                    { name: "Livro B", author: 'Autor B', genre: 'Gênero B', description: 'Descrição do Livro B', preco: "50", qtdAlugada: 1, dataAluguel: "2024-01-10", dataDevolucao: "2024-01-20", atrasado: 'não' }
                 ];
-    
+                
                 // Resolve a promessa com os dados simulados
                 resolve(fakeBooks);
             });
@@ -461,22 +437,21 @@ $(document).ready(function() {
             let start = (page - 1) * rowsPerPage;
             let end = start + rowsPerPage;
             let rowsToDisplay = clientItems.slice(start, end);
-    
+        
             // Limpar a tabela atual
             $(".list").html('');
-    
-            // Adicionar cada livro como uma nova linha na tabela
-            rowsToDisplay.forEach(function(book) {
-                // Cria uma linha para a tabela de livros
+        
+            // Adicionar cada cliente como uma nova linha na tabela
+            rowsToDisplay.forEach(function(client) {
+                // Cria uma linha para a tabela de clientes
                 let row = `
-                    <tr class="row" data-id="${book.id}">   
-                        <td>${book.name}</td>
-                        <td>${book.author}</td>
-                        <td>${book.genre}</td>
-                        <td>${book.age}</td>
-                        <td>${book.description}</td>
-                        <td>${book.quantityAvailable}</td>
-                        <td>${book.quantityTotal}</td>
+                    <tr class="row" data-id="${client.id}">   
+                        <td>${client.name}</td>
+                        <td>${client.cpf}</td>
+                        <td>${client.telefone}</td>
+                        <td>${client.genre}</td>
+                        <td>${client.age}</td>
+                        <td>${client.endereco}</td>
                         <td>
                             <button class="btn-edit">✏️</button>
                             <button class="btn-delete">🗑️</button>
@@ -487,14 +462,15 @@ $(document).ready(function() {
                             <table class="customer-list-table">
                                 <thead>
                                     <tr>
-                                        <th>Nome do Cliente</th>
-                                        <th>CPF</th>
-                                        <th>Telefone</th>
-                                        <th>Endereço</th>
+                                        <th>Nome do livro</th>
+                                        <th>Autor</th>
+                                        <th>Gênero</th>
+                                        <th>Idade indicativa</th>
                                         <th>Preço</th>
                                         <th>Qtd. Alugada</th>
                                         <th>Data de Aluguel</th>
                                         <th>Data de Devolução</th>
+                                        <th>Atrasado</th>
                                     </tr>
                                 </thead>
                                 <tbody class="customer-list"></tbody>
@@ -502,48 +478,50 @@ $(document).ready(function() {
                         </td>
                     </tr>
                 `;
-    
+        
                 $(".list").append(row);
-    
-                // Buscar clientes para cada livro assim que a linha é adicionada
-                fetchBookForclients(book.id).then(clientes => {
-                    // Adicionar clientes à tabela de clientes
-                    let customerRow = $('.row[data-id="' + book.id + '"]').next('.customer-table');
-                    clientes.forEach(cliente => {
-                        let clienteRow = `
+        
+                // Buscar livros para cada cliente assim que a linha é adicionada
+                fetchBookForclients(client.id).then(livros => {
+                    // Adicionar livros à tabela de clientes
+                    let customerRow = $('.row[data-id="' + client.id + '"]').next('.customer-table');
+                    livros.forEach(livro => {
+                        let livroRow = `
                             <tr>
-                                <td>${cliente.name}</td>
-                                <td>${cliente.cpf}</td>
-                                <td>${cliente.telefone}</td>
-                                <td>${cliente.endereco}</td>
-                                <td>${cliente.preco}</td>
-                                <td>${cliente.qtdAlugada}</td>
-                                <td>${cliente.dataAluguel}</td>
-                                <td>${cliente.dataDevolucao}</td>
+                                <td>${livro.name}</td>
+                                <td>${livro.author}</td>
+                                <td>${livro.genre}</td>
+                                <td>${livro.description}</td>
+                                <td>${livro.preco}</td>
+                                <td>${livro.qtdAlugada}</td>
+                                <td>${livro.dataAluguel}</td>
+                                <td>${livro.dataDevolucao}</td>
+                                <td>${livro.atrasado}</td>
                             </tr>
                         `;
-                        customerRow.find('.customer-list').append(clienteRow);
+                        customerRow.find('.customer-list').append(livroRow);
                     });
                 });
             });
-    
+        
             // Atualiza a exibição da página atual
             $("#current-page").text(page);
-    
-            // Adiciona eventos de clique nas linhas dos livros
+        
+            // Adiciona eventos de clique nas linhas dos clientes
             $('.row').off('click').on('click', function() {
                 let customerRow = $(this).next('.customer-table');
-    
+        
                 // Se a linha de clientes já estiver visível, ocultar e sair
                 if (customerRow.is(':visible')) {
                     customerRow.hide();
                     return;
                 }
-    
+        
                 // Exibir a linha de clientes
                 customerRow.show();
             });
         }
+        
     
         // Função para lidar com a paginação
         function handlePagination() {
