@@ -1,73 +1,57 @@
-// Classe Usuario 
-/**
- * Usuario
- */
 import java.util.Scanner;
+
 public class Usuario {
-    String Nome_Completo;
-    String Email;
-    int Nascimento;
-    int Senha;
+    private String nomeCompleto;
+    private String email;
+    private int nascimento;
+    private String senha;
+    private String genero;
+    private String endereco;
 
-    //Construtor vazio
-    public Usuario(){}
+    // Construtor vazio
+    public Usuario() {}
 
-    // Construtor que referencia cada variavel
-    public Usuario(String Nome_Completo,String Email,int Nascimento,int Senha){
-        this.Nome_Completo = Nome_Completo;
-        this.Email = Email;
-        this.Nascimento = Nascimento;
-        this.Senha = Senha;  
+    // Construtor que referencia cada variável
+    public Usuario(String nomeCompleto, String email, int nascimento, String senha) {
+        this.nomeCompleto = nomeCompleto;
+        this.email = email;
+        this.nascimento = nascimento;
+        this.senha = senha;
     }
-    
-    // Getters e Setter
-   public String getEmail() {
-       return Email;
-   }
-   public int getNascimento() {
-       return Nascimento;
-   }
-   public String getNome_Completo() {
-       return Nome_Completo;
-   }
-   public int getSenha() {
-       return Senha;
-   }
-   public void setEmail(String email) {
-       Email = email;
-   }
-   public void setNascimento(int nascimento) {
-       Nascimento = nascimento;
-   }
-   public void setNome_Completo(String nome_Completo) {
-       Nome_Completo = nome_Completo;
-   }
-   public void setSenha(int senha) {
-       Senha = senha;
-   }
+    // os Getters e Setters provavelmente não serão necessários
 
-   public void Cadastro() {
-    Scanner scanner = new Scanner(System.in);
+    // Getters
+    public String getEmail() {
+        return email;
+    }
 
-        System.out.print("Digite o nome completo: ");
-            this.setNome_Completo(scanner.nextLine());
+    public int getNascimento() {
+        return nascimento;
+    }
 
-            System.out.print("Digite o email: ");
-            this.setEmail(scanner.nextLine());
+    public String getNomeCompleto() {
+        return nomeCompleto;
+    }
 
-            System.out.print("Digite o ano de nascimento (ex: 1990): ");
-            this.setNascimento(scanner.nextInt());
+    public String getSenha() {
+        return senha;
+    }
 
-            System.out.print("Digite a senha numérica: ");
-            this.setSenha(scanner.nextInt());
+    // Setters
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
+    public void setNascimento(int nascimento) {
+        this.nascimento = nascimento;
+    }
 
-    System.out.println("\nUsuário cadastrado com sucesso!");
-    System.out.println("Nome Completo: " + this.getNome_Completo());
-    System.out.println("Email: " + this.getEmail());
-    System.out.println("Ano de Nascimento: " + this.getNascimento());
-    System.out.println("Senha: " + this.getSenha());
+    public void setNomeCompleto(String nomeCompleto) {
+        this.nomeCompleto = nomeCompleto;
+    }
 
-}
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
 }
 
