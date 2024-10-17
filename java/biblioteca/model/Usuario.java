@@ -5,18 +5,19 @@ public class Usuario {
     private String email;
     private int nascimento;
     private String senha;
-    private String genero;
     private String endereco;
 
     // Construtor vazio
     public Usuario() {}
 
     // Construtor que referencia cada variável
-    public Usuario(String nomeCompleto, String email, int nascimento, String senha) {
+    public Usuario(String nomeCompleto, String email, int nascimento, String senha, String endereco) {
         this.nomeCompleto = nomeCompleto;
         this.email = email;
         this.nascimento = nascimento;
         this.senha = senha;
+        this.endereco = endereco;
+
     }
     // os Getters e Setters provavelmente não serão necessários
 
@@ -37,6 +38,10 @@ public class Usuario {
         return senha;
     }
 
+    public String getEndereco() {
+        return endereco;
+    }
+
     // Setters
     public void setEmail(String email) {
         this.email = email;
@@ -52,6 +57,10 @@ public class Usuario {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
     }
 }
 

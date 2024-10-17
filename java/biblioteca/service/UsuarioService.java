@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 public class UsuarioService {
 
     @Autowired
-    private UsuarioDAO UsuarioDAO
+    private UsuarioDAO UsuarioDAO;
 
     public Usuario cadastrarUsuario (Usuario usuario) {
         // validações
