@@ -1,17 +1,17 @@
 // Interface LivroDAO 
+import java.util.List;
 
-/**
- * LivroDAO
- */
 public interface LivroDAO {
 
-    Livro salva(Livro livro);
+    Livro salvar(Livro livro);
 
-    Livro buscarPorAutor(String autor);
+    List<Livro> buscarPorAutor(String autor);
 
-    Livro buscarPorGenero(String genero);
+    List<Livro> buscarPorGenero(String genero);
 
-    Livro buscarPorTitulo(String titulo);
+    List<Livro> buscarPorTitulo(String titulo);
 
-    void remover (Livro livro);
+    void remover(Livro livro);
+
+    List<Livro> buscarTodos();
 }

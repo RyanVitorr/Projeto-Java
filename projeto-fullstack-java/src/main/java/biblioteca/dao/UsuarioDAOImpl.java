@@ -1,5 +1,6 @@
 // Implementação UsuarioDAOImpl 
-
+import biblioteca.dao.UsuarioDAO; // Importa a interface
+import biblioteca.model.Usuario; 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.NoResultException;

@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.NoResultException;
 import org.springframework.stereotype.Repository;
+import java.util.List;
 
 @Repository
 public class LivroDAOImpl implements LivroDAO {
@@ -39,6 +40,12 @@ public class LivroDAOImpl implements LivroDAO {
         return entityManager.createQuery(jpql, Livro.class)
                 .setParameter("titulo", titulo)
                 .getResultList();
+    }
+
+    @Override
+    public List<Livro> buscarTodos() { 
+        String jpql = "SELECT l FROM Livro l";  
+        return entityManager.createQuery(jpql, Livro.class).getResultList(); 
     }
 
     @Override

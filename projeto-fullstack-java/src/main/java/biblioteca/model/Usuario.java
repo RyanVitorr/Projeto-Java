@@ -1,3 +1,4 @@
+package biblioteca.model;
 import java.util.Scanner;
 
 public class Usuario {
@@ -19,7 +20,7 @@ public class Usuario {
         this.endereco = endereco;
 
     }
-    // os Getters e Setters provavelmente não serão necessários
+    // os Getters e Setters provavelmente não serão necessários ass: Ryan
 
     // Getters
     public String getEmail() {
