@@ -1,0 +1,39 @@
+Pacote model (Entidades):
+
+Contém as classes de domínio que representam as tabelas do banco de dados e os objetos principais do sistema, como Usuario, Livro, Emprestimo, Wishlist e Multa.
+Exemplos:
+
+Usuario.java: Contém atributos como id, nome, email, etc., com construtores, getters e setters.
+Livro.java: Contém atributos como id, titulo, autor, isbn, genero, etc.
+
+Pacote dao (Data Access Object - Acesso a Dados):
+
+Contém interfaces e suas implementações para o acesso ao banco de dados (CRUD). Cada entidade tem sua própria interface DAO para padronizar as operações de banco.
+Exemplos:
+
+UsuarioDAO.java: Interface com métodos para adicionar, buscar, listar, atualizar e deletar um Usuario.
+UsuarioDAOImpl.java: Implementação dos métodos de UsuarioDAO, contendo a lógica para comunicar-se com o banco de dados.
+
+Pacote service (Serviços/Lógica de Negócios):
+
+Contém classes com a lógica de negócios, como validações, regras e interações entre entidades antes de enviar/receber dados do DAO.
+Exemplos:
+
+UsuarioService.java: Classe que define a lógica para registrar e buscar usuários com validações antes de chamar o UsuarioDAO.
+LivroService.java: Classe para adicionar, buscar e manipular livros, também com validações.
+
+Pacote controller (Camada de Apresentação):
+
+Responsável por receber as requisições HTTP (caso esteja usando uma API REST), interagir com o service e enviar respostas adequadas.
+Exemplos:
+
+UsuarioController.java: Manipula requisições relacionadas a Usuario, chamando os métodos apropriados do UsuarioService.
+LivroController.java: Faz o mesmo para os livros.
+
+Pacote utils (Utilitários):
+
+Contém classes auxiliares, como métodos de validação e envio de notificações. Essas classes podem ser chamadas em várias partes do sistema.
+Exemplos:
+
+NotificacaoUtils.java: Métodos para enviar notificações, por exemplo, para informar usuários sobre empréstimos atrasados.
+ValidacaoUtils.java: Pode conter métodos para validações como formatos de e-mail ou CPF.
