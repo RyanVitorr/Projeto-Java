@@ -2,17 +2,14 @@
 $(document).ready(function() {
     let bookDataArrayApi = [];
     // Fazer a requisição AJAX para buscar todos os livros
-    $.ajax({
-        url: '/livro/todos',
-        type: 'GET',
-        success: function(livros) {    
-            bookDataArrayApi = livros;    
-            console.log(bookDataArrayApi);
-        },
-        error: function(xhr, status, error) {
-            console.error('Erro ao buscar livros:', error);
-        }
+    $.get('/livro/todos', function(data) {
+        
+        console.log(data); 
+        
+    }).fail(function(error) {
+        console.error('Erro ao buscar livros:', error); 
     });
+    
 
     $('#livros').on('click', function() {
         $('#containerPrincipal').html(`

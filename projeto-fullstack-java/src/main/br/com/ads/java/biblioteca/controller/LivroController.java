@@ -15,8 +15,14 @@ public class LivroController {
     @Autowired
     private LivroService livroService;
 
-    @GetMapping("/todos")
+
+    @GetMapping
+    public String teste(){
+        return "Hello Spring Boot";
+    }
+    /*@GetMapping("/todos")
     public List<Livro> buscarTodosLivrosr() {
         return livroService.buscarTodosLivros();
-    }
+    } */
+    
 }
