@@ -1,7 +1,8 @@
-// Classe Livro 
-/**
- * Livro
- */
+package biblioteca.model;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+
 public class Livro {
     private int id;
     private String titulo;
@@ -12,17 +13,13 @@ public class Livro {
     public Livro(){}
 
     public Livro(int id,String titulo,String autor,int anoPublicação, String genero){
-        this.id = id;
+
         this.titulo = titulo;
         this.autor = autor;
         this.anoPublicação = anoPublicação;
         this.genero = genero;
     }
     
-    public int getId() {
-        return id;
-    }
-
     public int getAnoPublicação() {
         return anoPublicação;
     }
@@ -37,10 +34,6 @@ public class Livro {
 
     public String getTitulo() {
         return titulo;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public void setAnoPublicação(int anoPublicação) {

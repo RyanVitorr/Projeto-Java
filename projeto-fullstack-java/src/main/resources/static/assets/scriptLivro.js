@@ -3,7 +3,7 @@ $(document).ready(function() {
     let bookDataArrayApi = [];
     // Fazer a requisição AJAX para buscar todos os livros
     $.ajax({
-        url: '/livros',
+        url: '/livro/todos',
         type: 'GET',
         success: function(livros) {    
             bookDataArrayApi = livros;    

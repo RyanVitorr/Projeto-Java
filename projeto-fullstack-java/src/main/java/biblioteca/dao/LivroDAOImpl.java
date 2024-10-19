@@ -1,9 +1,11 @@
-// Implementação LivroDAOImpl 
+package biblioteca.dao;  // Verifique se isso é consistente em ambos os arquivos
 
-import javax.persistence.EntityManager;
+import biblioteca.model.Livro;
+import javax.persistence.EntityManager; 
 import javax.persistence.PersistenceContext;
 import javax.persistence.NoResultException;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
 @Repository
@@ -43,7 +45,7 @@ public class LivroDAOImpl implements LivroDAO {
     }
 
     @Override
-    public List<Livro> buscarTodos() { 
+    public List<Livro> buscarTodosLivros() { 
         String jpql = "SELECT l FROM Livro l";  
         return entityManager.createQuery(jpql, Livro.class).getResultList(); 
     }

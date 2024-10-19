@@ -1,4 +1,5 @@
 // Classe Wishlist
+import biblioteca.model.Livro;
 import biblioteca.model.Usuario; 
 import java.util.ArrayList;
 import java.util.List;

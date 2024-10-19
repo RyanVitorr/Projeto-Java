@@ -1,4 +1,5 @@
-// Classe Emprestimo 
+// Classe Emprestimo
+import biblioteca.model.Livro;
 import biblioteca.model.Usuario; 
 import java.time.LocalDate;
 import java.util.Scanner;

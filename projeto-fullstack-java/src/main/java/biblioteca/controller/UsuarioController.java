@@ -1,3 +1,4 @@
+
 // Classe UsuarioController 
 package biblioteca.controller; // Certifique-se de que o pacote está correto
 
@@ -9,14 +10,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/usuarios")
 public class UsuarioController {
-
-    @Autowired
     private UsuarioService usuarioService;
 
     @PostMapping("/cadastrar")
     public Usuario cadastrarUsuario(@RequestBody Usuario usuario) {
         return usuarioService.cadastrarUsuario(usuario);
     }
-
-    // Você pode adicionar outros métodos aqui, como buscar ou atualizar usuários, se necessário.
-}
+} 

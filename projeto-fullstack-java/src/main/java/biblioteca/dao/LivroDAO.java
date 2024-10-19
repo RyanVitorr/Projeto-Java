@@ -1,4 +1,5 @@
-// Interface LivroDAO 
+package biblioteca.dao;
+import biblioteca.model.Livro;
 import java.util.List;
 
 public interface LivroDAO {
@@ -13,5 +14,5 @@ public interface LivroDAO {
 
     void remover(Livro livro);
 
-    List<Livro> buscarTodos();
+    List<Livro> buscarTodosLivros();
 }

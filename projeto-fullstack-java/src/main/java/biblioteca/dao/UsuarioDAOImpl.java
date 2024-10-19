@@ -1,4 +1,5 @@
 // Implementação UsuarioDAOImpl 
+package biblioteca.dao;
 import biblioteca.dao.UsuarioDAO; // Importa a interface
 import biblioteca.model.Usuario; 
 import javax.persistence.EntityManager;

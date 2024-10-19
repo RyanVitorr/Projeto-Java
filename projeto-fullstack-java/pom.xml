@@ -83,7 +83,12 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>biblioteca.Application</mainClass> <!-- Defina a sua classe principal aqui -->
+                </configuration>
             </plugin>
         </plugins>
     </build>
+
+    
 </project>
