@@ -1,5 +1,4 @@
-package biblioteca.model;
-import java.util.Scanner;
+package br.com.ads.java.biblioteca.model;
 
 public class Usuario {
     private String nomeCompleto;

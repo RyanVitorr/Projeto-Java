@@ -1,15 +1,17 @@
 
 // Classe UsuarioController 
-package biblioteca.controller; // Certifique-se de que o pacote está correto
+package br.com.ads.java.biblioteca.controller; // Certifique-se de que o pacote está correto
 
-import biblioteca.model.Usuario; // Importando a classe Usuario
-import biblioteca.service.UsuarioService; // Importando a classe UsuarioService
+import br.com.ads.java.biblioteca.model.Usuario; // Importando a classe Usuario
+import br.com.ads.java.biblioteca.service.UsuarioService; // Importando a classe UsuarioService
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/usuarios")
 public class UsuarioController {
+
+    @Autowired
     private UsuarioService usuarioService;
 
     @PostMapping("/cadastrar")

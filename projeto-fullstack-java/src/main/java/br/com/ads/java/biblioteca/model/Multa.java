@@ -1,7 +1,4 @@
-// Classe Multa 
-/**
- * Multa
- */
+package br.com.ads.java.biblioteca.model;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Scanner;

@@ -1,7 +1,7 @@
 // Classe LivroService
-package biblioteca.service; // Verifique se a declaração de pacote está correta
-import biblioteca.model.Livro; // Import correto do modelo
-import biblioteca.dao.LivroDAO;
+package br.com.ads.java.biblioteca.service; // Verifique se a declaração de pacote está correta
+import br.com.ads.java.biblioteca.model.Livro; // Import correto do modelo
+import br.com.ads.java.biblioteca.dao.LivroDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -13,6 +13,6 @@ public class LivroService {
     private LivroDAO livroDAO;
 
     public List<Livro> buscarTodosLivros() {
-        return livroDAO.buscarTodosLivros();
+        return livroDAO.findAll();
     }
 }
