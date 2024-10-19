@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class UsuarioDAOImpl implements UsuarioDAO {
 
+
     @PersistenceContext
     private EntityManager entityManager;
 
