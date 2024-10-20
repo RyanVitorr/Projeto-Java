@@ -9,13 +9,13 @@ import javax.persistence.Id;
 public class Livro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idLivro; // Atributo para o identificador do livro
+    private int idLivro; 
     private String nome;
     private String autor;
     private String genero;
-    private String idadeIndicativa; // Renomeado para seguir convenções
+    private String idadeIndicativa; 
     private String descricao;
-    private int qtdDisponivel; // Renomeado para seguir convenções
+    private int qtdDisponivel; 
     private int qtdTotal;
     private boolean disponivel;
 
@@ -117,5 +117,16 @@ public class Livro {
 
     public void setDisponivel(boolean disponivel) {
         this.disponivel = disponivel;
+    }
+
+    // get com idlivro
+    public String toStringIdLivro() {
+        return "Livro{" +
+                ", nome='" + nome + '\'' +
+                ", autor='" + autor + '\'' +
+                ", genero='" + genero + '\'' +
+                ", idadeIndicativa='" + idadeIndicativa + '\'' +
+                ", descricao='" + descricao + '\'' +
+                '}';
     }
 }

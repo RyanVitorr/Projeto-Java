@@ -18,6 +18,7 @@ public class EmprestimoService {
 
     // Busca empréstimos por ID do livro
     public List<Emprestimo> buscarEmprestimosPorIdLivro(int idLivro) {
+        System.out.println("Parâmetro idLivro recebido no service: " + idLivro);
         return emprestimoDAO.findByIdLivro(idLivro);
     }
 

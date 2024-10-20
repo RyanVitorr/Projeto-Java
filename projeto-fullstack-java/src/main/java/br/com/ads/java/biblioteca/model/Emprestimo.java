@@ -8,15 +8,13 @@ public class Emprestimo {
     private Usuario usuario; 
     private Livro livro;      
     private int livroId;     
-    private int usuarioId;     
-    private String nomeUsuario;    
-    private String nomeLivro;    
+    private int usuarioId;   
     private LocalDate dataEmprestimo;  
     private LocalDate dataDevolucao;   
     private String status;  
 
     // pega dados da api idLivro
-    /* 
+    
     public Emprestimo(int idEmprestimo, Usuario usuario, LocalDate dataEmprestimo, LocalDate dataDevolucao, String status) {
         this.idEmprestimo = idEmprestimo;
         this.usuario = usuario;
@@ -33,7 +31,7 @@ public class Emprestimo {
         this.dataEmprestimo = dataEmprestimo;
         this.dataDevolucao = dataDevolucao;
         this.status = status;
-    }*/
+    }
 
     // todo emprestimo
     public Emprestimo(int idEmprestimo, int usuarioId, int livroId, LocalDate dataEmprestimo, LocalDate dataDevolucao, String status) {
@@ -62,12 +60,12 @@ public class Emprestimo {
         this.usuarioId = usuarioId;
     }
 
-    public String getNomeUsuario() {
-        return nomeUsuario;
+    public Usuario getUsuario() {  
+        return usuario;
     }
 
-    public void setNomeUsuario(String nomeUsuario) {
-        this.nomeUsuario = nomeUsuario;
+    public Livro getLivro() {  
+        return livro;
     }
 
     public int getLivroId() {
@@ -76,14 +74,6 @@ public class Emprestimo {
 
     public void setLivroId(int livroId) {
         this.livroId = livroId;
-    }
-
-    public String getNomeLivro() {
-        return nomeLivro;
-    }
-
-    public void setNomeLivro(String nomeLivro) {
-        this.nomeLivro = nomeLivro;
     }
 
     public LocalDate getDataEmprestimo() {
@@ -110,18 +100,27 @@ public class Emprestimo {
         this.status = status;
     }
 
+    // idLivro
     public String toString() {
         return "Emprestimo{" +
                 "idEmprestimo=" + idEmprestimo +
-                ", usuario=" + usuario +
-                ", livro=" + livro +
-                ", livroId=" + livroId +
-                ", usuarioId=" + usuarioId +
-                ", nomeUsuario='" + nomeUsuario + '\'' +
-                ", nomeLivro='" + nomeLivro + '\'' +
+                ", usuario=" + usuario + 
                 ", dataEmprestimo=" + dataEmprestimo +
                 ", dataDevolucao=" + dataDevolucao +
                 ", status='" + status + '\'' +
                 '}';
     }
+
+    // idUsuario
+    /*
+    public String toStringIdLivro() {
+        return "Emprestimo{" +
+                "idEmprestimo=" + idEmprestimo +
+                ", livro=" + livro + 
+                ", dataEmprestimo=" + dataEmprestimo +
+                ", dataDevolucao=" + dataDevolucao +
+                ", status='" + status + '\'' +
+                '}';
+    }*/
+
 }

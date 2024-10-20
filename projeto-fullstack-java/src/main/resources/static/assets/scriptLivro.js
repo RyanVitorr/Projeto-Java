@@ -144,24 +144,26 @@ $(document).ready(function() {
         
             // Função para buscar clientes para um livro
             async function fetchClientesForBook(bookId) {
-                try {
-                    console.log(`Buscando clientes para o livro ID: ${bookId}`);
+                console.log("bookId:", bookId); 
             
-                    const response = await $.get('/emprestimos/todos', {});
-            
-                    if (!response || response.length === 0) {
-                        console.warn(`Nenhum empréstimo encontrado para o livro ID: ${bookId}`);
-                        return [];
-                    }
-            
-                    console.log('Empréstimos recebidos:', response);
-                    return response;
-            
-                } catch (error) {
-                    console.error(`Erro ao buscar clientes para o livro ID: ${bookId}`, error);
-                    throw error;  // Re-lança o erro para ser tratado em outro lugar, se necessário
-                }
+                return new Promise((resolve, reject) => {
+                    $.ajax({
+                        url: 'emprestimos/porLivro',
+                        type: 'GET',
+                        cache: false,
+                        data: { idLivro: bookId },
+                        success: function(data) {
+                            console.log("Dados recebidos:", data);  
+                            resolve(data);      
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Erro na requisição:', xhr.responseText); 
+                            reject(error);     
+                        }
+                    });
+                });
             }
+
             // Função para exibir uma página
             async function displayPage(page) {
                 let start = (page - 1) * rowsPerPage;
@@ -201,7 +203,7 @@ $(document).ready(function() {
                             let clienteRow = `
                             <tr class="customer-table" style="display: none;">
                                 <td colspan="8">
-                                    <table class="customer-list-table">
+                                    <table class="table customer-list-table">
                                         <thead>
                                             <tr>
                                                 <th>Nome do Cliente</th>
@@ -216,10 +218,10 @@ $(document).ready(function() {
                                         </thead>
                                         <tbody class="customer-list">
                                         <tr>
-                                            <td>${cliente.nomeUsuario}</td>
-                                            <td>${cliente.cpf}</td>
-                                            <td>${cliente.telefone}</td>
-                                            <td>${cliente.endereco}</td>
+                                            <td>${cliente.usuario.nome}</td>
+                                            <td>${cliente.usuario.cpf}</td>
+                                            <td>${cliente.usuario.telefone}</td>
+                                            <td>${cliente.usuario.endereco}</td>
                                             <td>${cliente.preco}</td>
                                             <td>${cliente.qtdAlugada}</td>
                                             <td>${cliente.dataEmprestimo}</td>

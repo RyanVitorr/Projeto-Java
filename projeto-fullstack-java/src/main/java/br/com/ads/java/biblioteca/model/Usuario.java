@@ -74,7 +74,7 @@ public class Usuario {
         this.endereco = endereco;
     }
 
-    @Override
+    // get emprestimo
     public String toString() {
         return "Usuario{" +
                 "nome='" + nome + '\'' +
@@ -84,7 +84,6 @@ public class Usuario {
                 ", endereco='" + endereco + '\'' +
                 '}';
     }
-
    
 }
 
