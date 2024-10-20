@@ -1,9 +1,12 @@
 //------------------------------- livros -------------------------
 $(document).ready(function() {
-    let bookDataArrayApi = [];
+    let bookDataArrayApi;
     // Fazer a requisição AJAX para buscar todos os livros
     $.get('/livro/todos', function(data) {
-        console.log(data); 
+         
+        bookDataArrayApi = data;
+        console.log("O DATA: " + JSON.stringify(bookDataArrayApi, null, 2));
+
         $('#livros').on('click', function() {
             $('#containerPrincipal').html(`
                 <div class="add-container">
@@ -58,6 +61,7 @@ $(document).ready(function() {
                                     <th>Descrição</th>
                                     <th>Qtd. Disponível</th>
                                     <th>Qtd. Total</th>
+                                    <th>Disponivel</th>
                                     <th>Ações</th>
                                 </tr>
                             </thead>
@@ -132,28 +136,23 @@ $(document).ready(function() {
         });
         
         // Função para renderizar os livros na tabela
-        function renderBooks(bookItems) {
+        async function renderBooks(bookItems) {
             let rowsPerPage = parseInt($("#entries").val());
             let currentPage = 1;
             let totalRows = bookItems.length;
             let totalPages = Math.ceil(totalRows / rowsPerPage);
         
-            // Função para buscar os clientes relacionados ao ID do livro
-            function fetchClientesForBook(bookId) {
-                return new Promise((resolve) => {
-                    // Simulação de dados retornados pela API (exemplo)
-                    let fakeClientes = [
-                        { name: "João Silva", cpf: "123.456.789-00", telefone: "9999-9999", endereco: "Rua A, 123", preco: "50", qtdAlugada: 1, dataAluguel: "2024-01-10", dataDevolucao: "2024-01-20" },
-                        { name: "Maria Souza", cpf: "987.654.321-00", telefone: "8888-8888", endereco: "Rua B, 456", preco: "60", qtdAlugada: 2, dataAluguel: "2024-01-15", dataDevolucao: "2024-01-25" }
-                    ];
-        
-                    // Resolve a promessa com os dados simulados
-                    resolve(fakeClientes);
-                });
+            // Função para buscar clientes para um livro
+            async function fetchClientesForBook(bookId) {
+                console.log(`Buscando clientes para o livro ID: ${bookId}`);
+                const response = await $.get('/emprestimo/porUsuario', { idUsuario: bookId });
+                console.log('Empréstimos recebidos:', response);
+                
+                return response;
             }
-        
+            
             // Função para exibir uma página
-            function displayPage(page) {
+            async function displayPage(page) {
                 let start = (page - 1) * rowsPerPage;
                 let end = start + rowsPerPage;
                 let rowsToDisplay = bookItems.slice(start, end);
@@ -162,66 +161,69 @@ $(document).ready(function() {
                 $(".list").html('');
         
                 // Adicionar cada livro como uma nova linha na tabela
-                rowsToDisplay.forEach(function(book) {
+                for (const book of rowsToDisplay) {
                     // Cria uma linha para a tabela de livros
                     let row = `
-                        <tr class="row" data-id="${book.id}">   
-                            <td>${book.name}</td>
-                            <td>${book.author}</td>
-                            <td>${book.genre}</td>
-                            <td>${book.age}</td>
-                            <td>${book.description}</td>
-                            <td>${book.quantityAvailable}</td>
-                            <td>${book.quantityTotal}</td>
+                        <tr class="row" data-id="${book.idLivro}">
+                            <td>${book.nome}</td>
+                            <td>${book.autor}</td>
+                            <td>${book.genero}</td>
+                            <td>${book.idadeIndicativa}</td>
+                            <td>${book.descricao}</td>
+                            <td>${book.qtdDisponivel}</td>
+                            <td>${book.qtdTotal}</td>
+                            <td>${book.disponivel}</td>
                             <td>
                                 <button class="btn-edit">✏️</button>
                                 <button class="btn-delete">🗑️</button>
                             </td>
                         </tr>
-                        <tr class="customer-table" style="display: none;">
-                            <td colspan="8">
-                                <table class="customer-list-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Nome do Cliente</th>
-                                            <th>CPF</th>
-                                            <th>Telefone</th>
-                                            <th>Endereço</th>
-                                            <th>Preço</th>
-                                            <th>Qtd. Alugada</th>
-                                            <th>Data de Aluguel</th>
-                                            <th>Data de Devolução</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="customer-list"></tbody>
-                                </table>
-                            </td>
-                        </tr>
+                        
                     `;
         
                     $(".list").append(row);
-        
+
                     // Buscar clientes para cada livro assim que a linha é adicionada
-                    fetchClientesForBook(book.id).then(clientes => {
-                        // Adicionar clientes à tabela de clientes
-                        let customerRow = $('.row[data-id="' + book.id + '"]').next('.customer-table');
+                    const clientes = await fetchClientesForBook(book.idLivro);
+                    if (clientes.length > 0) {
                         clientes.forEach(cliente => {
                             let clienteRow = `
-                                <tr>
-                                    <td>${cliente.name}</td>
-                                    <td>${cliente.cpf}</td>
-                                    <td>${cliente.telefone}</td>
-                                    <td>${cliente.endereco}</td>
-                                    <td>${cliente.preco}</td>
-                                    <td>${cliente.qtdAlugada}</td>
-                                    <td>${cliente.dataAluguel}</td>
-                                    <td>${cliente.dataDevolucao}</td>
-                                </tr>
-                            `;
-                            customerRow.find('.customer-list').append(clienteRow);
+                            <tr class="customer-table" style="display: none;">
+                                <td colspan="8">
+                                    <table class="customer-list-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Nome do Cliente</th>
+                                                <th>CPF</th>
+                                                <th>Telefone</th>
+                                                <th>Endereço</th>
+                                                <th>Preço</th>
+                                                <th>Qtd. Alugada</th>
+                                                <th>Data de Aluguel</th>
+                                                <th>Data de Devolução</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="customer-list">
+                                        <tr>
+                                            <td>${cliente.nomeUsuario}</td>
+                                            <td>${cliente.cpf}</td>
+                                            <td>${cliente.telefone}</td>
+                                            <td>${cliente.endereco}</td>
+                                            <td>${cliente.preco}</td>
+                                            <td>${cliente.qtdAlugada}</td>
+                                            <td>${cliente.dataEmprestimo}</td>
+                                            <td>${cliente.dataDevolucao}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>`;
+                            $('.list').append(clienteRow);
                         });
-                    });
-                });
+                    } else {
+                        console.log(`Nenhum cliente encontrado para o livro ID: ${book.idLivro}`);
+                    }
+                }
         
                 // Atualiza a exibição da página atual
                 $("#current-page").text(page);
@@ -256,14 +258,12 @@ $(document).ready(function() {
                         displayPage(currentPage);
                     }
                 });
-    
+        
                 $("#entries").off("change").on("change", function() {
                     rowsPerPage = parseInt($(this).val());
-                    totalPages = Math.ceil(totalRows / rowsPerPage); // Recalcular o total de páginas
-                    displayPage(1); // Reiniciar na primeira página
+                    totalPages = Math.ceil(totalRows / rowsPerPage); 
+                    displayPage(1); 
                 });
-    
-                
         
                 // Atualiza a exibição inicial
                 displayPage(currentPage);
@@ -271,6 +271,7 @@ $(document).ready(function() {
         
             handlePagination();
         }
+        
         
     }).fail(function(error) {
         console.error('Erro ao buscar livros:', error); 

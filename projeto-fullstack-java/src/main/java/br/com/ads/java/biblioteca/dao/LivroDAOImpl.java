@@ -23,7 +23,7 @@ public class LivroDAOImpl implements LivroDAO {
         try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 livros.add(new Livro(
-                        rs.getInt("id_livro"), // Certifique-se de que o nome da coluna esteja correto
+                        rs.getInt("id_livro"), 
                         rs.getString("nome"),
                         rs.getString("autor"),
                         rs.getString("genero"),
@@ -31,7 +31,7 @@ public class LivroDAOImpl implements LivroDAO {
                         rs.getString("descricao"),
                         rs.getInt("qtd_disponivel"),
                         rs.getInt("qtd_total"),
-                        rs.getBoolean("disponivel") // Supondo que 'disponivel' seja do tipo boolean
+                        rs.getBoolean("disponivel") 
                 ));
             }
         } catch (SQLException e) {

@@ -1,6 +1,5 @@
 // Implementação UsuarioDAOImpl 
 package br.com.ads.java.biblioteca.dao;
-import br.com.ads.java.biblioteca.dao.UsuarioDAO; // Importa a interface
 import br.com.ads.java.biblioteca.model.Usuario; 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

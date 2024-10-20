@@ -1,66 +1,90 @@
 package br.com.ads.java.biblioteca.model;
+import java.time.LocalDate;
+
 
 public class Usuario {
-    private String nomeCompleto;
+    private String nome;
     private String email;
-    private int nascimento;
-    private String senha;
+    private String telefone;
+    private LocalDate dataNascimento; 
     private String endereco;
-
+    
     // Construtor vazio
     public Usuario() {}
+    
+    // Construtor para receber dados do banco
+    public Usuario(String nome, String email, String telefone, LocalDate dataNascimento, String endereco) {
+        this.nome = nome;
+        this.email = email;
+        this.telefone = telefone;
+        this.dataNascimento = dataNascimento;
+        this.endereco = endereco;
+    }
+    
 
     // Construtor que referencia cada variável
-    public Usuario(String nomeCompleto, String email, int nascimento, String senha, String endereco) {
-        this.nomeCompleto = nomeCompleto;
+    public Usuario(String nome, String email, String telefone, LocalDate dataNascimento, LocalDate dataRegistro, String endereco) {
+        this.nome = nome;
         this.email = email;
-        this.nascimento = nascimento;
-        this.senha = senha;
+        this.telefone = telefone;
+        this.dataNascimento = dataNascimento;
+        
         this.endereco = endereco;
-
     }
     // os Getters e Setters provavelmente não serão necessários ass: Ryan
 
-    // Getters
+      // Getters e Setters
+      public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
     public String getEmail() {
         return email;
     }
 
-    public int getNascimento() {
-        return nascimento;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getNomeCompleto() {
-        return nomeCompleto;
+    public String getTelefone() {
+        return telefone;
     }
 
-    public String getSenha() {
-        return senha;
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
+    public LocalDate getDataNascimento() {
+        return dataNascimento;
+    }
+
+    public void setDataNascimento(LocalDate dataNascimento) {
+        this.dataNascimento = dataNascimento;
     }
 
     public String getEndereco() {
         return endereco;
     }
 
-    // Setters
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setNascimento(int nascimento) {
-        this.nascimento = nascimento;
-    }
-
-    public void setNomeCompleto(String nomeCompleto) {
-        this.nomeCompleto = nomeCompleto;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-
     public void setEndereco(String endereco) {
         this.endereco = endereco;
     }
+
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "nome='" + nome + '\'' +
+                ", email='" + email + '\'' +
+                ", telefone='" + telefone + '\'' +
+                ", dataNascimento=" + dataNascimento +
+                ", endereco='" + endereco + '\'' +
+                '}';
+    }
+
+   
 }
 
