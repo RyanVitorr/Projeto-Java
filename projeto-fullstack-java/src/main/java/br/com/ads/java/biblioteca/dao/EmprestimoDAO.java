@@ -10,5 +10,7 @@ public interface EmprestimoDAO {
 
     // Busca todos os empréstimos por id do usuário
     List<Emprestimo> findByIdUsuario(int idUsuario);
+
+    List<Emprestimo> buscarEmprestimos();
 }
 

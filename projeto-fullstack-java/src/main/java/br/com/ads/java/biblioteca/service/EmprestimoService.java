@@ -25,4 +25,9 @@ public class EmprestimoService {
     public List<Emprestimo> buscarEmprestimosPorIdUsuario(int idUsuario) {
         return emprestimoDAO.findByIdUsuario(idUsuario);
     }
+
+    
+    public List<Emprestimo> buscarEmprestimos() {
+        return emprestimoDAO.buscarEmprestimos();
+    }
 }

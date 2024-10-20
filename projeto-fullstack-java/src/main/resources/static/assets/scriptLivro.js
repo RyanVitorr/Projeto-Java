@@ -144,13 +144,24 @@ $(document).ready(function() {
         
             // Função para buscar clientes para um livro
             async function fetchClientesForBook(bookId) {
-                console.log(`Buscando clientes para o livro ID: ${bookId}`);
-                const response = await $.get('/emprestimo/porUsuario', { idUsuario: bookId });
-                console.log('Empréstimos recebidos:', response);
-                
-                return response;
-            }
+                try {
+                    console.log(`Buscando clientes para o livro ID: ${bookId}`);
             
+                    const response = await $.get('/emprestimos/todos', {});
+            
+                    if (!response || response.length === 0) {
+                        console.warn(`Nenhum empréstimo encontrado para o livro ID: ${bookId}`);
+                        return [];
+                    }
+            
+                    console.log('Empréstimos recebidos:', response);
+                    return response;
+            
+                } catch (error) {
+                    console.error(`Erro ao buscar clientes para o livro ID: ${bookId}`, error);
+                    throw error;  // Re-lança o erro para ser tratado em outro lugar, se necessário
+                }
+            }
             // Função para exibir uma página
             async function displayPage(page) {
                 let start = (page - 1) * rowsPerPage;
