@@ -30,4 +30,15 @@ public class UsuarioDAOImpl implements UsuarioDAO {
             return null;
         }
     }
+
+    @Override
+    public Usuario buscarTodos() {
+        String jpql = "SELECT * FROM usuarios";
+        try {
+            return entityManager.createQuery(jpql, Usuario.class)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
 }

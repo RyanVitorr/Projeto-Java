@@ -13,9 +13,10 @@ public class UsuarioService {
     private UsuarioDAO usuarioDAO; 
 
     public Usuario cadastrarUsuario(Usuario usuario) {
-        // Adicione validações aqui, se necessário
-        
-        // Chama função do DAO
         return usuarioDAO.salvar(usuario);
+    }
+
+    public Usuario buscarTodos() {
+        return usuarioDAO.buscarTodos();
     }
 }
