@@ -82,7 +82,6 @@ $(document).ready(function() {
                         <h3>Alugar Livro</h3>
                         <div class="container-form">
                             <div>
-                                
                                 <label for="clientePesquisa">Pesquisar Cliente:</label>
                                 <input type="text" id="clientePesquisa" placeholder="Pesquise o cliente...">
                                 <ul id="clienteLista"></ul>
@@ -93,8 +92,6 @@ $(document).ready(function() {
                                 <input type="text" id="cpfAluguel" name="cpf" readonly>
                                 <label for="telefoneAluguel">Telefone:</label>
                                 <input type="text" id="telefoneAluguel" name="telefone" readonly>
-                                
-                               
                             </div>
 
 

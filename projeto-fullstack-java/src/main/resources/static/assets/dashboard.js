@@ -35,6 +35,9 @@ $(document).ready(function () {
             </div>
         `;
         $('.main-content').html(dashboardHTML); // Insere o HTML no elemento dashboard
+        
+        // Chama a função para buscar os dados via AJAX após o HTML ser inserido
+        fetchDashboardData();
     });
 
     // Função para atualizar os dados do dashboard
@@ -82,29 +85,31 @@ $(document).ready(function () {
         });
     }
 
-    // Simulação de dados
-    const dashboardData = {
-        totalLivrosAlugados: 150,
-        totalRecebido: 3400.50,
-        totalAtraso: 5,
-        devolvidos: 120,
-        atrasados: 30
-    };
+    // Função para buscar os dados do dashboard via AJAX
+    function fetchDashboardData(dataEmprestimo) {
+        $.ajax({
+            url: 'livros/dashboard', 
+            type: 'GET',
+            data: {
+                dataEmprestimo: dataEmprestimo || null, 
+            },
+            success: function (data) {
+                updateDashboard(data); 
+            },
+            error: function (xhr, status, error) {
+                console.error('Erro ao buscar dados do dashboard:', error);
+            }
+        });
+    }
+    
+    
 
-    // Função para filtrar por data (simulação)
-    $('#dashboard').on('click', '#filterBtn', function () {
+    // Função para filtrar por data
+    $('.main-content').on('click', '#filterBtn', function () {
         const startDate = $('#startDate').val();
         const endDate = $('#endDate').val();
 
-        // Aqui você implementaria a chamada à API para obter dados filtrados
-        console.log(`Filtrando por data de ${startDate} até ${endDate}`);
-
-        // Atualizar os dados filtrados (simulado)
-        // Exemplo: atualize o dashboard com dados filtrados pela data
-        // updateDashboard(filtredData);
+        // Faz a requisição AJAX para obter os dados filtrados
+        fetchDashboardData(startDate, endDate);
     });
-
-    // Gera o HTML do dashboard dinamicamente e atualiza os dados
-    createDashboard();
-    updateDashboard(dashboardData);
 });
