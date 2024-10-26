@@ -1,7 +1,5 @@
 package br.com.ads.java.biblioteca.service;
-import br.com.ads.java.biblioteca.dao.EmprestimoDAO;
 import br.com.ads.java.biblioteca.dao.MultaDAO;
-import br.com.ads.java.biblioteca.model.Emprestimo;
 import br.com.ads.java.biblioteca.model.Multa;
 
 import org.springframework.beans.factory.annotation.Autowired;

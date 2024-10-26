@@ -3,6 +3,7 @@ import java.time.LocalDate;
 
 
 public class Usuario {
+    private int id;
     private String nome;
     private String email;
     private String telefone;
@@ -13,15 +14,19 @@ public class Usuario {
     public Usuario() {}
     
     // Construtor para receber dados do banco
-    public Usuario(String nome, String email, String telefone, LocalDate dataNascimento, String endereco) {
+    public Usuario(int id, String nome, String email, String telefone, LocalDate dataNascimento, String endereco) {
         this.nome = nome;
         this.email = email;
         this.telefone = telefone;
         this.dataNascimento = dataNascimento;
         this.endereco = endereco;
     }
-    
 
+    public Usuario(String nome, String email) {
+        this.nome = nome;
+        this.email = email;
+    }
+    
     // Construtor que referencia cada variável
     public Usuario(String nome, String email, String telefone, LocalDate dataNascimento, LocalDate dataRegistro, String endereco) {
         this.nome = nome;

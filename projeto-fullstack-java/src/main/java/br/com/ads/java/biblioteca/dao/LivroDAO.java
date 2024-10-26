@@ -8,5 +8,5 @@ public interface LivroDAO {
     
     List<Livro> findAll();
   
-    List<Livro> dashboard(Date dataEmprestimo);
+    
 }

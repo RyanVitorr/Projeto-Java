@@ -26,9 +26,8 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
 
         try (Statement stmt = connection.createStatement(); 
             ResultSet rs = stmt.executeQuery(sql)) {
-
-            
             while (rs.next()) {
+
                 emprestimos.add(new Emprestimo(
                     rs.getInt("id_emprestimo"), 
                     rs.getInt("id_usuario"), 
@@ -46,8 +45,6 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
 
         return emprestimos;
     }
-
-
 
     @Override
     public List<Emprestimo> findByIdUsuario(int idUsuario) {
@@ -74,7 +71,6 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
                         rs.getBoolean("disponivel") 
                     );
 
-                    
                     Emprestimo emprestimo = new Emprestimo(
                         rs.getInt("id_emprestimo"), 
                         livro,   
@@ -113,6 +109,7 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
                 while (rs.next()) {
                     
                     Usuario usuario = new Usuario(
+                        rs.getInt("id_usuario"),
                         rs.getString("nome_usuario"),
                         rs.getString("email"),
                         rs.getString("telefone"),
@@ -120,7 +117,6 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
                         rs.getString("endereco")
                     );
     
-                    
                     Emprestimo emprestimo = new Emprestimo(
                         rs.getInt("id_emprestimo"), 
                         usuario,    
@@ -130,13 +126,6 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
                     );
                       
                     emprestimos.add(emprestimo);
-                    System.out.println("Emprestimo com detalhes do emprestimo: " + emprestimo.toString()); 
-                    System.out.println("");
-                    System.out.println("");
-                    System.out.println("Emprestimo com detalhes do usuario: " + usuario.toString()); 
-                    System.out.println("");
-                    System.out.println("");
-                    System.out.println("");
                 }
             }
         } catch (SQLException e) {
@@ -144,6 +133,114 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
         }
         return emprestimos;
     }
+
+    @Override
+    public List<Emprestimo> buscarEmprestimosDash() {
+        List<Emprestimo> emprestimos = new ArrayList<>();
+        String sql = "SELECT e.id_emprestimo, e.data_emprestimo, e.data_devolucao, e.status, " +
+                    "u.nome AS nome_usuario, u.email, " +
+                    "l.id_livro, l.nome, " +
+                    "(SELECT COUNT(*) FROM livros) AS total_livros, " +
+                    "(SELECT COUNT(*) FROM emprestimos WHERE data_devolucao IS NULL OR data_devolucao < CURRENT_DATE) AS livros_atraso, " +
+                    "(SELECT COUNT(*) FROM emprestimos) AS total_livros_alugados " +
+                    "FROM emprestimos e " +
+                    "JOIN livros l ON e.id_livros = l.id_livro " +
+                    "JOIN usuarios u ON e.id_usuario = u.id_usuario";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery()) {
+            
+            System.out.println("Consulta executada com sucesso.");
+            
+            while (rs.next()) {
+                System.out.println("Processando registro de empréstimo ID: " + rs.getInt("id_emprestimo"));
+                
+                Livro livro = new Livro(
+                    rs.getInt("id_livro"),
+                    rs.getString("nome")
+                );
+
+                Usuario usuario = new Usuario(
+                    rs.getString("nome_usuario"),
+                    rs.getString("email")
+                );
+
+                Emprestimo emprestimo = new Emprestimo(
+                    rs.getInt("id_emprestimo"),
+                    usuario,
+                    livro,
+                    rs.getDate("data_emprestimo").toLocalDate(),
+                    rs.getDate("data_devolucao") != null ? rs.getDate("data_devolucao").toLocalDate() : null,
+                    rs.getString("status"),
+                    rs.getInt("total_livros"),
+                    rs.getInt("livros_atraso"),
+                    rs.getInt("total_livros_alugados")
+                );
+
+                emprestimos.add(emprestimo);
+            }
+
+            if (emprestimos.isEmpty()) {
+                System.out.println("Nenhum registro encontrado.");
+            } else {
+                System.out.println("Total de registros encontrados: " + emprestimos.size());
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return emprestimos;
+    }
+
+    
+    
+
+    @Override
+    public List<Emprestimo> dashboard(Date dataEmprestimo) {
+        List<Emprestimo> emprestimos = new ArrayList<>();
+        String sql = "SELECT e.id_emprestimo, e.data_emprestimo, e.data_devolucao, e.status, " +
+                     "u.nome AS nome_usuario, u.email, " +
+                     "l.id_livro, l.nome " +
+                     "FROM emprestimos e " +
+                     "JOIN livros l ON e.id_livros = l.id_livro " +
+                     "JOIN usuarios u ON e.id_usuario = u.id_usuario " +
+                     "WHERE e.data_emprestimo = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setDate(1, dataEmprestimo);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    
+                    Livro livro = new Livro(
+                        rs.getInt("id_livro"),
+                        rs.getString("nome")
+                    );
+    
+                    
+                    Usuario usuario = new Usuario(
+                        rs.getString("nome_usuario"),
+                        rs.getString("email")
+                    );
+    
+                    emprestimos.add(new Emprestimo(
+                        rs.getInt("id_emprestimo"), 
+                        usuario,
+                        livro,    
+                        rs.getDate("data_emprestimo").toLocalDate(),
+                        rs.getDate("data_devolucao") != null ? rs.getDate("data_devolucao").toLocalDate() : null, 
+                        rs.getString("status"),
+                        rs.getInt("total_livros"),
+                        rs.getInt("livros_atraso"),
+                        rs.getInt("total_livros_alugados")
+                    ));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return emprestimos;
+    }
+    
     
 }
 

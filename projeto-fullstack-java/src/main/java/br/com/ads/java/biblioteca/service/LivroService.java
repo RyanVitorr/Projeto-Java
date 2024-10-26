@@ -1,11 +1,10 @@
 // Classe LivroService
-package br.com.ads.java.biblioteca.service; // Verifique se a declaração de pacote está correta
-import br.com.ads.java.biblioteca.model.Livro; // Import correto do modelo
+package br.com.ads.java.biblioteca.service; 
+import br.com.ads.java.biblioteca.model.Livro; 
 import br.com.ads.java.biblioteca.dao.LivroDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.sql.Date;
 
 @Service
 public class LivroService {
@@ -17,7 +16,4 @@ public class LivroService {
         return livroDAO.findAll();
     }
 
-    public List<Livro> dashboard(Date dataEmprestimo) {
-        return livroDAO.dashboard(dataEmprestimo);
-    }
 }

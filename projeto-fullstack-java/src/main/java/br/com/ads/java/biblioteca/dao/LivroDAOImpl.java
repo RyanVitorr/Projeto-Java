@@ -38,35 +38,5 @@ public class LivroDAOImpl implements LivroDAO {
             e.printStackTrace();
         }
         return livros;
-    }
-
-    @Override
-    public List<Livro> dashboard(Date dataEmprestimo) {
-        List<Livro> livros = new ArrayList<>();
-        String sql = "SELECT l.* FROM livros l " +
-                     "JOIN emprestimos e ON l.id_livro = e.id_livro " +
-                     "WHERE e.data_emprestimo = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setDate(1, dataEmprestimo); 
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    livros.add(new Livro(
-                            rs.getInt("id_livro"),
-                            rs.getString("nome"),
-                            rs.getString("autor"),
-                            rs.getString("genero"),
-                            rs.getString("idade_indicativa"),
-                            rs.getString("descricao"),
-                            rs.getInt("qtd_disponivel"),
-                            rs.getInt("qtd_total"),
-                            rs.getBoolean("disponivel")
-                    ));
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return livros;
-    }
-    
+    }  
 }

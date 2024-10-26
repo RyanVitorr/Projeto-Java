@@ -20,8 +20,7 @@ public class Livro {
     private boolean disponivel;
 
     // Construtor ajustado para incluir idLivro
-    public Livro(String nome, String autor, String genero, String idadeIndicativa, String descricao,
-                 int qtdDisponivel, int qtdTotal, boolean disponivel) {
+    public Livro(String nome, String autor, String genero, String idadeIndicativa, String descricao, int qtdDisponivel, int qtdTotal, boolean disponivel) {
         this.nome = nome;
         this.autor = autor;
         this.genero = genero;
@@ -33,8 +32,7 @@ public class Livro {
     }
 
     // Construtor com ID (para casos onde o ID é necessário)
-    public Livro(int idLivro, String nome, String autor, String genero, String idadeIndicativa,
-        String descricao, int qtdDisponivel, int qtdTotal, boolean disponivel) {
+    public Livro(int idLivro, String nome, String autor, String genero, String idadeIndicativa, String descricao, int qtdDisponivel, int qtdTotal, boolean disponivel) {
         this.idLivro = idLivro;
         this.nome = nome;
         this.autor = autor;
@@ -44,6 +42,11 @@ public class Livro {
         this.qtdDisponivel = qtdDisponivel;
         this.qtdTotal = qtdTotal;
         this.disponivel = disponivel;
+    }
+
+    public Livro(int idLivro, String nome) {
+        this.idLivro = idLivro;
+        this.nome = nome;
     }
 
     // Getters e setters
