@@ -18,4 +18,10 @@ public class UsuarioController {
     public Usuario cadastrarUsuario(@RequestBody Usuario usuario) {
         return usuarioService.cadastrarUsuario(usuario);
     }
+
+    @PostMapping("/todos")
+    public Usuario buscarTodos() {
+        return usuarioService.buscarTodos();
+    }
+
 } 

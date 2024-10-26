@@ -2,45 +2,35 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">   
-    <title>Barra de Navegação Lateral</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca</title>
     <link rel="stylesheet" href="assets/style.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <aside class="sidebar">
-        <div class="logo">
-            <h2>MINHA BIBLIOTECA</h2>
+   
+    <div class="navbar" id="navbar">
+        
+        <div class="menu-burger" id="menuBurger">
+            &#9776; 
         </div>
-        <ul class="nav-list">
-            <li>
-                <a id="clientes">
-                    <span class="icon">👤</span>
-                    <span class="nav-text">Clientes</span>
-                </a>
-            </li>
-            <li>
-                <a id="livros">
-                    <span class="icon">📚</span>
-                    <span class="nav-text">Livros</span>
-                </a>
-            </li>
-            <li>
-                <a id="alugados">
-                    <span class="icon">📦</span>
-                    <span class="nav-text">Alugados</span>
-                </a>
-            </li>
+        <ul>
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="#">Clientes</a></li>
+            <li><a href="#">Livros</a></li>
         </ul>
-    </aside>
+    </div>
 
-    <section id="containerPrincipal">
-        
-        
-    </section>
+    <div class="main-content">
+        <h1>Bem-vindo ao sistema de biblioteca</h1>
+        <p>Selecione uma opção no menu à esquerda.</p>
+    </div>
 
-
-    <script src="assets/scriptCliente.js"></script>
-    <script src="assets/scriptLivro.js"></script>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <script src="assets/navbar.js"></script>
+    <script src="assets/clientes.js"></script>
+    <script src="assets/livros.js"></script>
+    <script src="assets/dashboard.js"></script>
 </body>
 </html>

@@ -6,4 +6,5 @@ import br.com.ads.java.biblioteca.model.Usuario;
 public interface UsuarioDAO {
     Usuario salvar(Usuario usuario);
     Usuario buscarPorEmail(String email);
+    Usuario buscarTodos();
 }
