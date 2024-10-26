@@ -367,7 +367,27 @@ form button[type="submit"]:hover {
     background-color: #cccccc;
 }
 
-
+.cancelBtn {
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    width: 100%;
+    height: 10px;
+}
+.cancelBtn > p {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+    height: 25px;
+    background-color: #007bff2e;
+    border-radius: 5px;
+    font-size: 1.5vmin;
+    cursor: pointer;
+}
+.cancelBtn > p:hover {
+    background-color: #007BFF;
+}
 /*-------------------------- dashboard----------------------------- */
 * {
     margin: 0;
@@ -505,3 +525,4 @@ canvas {
 #alugueis-table-title {
     margin-bottom: 10px;
 }
+

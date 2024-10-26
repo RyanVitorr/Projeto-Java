@@ -14,20 +14,22 @@ public class Emprestimo {
     private int totaLivrosAlugados;
     private LocalDate dataDevolucao;
 
-    // pega dados da api idLivro
-    public Emprestimo(int idEmprestimo, Usuario usuario, LocalDate dataEmprestimo, LocalDate dataPrevDevolucao, LocalDate dataDevolucao) {
+
+    
+    // pega dados da api idUsuario/livro
+    public Emprestimo(int idEmprestimo, Usuario usuario, Livro livro, LocalDate dataEmprestimo, LocalDate dataPrevDevolucao, LocalDate dataDevolucao) {
         this.idEmprestimo = idEmprestimo;
         this.usuario = usuario;
+        this.livro = livro;
         this.dataEmprestimo = dataEmprestimo;
         this.dataPrevDevolucao = dataPrevDevolucao;
 
         this.dataDevolucao = dataDevolucao;
     }
 
-    
-    // pega dados da api idUsuario
     public Emprestimo(int idEmprestimo, Livro livro, LocalDate dataEmprestimo, LocalDate dataPrevDevolucao, LocalDate dataDevolucao) {
         this.idEmprestimo = idEmprestimo;
+
         this.livro = livro;
         this.dataEmprestimo = dataEmprestimo;
         this.dataPrevDevolucao = dataPrevDevolucao;

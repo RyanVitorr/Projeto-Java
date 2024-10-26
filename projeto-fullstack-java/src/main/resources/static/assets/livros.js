@@ -19,8 +19,15 @@ $(document).ready(function() {
             } else {
 
                 $('#formContainer').html(`
-                    <div class="container-form-transp">
+                    <div class="container-form-transp"> 
+                        
                         <form id="formNovoLivro">
+                        <div class="cancelBtn">
+                            <p id="cancelBtnP">
+                                X
+                            </p>
+                        </div>
+                            
                             <h3>Registrar Novo Livro</h3>
                             <label for="nomeLivro">Nome do Livro:</label>
                             <input type="text" id="nomeLivro" name="nomeLivro" required>
@@ -37,8 +44,9 @@ $(document).ready(function() {
                     </div>
                 `).find('#formNovoLivro').show();
 
-                $('.container-form-transp').off('click').on('click', function () {
-                    $($(this)).remove();
+                $('#cancelBtnP').off('click').on('click', function () {
+                    console.log("clicou")
+                    $('.container-form-transp').remove();
                 });
             }
         });
@@ -52,6 +60,11 @@ $(document).ready(function() {
                 $('#formContainer').html(`
                     <div class="container-form-transp">
                         <form id="formEmprestarLivro">
+                            <div class="cancelBtn">
+                                <p id="cancelBtnP">
+                                    X
+                                </p>
+                            </div>
                             <h3>Emprestar Livro</h3>
                             <div class="container-form">
                                 <div>
@@ -87,8 +100,9 @@ $(document).ready(function() {
                     </div>
                 `).find('#formEmprestarLivro').show();
 
-                $('.container-form-transp').off('click').on('click', function () {
-                    $($(this)).remove();
+                $('#cancelBtnP').off('click').on('click', function () {
+                    console.log("clicou")
+                    $('.container-form-transp').remove();
                 });
                 
             };
@@ -347,7 +361,7 @@ $(document).ready(function() {
                                             <td>${cliente.usuario.cpf}</td>
                                             <td>${cliente.usuario.telefone}</td>
                                             <td>${cliente.usuario.endereco}</td>
-                                            <td>${cliente.preco}</td>
+                                            <td>${cliente.livro.preco}</td>
                                             <td>${cliente.qtdAlugada}</td>
                                             <td>${cliente.dataEmprestimo}</td>
                                             <td>${cliente.dataDevolucao}</td>

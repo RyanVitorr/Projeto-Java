@@ -32,6 +32,11 @@ public class Livro {
         this.preco = preco;
     }
 
+    public Livro(int idLivro, float preco) {
+        this.idLivro = idLivro;
+        this.preco = preco;
+    }
+
     // Construtor com ID (para casos onde o ID é necessário)
     public Livro(int idLivro, String nome, String autor, String genero, String idadeIndicativa, String descricao, int qtdDisponivel, int qtdTotal, float preco) {
         this.idLivro = idLivro;

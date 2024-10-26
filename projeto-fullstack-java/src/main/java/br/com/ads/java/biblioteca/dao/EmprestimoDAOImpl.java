@@ -71,6 +71,7 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
                         rs.getFloat("preco")
                     );
 
+
                     Emprestimo emprestimo = new Emprestimo(
                         rs.getInt("id_emprestimo"), 
                         livro,   
@@ -96,10 +97,12 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
         System.out.println("Parâmetro idLivro recebido no dao: " + idLivro);
         List<Emprestimo> emprestimos = new ArrayList<>();
         String sql = "SELECT emprestimos.id_emprestimo, emprestimos.data_emprestimo, emprestimos.data_devolucao, emprestimos.data_previ_devolucao, "
-                   + "usuarios.id_usuario, usuarios.nome AS nome_usuario, usuarios.email, usuarios.telefone, usuarios.data_nascimento, usuarios.endereco "
+                   + "usuarios.id_usuario, usuarios.nome AS nome_usuario, usuarios.email, usuarios.telefone, usuarios.data_nascimento, usuarios.endereco, "
+                   + "livros.preco, livros.id "
                    + "FROM emprestimos "
                    + "JOIN usuarios ON emprestimos.id_usuario = usuarios.id_usuario "
-                   + "WHERE id_emprestimo = ?"; 
+                   + "JOIN livros ON emprestimos.id_livros = livros.id "
+                   + "WHERE emprestimos.id_livros = ?";
         
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             
@@ -116,10 +119,16 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
                         rs.getDate("data_nascimento") != null ? rs.getDate("data_nascimento").toLocalDate() : null, 
                         rs.getString("endereco")
                     );
+
+                    Livro livro = new Livro(
+                        rs.getInt("id"),
+                        rs.getFloat("preco")
+                    );
     
                     Emprestimo emprestimo = new Emprestimo(
                         rs.getInt("id_emprestimo"), 
-                        usuario,    
+                        usuario,
+                        livro, 
                         rs.getDate("data_emprestimo").toLocalDate(),
                         rs.getDate("data_previ_devolucao") != null ? rs.getDate("data_previ_devolucao").toLocalDate() : null,
                         rs.getDate("data_devolucao") != null ? rs.getDate("data_devolucao").toLocalDate() : null
