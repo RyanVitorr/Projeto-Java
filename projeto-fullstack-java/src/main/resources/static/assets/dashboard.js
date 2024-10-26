@@ -51,6 +51,7 @@ $(document).ready(function () {
                                 <th>Email</th>
                                 <th>ID do Livro</th>
                                 <th>Nome do Livro</th>
+                                <th>Preço</th>
                                 <th>Data do Empréstimo</th>
                                 <th>Data de Devolução</th>
                             </tr>
@@ -84,6 +85,7 @@ $(document).ready(function () {
                     <td>${emprestimo.usuario.email}</td>
                     <td>${emprestimo.livro.idLivro}</td>
                     <td>${emprestimo.livro.nome}</td>
+                     <td>R$ ${emprestimo.livro.preco.toFixed(2)}</td>
                     <td>${new Date(emprestimo.dataEmprestimo).toLocaleDateString('pt-BR')}</td>
                     <td>${emprestimo.dataDevolucao ? new Date(emprestimo.dataDevolucao).toLocaleDateString('pt-BR') : 'Não Devolvido'}</td>
                 </tr>

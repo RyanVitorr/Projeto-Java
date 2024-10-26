@@ -8,52 +8,55 @@ public class Emprestimo {
     private int livroId;     
     private int usuarioId;   
     private LocalDate dataEmprestimo;  
-    private LocalDate dataDevolucao;   
-    private String status;  
+    private LocalDate dataPrevDevolucao;   
     private int totalLivros;
     private int livrosAtrasados;
     private int totaLivrosAlugados;
+    private LocalDate dataDevolucao;
 
     // pega dados da api idLivro
-    public Emprestimo(int idEmprestimo, Usuario usuario, LocalDate dataEmprestimo, LocalDate dataDevolucao, String status) {
+    public Emprestimo(int idEmprestimo, Usuario usuario, LocalDate dataEmprestimo, LocalDate dataPrevDevolucao, LocalDate dataDevolucao) {
         this.idEmprestimo = idEmprestimo;
         this.usuario = usuario;
         this.dataEmprestimo = dataEmprestimo;
+        this.dataPrevDevolucao = dataPrevDevolucao;
+
         this.dataDevolucao = dataDevolucao;
-        this.status = status;
     }
 
     
     // pega dados da api idUsuario
-    public Emprestimo(int idEmprestimo, Livro livro, LocalDate dataEmprestimo, LocalDate dataDevolucao, String status) {
+    public Emprestimo(int idEmprestimo, Livro livro, LocalDate dataEmprestimo, LocalDate dataPrevDevolucao, LocalDate dataDevolucao) {
         this.idEmprestimo = idEmprestimo;
         this.livro = livro;
         this.dataEmprestimo = dataEmprestimo;
+        this.dataPrevDevolucao = dataPrevDevolucao;
+
         this.dataDevolucao = dataDevolucao;
-        this.status = status;
     }
 
     // todos os daddos emprestimo/usuario/livro
-    public Emprestimo(int idEmprestimo, Usuario usuario, Livro livro, LocalDate dataEmprestimo, LocalDate dataDevolucao, String status, int totalLivros, int livrosAtrasados, int totaLivrosAlugados) {
+    public Emprestimo(int idEmprestimo, Usuario usuario, Livro livro, LocalDate dataEmprestimo, LocalDate dataPrevDevolucao, LocalDate dataDevolucao, int totalLivros, int livrosAtrasados, int totaLivrosAlugados) {
         this.idEmprestimo = idEmprestimo;
         this.usuario = usuario;
         this.livro = livro;
         this.dataEmprestimo = dataEmprestimo;
-        this.dataDevolucao = dataDevolucao;
-        this.status = status;
+        this.dataPrevDevolucao = dataPrevDevolucao;
+
         this.totalLivros = totalLivros;
         this.livrosAtrasados = livrosAtrasados;
         this.totaLivrosAlugados = totaLivrosAlugados;
+        this.dataDevolucao = dataDevolucao;
     }
 
 
     // todo emprestimo
-    public Emprestimo(int idEmprestimo, int usuarioId, int livroId, LocalDate dataEmprestimo, LocalDate dataDevolucao, String status) {
+    public Emprestimo(int idEmprestimo, int usuarioId, int livroId, LocalDate dataEmprestimo, LocalDate dataPrevDevolucao, LocalDate dataDevolucao) {
         this.usuarioId = usuarioId;
         this.livroId = livroId;
         this.dataEmprestimo = dataEmprestimo;
+        this.dataPrevDevolucao = dataPrevDevolucao;
         this.dataDevolucao = dataDevolucao;
-        this.status = status;
     }
  
     // Getters e Setters
@@ -125,20 +128,16 @@ public class Emprestimo {
         this.totaLivrosAlugados = totaLivrosAlugados;
     }
 
+    public LocalDate getDataPrevDevolucao() {
+        return dataPrevDevolucao;
+    }
+
+    public void setDataDevolucao(LocalDate dataPrevDevolucao) {
+        this.dataPrevDevolucao = dataPrevDevolucao;
+    }
+    
     public LocalDate getDataDevolucao() {
         return dataDevolucao;
-    }
-
-    public void setDataDevolucao(LocalDate dataDevolucao) {
-        this.dataDevolucao = dataDevolucao;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     @Override
@@ -148,11 +147,11 @@ public class Emprestimo {
                 ", usuario=" + usuario +
                 ", livro=" + livro +
                 ", dataEmprestimo=" + dataEmprestimo +
-                ", dataDevolucao=" + dataDevolucao +
-                ", status='" + status + '\'' +
+                ", dataDevolucao=" + dataPrevDevolucao +
+                ", dataPrevDevolucao=" + dataPrevDevolucao +
                 ", total_livros=" + totalLivros +
                 ", livros_atrasados=" + livrosAtrasados +  
-                ", total_livros_alugados=" + totaLivrosAlugados +  
+                ", total_livros_alugados=" + totaLivrosAlugados +
                 '}';
     }
     // idUsuario
@@ -163,8 +162,10 @@ public class Emprestimo {
                 ", livro=" + livro + 
                 ", dataEmprestimo=" + dataEmprestimo +
                 ", dataDevolucao=" + dataDevolucao +
-                ", status='" + status + '\'' +
                 '}';
     }*/
+
+
+    
 
 }

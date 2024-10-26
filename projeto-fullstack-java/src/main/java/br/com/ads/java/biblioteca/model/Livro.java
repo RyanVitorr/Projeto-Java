@@ -17,10 +17,11 @@ public class Livro {
     private String descricao;
     private int qtdDisponivel; 
     private int qtdTotal;
-    private boolean disponivel;
+    private float preco;
+
 
     // Construtor ajustado para incluir idLivro
-    public Livro(String nome, String autor, String genero, String idadeIndicativa, String descricao, int qtdDisponivel, int qtdTotal, boolean disponivel) {
+    public Livro(String nome, String autor, String genero, String idadeIndicativa, String descricao, int qtdDisponivel, int qtdTotal, float preco) {
         this.nome = nome;
         this.autor = autor;
         this.genero = genero;
@@ -28,11 +29,11 @@ public class Livro {
         this.descricao = descricao;
         this.qtdDisponivel = qtdDisponivel;
         this.qtdTotal = qtdTotal;
-        this.disponivel = disponivel;
+        this.preco = preco;
     }
 
     // Construtor com ID (para casos onde o ID é necessário)
-    public Livro(int idLivro, String nome, String autor, String genero, String idadeIndicativa, String descricao, int qtdDisponivel, int qtdTotal, boolean disponivel) {
+    public Livro(int idLivro, String nome, String autor, String genero, String idadeIndicativa, String descricao, int qtdDisponivel, int qtdTotal, float preco) {
         this.idLivro = idLivro;
         this.nome = nome;
         this.autor = autor;
@@ -41,12 +42,13 @@ public class Livro {
         this.descricao = descricao;
         this.qtdDisponivel = qtdDisponivel;
         this.qtdTotal = qtdTotal;
-        this.disponivel = disponivel;
+        this.preco = preco;
     }
 
-    public Livro(int idLivro, String nome) {
+    public Livro(int idLivro, String nome, float preco) {
         this.idLivro = idLivro;
         this.nome = nome;
+        this.preco = preco;
     }
 
     // Getters e setters
@@ -114,12 +116,12 @@ public class Livro {
         this.qtdTotal = qtdTotal;
     }
 
-    public boolean isDisponivel() {
-        return disponivel;
+    public float getPreco() {
+        return preco;
     }
 
-    public void setDisponivel(boolean disponivel) {
-        this.disponivel = disponivel;
+    public void setPreco(float preco) {
+        this.preco = preco;
     }
 
     // get com idlivro
@@ -130,6 +132,8 @@ public class Livro {
                 ", genero='" + genero + '\'' +
                 ", idadeIndicativa='" + idadeIndicativa + '\'' +
                 ", descricao='" + descricao + '\'' +
+                ", preço=" + preco +
                 '}';
     }
 }
+

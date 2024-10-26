@@ -33,8 +33,8 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
                     rs.getInt("id_usuario"), 
                     rs.getInt("id_livros"),     
                     rs.getDate("data_emprestimo").toLocalDate(),
-                    rs.getDate("data_devolucao") != null ? rs.getDate("data_devolucao").toLocalDate() : null, 
-                    rs.getString("status")
+                    rs.getDate("data_previ_devolucao") != null ? rs.getDate("data_previ_devolucao").toLocalDate() : null,
+                    rs.getDate("data_devolucao") != null ? rs.getDate("data_devolucao").toLocalDate() : null
                 ));
             }
 
@@ -51,7 +51,7 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
         List<Emprestimo> Emprestimos = new ArrayList<>();
         String sql = "SELECT emprestimos.*, livros.* "
            + "FROM emprestimos "
-           + "JOIN livros ON emprestimos.id_livros = livros.id_livro "
+           + "JOIN livros ON emprestimos.id = livros.id "
            + "WHERE emprestimos.id_usuarios = ?"; 
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -68,15 +68,15 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
                         rs.getString("descricao"),
                         rs.getInt("qtd_disponivel"),
                         rs.getInt("qtd_total"),
-                        rs.getBoolean("disponivel") 
+                        rs.getFloat("preco")
                     );
 
                     Emprestimo emprestimo = new Emprestimo(
                         rs.getInt("id_emprestimo"), 
                         livro,   
                         rs.getDate("data_emprestimo").toLocalDate(),
-                        rs.getDate("data_devolucao") != null ? rs.getDate("data_devolucao").toLocalDate() : null, 
-                        rs.getString("status")
+                        rs.getDate("data_previ_devolucao") != null ? rs.getDate("data_previ_devolucao").toLocalDate() : null,
+                        rs.getDate("data_devolucao") != null ? rs.getDate("data_devolucao").toLocalDate() : null
                     );
 
                     Emprestimos.add(emprestimo);
@@ -95,11 +95,11 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
     public List<Emprestimo> findByIdLivro(int idLivro) {
         System.out.println("Parâmetro idLivro recebido no dao: " + idLivro);
         List<Emprestimo> emprestimos = new ArrayList<>();
-        String sql = "SELECT emprestimos.id_emprestimo, emprestimos.data_emprestimo, emprestimos.data_devolucao, emprestimos.status, "
+        String sql = "SELECT emprestimos.id_emprestimo, emprestimos.data_emprestimo, emprestimos.data_devolucao, emprestimos.data_previ_devolucao, "
                    + "usuarios.id_usuario, usuarios.nome AS nome_usuario, usuarios.email, usuarios.telefone, usuarios.data_nascimento, usuarios.endereco "
                    + "FROM emprestimos "
                    + "JOIN usuarios ON emprestimos.id_usuario = usuarios.id_usuario "
-                   + "WHERE emprestimos.id_livros = ?"; 
+                   + "WHERE id_emprestimo = ?"; 
         
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             
@@ -121,8 +121,8 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
                         rs.getInt("id_emprestimo"), 
                         usuario,    
                         rs.getDate("data_emprestimo").toLocalDate(),
-                        rs.getDate("data_devolucao") != null ? rs.getDate("data_devolucao").toLocalDate() : null, 
-                        rs.getString("status")
+                        rs.getDate("data_previ_devolucao") != null ? rs.getDate("data_previ_devolucao").toLocalDate() : null,
+                        rs.getDate("data_devolucao") != null ? rs.getDate("data_devolucao").toLocalDate() : null
                     );
                       
                     emprestimos.add(emprestimo);
@@ -137,14 +137,14 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
     @Override
     public List<Emprestimo> buscarEmprestimosDash() {
         List<Emprestimo> emprestimos = new ArrayList<>();
-        String sql = "SELECT e.id_emprestimo, e.data_emprestimo, e.data_devolucao, e.status, " +
+        String sql = "SELECT e.id_emprestimo, e.data_emprestimo, e.data_devolucao, e.data_previ_devolucao, " +
                     "u.nome AS nome_usuario, u.email, " +
-                    "l.id_livro, l.nome, " +
+                    "l.id, l.nome, l.preco, " +
                     "(SELECT COUNT(*) FROM livros) AS total_livros, " +
                     "(SELECT COUNT(*) FROM emprestimos WHERE data_devolucao IS NULL OR data_devolucao < CURRENT_DATE) AS livros_atraso, " +
                     "(SELECT COUNT(*) FROM emprestimos) AS total_livros_alugados " +
                     "FROM emprestimos e " +
-                    "JOIN livros l ON e.id_livros = l.id_livro " +
+                    "JOIN livros l ON e.id_livros = l.id " +
                     "JOIN usuarios u ON e.id_usuario = u.id_usuario";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql);
@@ -156,8 +156,9 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
                 System.out.println("Processando registro de empréstimo ID: " + rs.getInt("id_emprestimo"));
                 
                 Livro livro = new Livro(
-                    rs.getInt("id_livro"),
-                    rs.getString("nome")
+                    rs.getInt("id"),
+                    rs.getString("nome"),
+                    rs.getFloat("preco")
                 );
 
                 Usuario usuario = new Usuario(
@@ -170,8 +171,8 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
                     usuario,
                     livro,
                     rs.getDate("data_emprestimo").toLocalDate(),
+                    rs.getDate("data_previ_devolucao") != null ? rs.getDate("data_previ_devolucao").toLocalDate() : null,
                     rs.getDate("data_devolucao") != null ? rs.getDate("data_devolucao").toLocalDate() : null,
-                    rs.getString("status"),
                     rs.getInt("total_livros"),
                     rs.getInt("livros_atraso"),
                     rs.getInt("total_livros_alugados")
@@ -193,17 +194,14 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
         return emprestimos;
     }
 
-    
-    
-
     @Override
     public List<Emprestimo> dashboard(Date dataEmprestimo) {
         List<Emprestimo> emprestimos = new ArrayList<>();
-        String sql = "SELECT e.id_emprestimo, e.data_emprestimo, e.data_devolucao, e.status, " +
+        String sql = "SELECT e.id_emprestimo, e.data_emprestimo, e.data_devolucao, e.data_previ_devolucao, " +
                      "u.nome AS nome_usuario, u.email, " +
-                     "l.id_livro, l.nome " +
+                     "l.id, l.nome " +
                      "FROM emprestimos e " +
-                     "JOIN livros l ON e.id_livros = l.id_livro " +
+                     "JOIN livros l ON e.id_livros = l.id " +
                      "JOIN usuarios u ON e.id_usuario = u.id_usuario " +
                      "WHERE e.data_emprestimo = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -212,8 +210,9 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
                 while (rs.next()) {
                     
                     Livro livro = new Livro(
-                        rs.getInt("id_livro"),
-                        rs.getString("nome")
+                        rs.getInt("id"),
+                        rs.getString("nome"),
+                        rs.getFloat("preco")
                     );
     
                     
@@ -227,8 +226,8 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
                         usuario,
                         livro,    
                         rs.getDate("data_emprestimo").toLocalDate(),
-                        rs.getDate("data_devolucao") != null ? rs.getDate("data_devolucao").toLocalDate() : null, 
-                        rs.getString("status"),
+                        rs.getDate("data_previ_devolucao") != null ? rs.getDate("data_previ_devolucao").toLocalDate() : null,
+                        rs.getDate("data_devolucao") != null ? rs.getDate("data_devolucao").toLocalDate() : null,
                         rs.getInt("total_livros"),
                         rs.getInt("livros_atraso"),
                         rs.getInt("total_livros_alugados")

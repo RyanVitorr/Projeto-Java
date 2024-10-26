@@ -181,6 +181,7 @@ $(document).ready(function() {
                                 <th>Gênero</th>
                                 <th>Idade Indicativa</th>
                                 <th>Descrição</th>
+                                <th>Preço</th>
                                 <th>Qtd. Disponível</th>
                                 <th>Qtd. Total</th>
                                 <th>Disponivel</th>
@@ -297,7 +298,8 @@ $(document).ready(function() {
         
                 // Adicionar cada livro como uma nova linha na tabela
                 for (const book of rowsToDisplay) {
-                    // Cria uma linha para a tabela de livros
+                    let disponivel;
+                    book.qtdDisponivel >= 1 ? disponivel = true : disponivel = false;
                     let row = `
                         <tr class="row" data-id="${book.idLivro}">
                             <td>${book.nome}</td>
@@ -305,9 +307,10 @@ $(document).ready(function() {
                             <td>${book.genero}</td>
                             <td>${book.idadeIndicativa}</td>
                             <td>${book.descricao}</td>
+                            <td>R$ ${book.preco.toFixed(2)}</td>
                             <td>${book.qtdDisponivel}</td>
                             <td>${book.qtdTotal}</td>
-                            <td>${book.disponivel}</td>
+                            <td>${disponivel}</td>
                             <td class="td-perso">
                                 <button class="btn-edit">✏️</button>
                                 <button class="btn-delete">🗑️</button>

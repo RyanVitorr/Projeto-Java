@@ -13,7 +13,7 @@ public class LivroDAOImpl implements LivroDAO {
     private Connection connection;
 
     public LivroDAOImpl() {
-        this.connection = DatabaseUtil.getConnection(); // Método para obter a conexão
+        this.connection = DatabaseUtil.getConnection();
     }
 
     @Override
@@ -23,15 +23,15 @@ public class LivroDAOImpl implements LivroDAO {
         try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 livros.add(new Livro(
-                        rs.getInt("id_livro"), 
-                        rs.getString("nome"),
-                        rs.getString("autor"),
-                        rs.getString("genero"),
-                        rs.getString("idade_indicativa"),
-                        rs.getString("descricao"),
-                        rs.getInt("qtd_disponivel"),
-                        rs.getInt("qtd_total"),
-                        rs.getBoolean("disponivel") 
+                    rs.getInt("id"), 
+                    rs.getString("nome"),
+                    rs.getString("autor"),
+                    rs.getString("genero"),
+                    rs.getString("idade_indicativa"),
+                    rs.getString("descricao"),
+                    rs.getInt("qtd_disponivel"),
+                    rs.getInt("qtd_total"),
+                    rs.getFloat("preco")
                 ));
             }
         } catch (SQLException e) {
