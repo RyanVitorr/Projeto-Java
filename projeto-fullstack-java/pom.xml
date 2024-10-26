@@ -54,8 +54,10 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
+            <version>42.7.4</version> <!-- ou a versão mais recente -->
             <scope>runtime</scope>
         </dependency>
+
 
         <!-- Spring Data JPA para interação com banco de dados -->
         <dependency>
@@ -83,7 +85,12 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>br.com.ads.java.biblioteca.Application</mainClass> <!-- Defina a sua classe principal aqui -->
+                </configuration>
             </plugin>
         </plugins>
     </build>
+
+    
 </project>

@@ -1,6 +1,6 @@
 // Implementação UsuarioDAOImpl 
-import biblioteca.dao.UsuarioDAO; // Importa a interface
-import biblioteca.model.Usuario; 
+package br.com.ads.java.biblioteca.dao;
+import br.com.ads.java.biblioteca.model.Usuario; 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.NoResultException;
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class UsuarioDAOImpl implements UsuarioDAO {
+
 
     @PersistenceContext
     private EntityManager entityManager;
