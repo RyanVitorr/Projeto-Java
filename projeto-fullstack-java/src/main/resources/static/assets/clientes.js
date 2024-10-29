@@ -6,20 +6,6 @@ $(document).ready(function() {
     $('.navbar ul li a:contains("Clientes")').on('click', function() {
 
         $.ajax({
-            url: 'emprestimos/todos',
-            type: 'GET',
-            cache: false,
-            success: function(data) {
-                console.log("Dados recebidos:", data);  
-                dataEmprestimos = data;
-            },
-            error: function(xhr, status, error) {
-                console.error('Erro na requisição:', xhr.responseText); 
-                reject(error);     
-            }
-        });
-
-        $.ajax({
             url: 'usuarios/todos',
             type: 'GET',
             cache: false,
@@ -82,6 +68,7 @@ $(document).ready(function() {
                         <h3>Alugar Livro</h3>
                         <div class="container-form">
                             <div>
+                                
                                 <label for="clientePesquisa">Pesquisar Cliente:</label>
                                 <input type="text" id="clientePesquisa" placeholder="Pesquise o cliente...">
                                 <ul id="clienteLista"></ul>
@@ -92,6 +79,8 @@ $(document).ready(function() {
                                 <input type="text" id="cpfAluguel" name="cpf" readonly>
                                 <label for="telefoneAluguel">Telefone:</label>
                                 <input type="text" id="telefoneAluguel" name="telefone" readonly>
+                                
+                               
                             </div>
 
 
@@ -202,6 +191,241 @@ $(document).ready(function() {
             });
         });  
         
+        $('#conteudo-principal').html(`
+            <div class="table-wrapper">
+                <div id="div-filter">
+                    <label for="entries">Exibir</label>
+                    <select id="entries">
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                    </select>
+                    <span>resultados por página</span>
+                    <input type="text" id="search" placeholder="Buscar...">
+                </div>
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Nome do Cliente</th>
+                                <th>CPF</th>
+                                <th>Telefone</th>
+                                <th>Endereço</th>
+                                <th>Preço</th>
+                                <th>Qtd. Alugada</th>
+                                <th>Data de Aluguel</th>
+                                <th>Data de Devolução</th>
+                            </tr>
+                        </thead>
+                        <tbody class="list"></tbody>
+                    </table>
+                </div>
+                <div class="pagination">
+                    <button class="prev">Anterior</button>
+                    <span>Página <span id="current-page">1</span></span>
+                    <button class="next">Próxima</button>
+                </div>
+            </div>
+        `);
+
+        const fetchClientes = ()=> {
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    url: 'livro/todos',
+                    type: 'GET',
+                    cache: false,
+                    success: function(data) {
+                        resolve(data);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Erro na requisição:', xhr.responseText);
+                        reject(error); 
+                    }
+                });
+            });
+        }
+        
+        fetchClientes().then(dataClientes => {
+            console.log(dataClientes);  
+            renderClientes(dataLClientes);
+        }).catch(error => {
+            console.error('Erro ao buscar Clientes:', error);  
+        });
+
+        // Função para adicionar um novo client ao array de objetos ao enviar o formulário (Ryan vai modificar)
+        $(document).on('submit', '#add-book-form', function(e) {
+            e.preventDefault(); 
+           
+            const clienteName = $('#name').val();
+            const clienteCpf = $('#book-author').val();
+            const clienteTelefone = $('#book-genre').val();
+    
+            
+            let newCliente = {
+                nome: clienteName,
+                cpf: clienteCpf,
+            };
+    
+            dataClientes.push(newCliente);
+    
+            console.log(dataClientes);
+    
+            $('#add-book-form')[0].reset();
+            $('#add-book-form-section').hide(); 
+    
+            renderClientes(dataClientes);
+        });
+
+         // Função para renderizar os livros na tabela
+         async function renderClientes(clienteItems) {
+            let rowsPerPage = parseInt($("#entries").val());
+            let currentPage = 1;
+            let totalRows = clienteItems.length;
+            let totalPages = Math.ceil(totalRows / rowsPerPage);
+        
+            // Função para buscar clientes para um livro
+            async function fetchLivrosForClientes(clienteId) {
+                console.log("clienteId:", clienteId); 
+            
+                return new Promise((resolve, reject) => {
+                    $.ajax({
+                        url: 'emprestimos/porCliente',
+                        type: 'GET',
+                        cache: false,
+                        data: { idLivro: clienteId },
+                        success: function(data) {
+                            console.log("Dados recebidos:", data);  
+                            resolve(data);      
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Erro na requisição:', xhr.responseText); 
+                            reject(error);     
+                        }
+                    });
+                });
+            }
+
+            // Função para exibir uma página
+            async function displayPage(page) {
+                let start = (page - 1) * rowsPerPage;
+                let end = start + rowsPerPage;
+                let rowsToDisplay = clienteItems.slice(start, end);
+        
+                // Limpar a tabela atual
+                $(".list").html('');
+        
+                // Adicionar cada cliente como uma nova linha na tabela
+                for (const cliente of rowsToDisplay) {
+                    // Cria uma linha para a tabela de clientes
+                    let row = `
+                        <tr class="row" data-id="${cliente.idLivro}">
+                            <td>${cliente.nome}</td>
+                            <td>${cliente.autor}</td>
+                            <td>${cliente.genero}</td>
+                            <td>${cliente.idadeIndicativa}</td>
+                            <td>${cliente.descricao}</td>
+                            <td>${cliente.qtdDisponivel}</td>
+                            <td>${cliente.qtdTotal}</td>
+                            <td>${cliente.disponivel}</td>
+                            <td class="td-perso">
+                                <button class="btn-edit">✏️</button>
+                                <button class="btn-delete">🗑️</button>
+                            </td>
+                        </tr>
+                        
+                    `;
+        
+                    $(".list").append(row);
+
+                    // Buscar livros para cada cliente assim que a linha é adicionada
+                    const livros = await fetchLivrosForClientes(cliente.idCliente);
+                    if (livros.length > 0) {
+                        livros.forEach(livro => {
+                            let livroRow = `
+                            <tr class="customer-table" style="display: none;">
+                                <td colspan="8">
+                                    <table class="table customer-list-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Nome do Cliente</th>
+                                                <th>CPF</th>
+                                                <th>Telefone</th>
+                                                <th>Endereço</th>
+                                                <th>Preço</th>
+                                                <th>Qtd. Alugada</th>
+                                                <th>Data de Aluguel</th>
+                                                <th>Data de Devolução</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="customer-list">
+                                        <tr>
+                                            <td>${cliente.usuario.nome}</td>
+                                            <td>${cliente.usuario.cpf}</td>
+                                            <td>${cliente.usuario.telefone}</td>
+                                            <td>${cliente.usuario.endereco}</td>
+                                            <td>${cliente.preco}</td>
+                                            <td>${cliente.qtdAlugada}</td>
+                                            <td>${cliente.dataEmprestimo}</td>
+                                            <td>${cliente.dataDevolucao}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>`;
+                            $('.list').append(clienteRow);
+                        });
+                    } else {
+                        console.log(`Nenhum cliente encontrado para o livro ID: ${book.idLivro}`);
+                    }
+                }
+        
+                // Atualiza a exibição da página atual
+                $("#current-page").text(page);
+        
+                // Adiciona eventos de clique nas linhas dos livros
+                $('.row').off('click').on('click', function() {
+                    let customerRow = $(this).next('.customer-table');
+        
+                    // Se a linha de clientes já estiver visível, ocultar e sair
+                    if (customerRow.is(':visible')) {
+                        customerRow.hide();
+                        return;
+                    }
+        
+                    // Exibir a linha de clientes
+                    customerRow.show();
+                });
+            }
+        
+            // Função para lidar com a paginação
+            function handlePagination() {
+                $('.prev').off('click').on('click', function() {
+                    if (currentPage > 1) {
+                        currentPage--;
+                        displayPage(currentPage);
+                    }
+                });
+        
+                $('.next').off('click').on('click', function() {
+                    if (currentPage < totalPages) {
+                        currentPage++;
+                        displayPage(currentPage);
+                    }
+                });
+        
+                $("#entries").off("change").on("change", function() {
+                    rowsPerPage = parseInt($(this).val());
+                    totalPages = Math.ceil(totalRows / rowsPerPage); 
+                    displayPage(1); 
+                });
+        
+                // Atualiza a exibição inicial
+                displayPage(currentPage);
+            }
+        
+            handlePagination();
+        }
+
         
         
     });
