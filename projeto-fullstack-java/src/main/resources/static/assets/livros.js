@@ -83,6 +83,8 @@ $(document).ready(function() {
                                     <label for="livroPesquisa">Pesquisar Livro:</label>
                                     <input type="text" id="livroPesquisa" placeholder="Pesquise o livro...">
                                     <ul id="livroLista"></ul>
+                                    <label for="idLivroEmprestimo">Id do Livro:</label>
+                                    <input type="text" id="idLivroEmprestimo" name="idLivroEmprestimo" readonly>
                                     <label for="nomeLivroEmprestimo">Nome do Livro:</label>
                                     <input type="text" id="nomeLivroEmprestimo" name="nomeLivroEmprestimo" readonly>
                                     <label for="autorLivroEmprestimo">Autor:</label>
@@ -91,8 +93,8 @@ $(document).ready(function() {
                                     <input type="number" id="idadeIndicativaEmprestimo" name="idadeIndicativaEmprestimo" readonly>
                                     <label for="generoLivroEmprestimo">Gênero:</label>
                                     <input type="text" id="generoLivroEmprestimo" name="generoLivroEmprestimo" readonly>
-                                    <label for="qtdDisponivelEmprestimo">Quantidade Disponível:</label>
-                                    <input type="number" id="qtdDisponivelEmprestimo" name="qtdDisponivelEmprestimo" readonly>
+                                    <label for="qtdDesejadaEmprestimo">Quantidade:</label>
+                                    <input type="number" id="qtdDesejadaEmprestimo" name="qtdDesejadaEmprestimo">
                                 </div>
                             </div>
                             <button type="submit">Confirmar Empréstimo</button>
@@ -140,21 +142,25 @@ $(document).ready(function() {
 
             // Adiciona evento para pesquisa de livro (usando os dados já recebidos)
             $('#livroPesquisa').on('input', function() {
+                console.log("input livro");
+                console.log(dataLivros);
                 const searchValue = $(this).val().toLowerCase();
                 const filteredLivros = dataLivros.filter(livro => 
                     livro.nome.toLowerCase().includes(searchValue)
                 );
+                console.log(searchValue);
+                console.log(filteredLivros);
 
                 if (filteredLivros.length > 0) {
                     let livroListHtml = "";
                     filteredLivros.forEach(livro => {
                         livroListHtml += `
-                            <li data-nome="${livro.nome}" data-autor="${livro.autor}" data-idade="${livro.idade}" data-genero="${livro.genero}" data-qtd="${livro.qtd}">
+                            <li data-id="${livro.idLivro}" data-nome="${livro.nome}" data-autor="${livro.autor}" data-idade="${livro.idadeIndicativa}" data-genero="${livro.genero}" data-qtd="${livro.qtdDisponivel}">
                                 <strong>Nome:</strong> ${livro.nome} <br>
                                 <strong>Autor:</strong> ${livro.autor} <br>
-                                <strong>Idade Indicativa:</strong> ${livro.idade} <br>
+                                <strong>Idade Indicativa:</strong> ${livro.idadeIndicativa} <br>
                                 <strong>Gênero:</strong> ${livro.genero} <br>
-                                <strong>Qtd Disponível:</strong> ${livro.qtd}
+                                <strong>Qtd Disponível:</strong> ${livro.qtdDisponivel}
                             </li>
                         `;
                     });
@@ -164,11 +170,11 @@ $(document).ready(function() {
                 }
 
                 $('#livroLista li').on('click', function() {
-                    $('#nomeLivroEmprestimo').val($(this).data('nome'));
-                    $('#autorLivroEmprestimo').val($(this).data('autor'));
-                    $('#idadeIndicativaEmprestimo').val($(this).data('idade'));
-                    $('#generoLivroEmprestimo').val($(this).data('genero'));
-                    $('#qtdDisponivelEmprestimo').val($(this).data('qtd'));
+                    $('#idLivroEmprestimo').val($(this).data('id'))
+                    $('#nomeLivroEmprestimo').val($(this).data('nome'))
+                    $('#autorLivroEmprestimo').val($(this).data('autor'))
+                    $('#idadeIndicativaEmprestimo').val($(this).data('idade'))
+                    $('#generoLivroEmprestimo').val($(this).data('genero'))
                     $('#livroLista').html('');
                 });
             });
@@ -220,6 +226,7 @@ $(document).ready(function() {
                     type: 'GET',
                     cache: false,
                     success: function(data) {
+                        dataLivros = data;
                         resolve(data);
                     },
                     error: function(xhr, status, error) {
