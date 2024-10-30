@@ -131,7 +131,7 @@ form label {
     display: block;
 }
 
-#formNovoCliente, #formEmprestarLivro, #formNovoLivro {
+#formNovoCliente, #formEmprestarLivro, #formNovoLivro, #formEditarLivro {
     padding: 20px; /* Espaçamento interno */
     border: 1px solid #ccc; /* Borda leve */
     box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Sombra para destaque */
@@ -279,7 +279,7 @@ form button[type="submit"]:hover {
 }
 
 .table th, .table td {
-    padding: 12px;
+    padding: 8px;
     text-align: left;
     border-bottom: 1px solid #ddd;
 }
@@ -526,3 +526,17 @@ canvas {
     margin-bottom: 10px;
 }
 
+
+
+/*--------exlcuir---------*/
+
+.container-excluir {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 25px;
+    gap: 3.5vmin;
+    border-radius: 8px;
+    background-color: white;
+}

@@ -17,7 +17,7 @@ public class Emprestimo {
 
     
     // pega dados da api idUsuario/livro
-    public Emprestimo(int idEmprestimo, Usuario usuario, Livro livro, LocalDate dataEmprestimo, LocalDate dataPrevDevolucao, LocalDate dataDevolucao) {
+    public Emprestimo(int idEmprestimo, Usuario usuario, Livro livro, LocalDate dataEmprestimo, LocalDate dataPrevDevolucao, LocalDate dataDevolucao, int totaLivrosAlugados) {
         this.idEmprestimo = idEmprestimo;
         this.usuario = usuario;
         this.livro = livro;
@@ -25,6 +25,7 @@ public class Emprestimo {
         this.dataPrevDevolucao = dataPrevDevolucao;
 
         this.dataDevolucao = dataDevolucao;
+        this.totaLivrosAlugados = totaLivrosAlugados;
     }
 
     public Emprestimo(int idEmprestimo, Livro livro, LocalDate dataEmprestimo, LocalDate dataPrevDevolucao, LocalDate dataDevolucao) {
@@ -47,8 +48,9 @@ public class Emprestimo {
 
         this.totalLivros = totalLivros;
         this.livrosAtrasados = livrosAtrasados;
-        this.totaLivrosAlugados = totaLivrosAlugados;
+   
         this.dataDevolucao = dataDevolucao;
+        this.totaLivrosAlugados = totaLivrosAlugados;
     }
 
 

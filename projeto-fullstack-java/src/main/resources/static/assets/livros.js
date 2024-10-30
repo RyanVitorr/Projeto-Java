@@ -226,6 +226,7 @@ $(document).ready(function() {
                     type: 'GET',
                     cache: false,
                     success: function(data) {
+                        console.log(data);
                         dataLivros = data;
                         resolve(data);
                     },
@@ -239,7 +240,6 @@ $(document).ready(function() {
         
         
         fetchLivros().then(dataLivros => {
-            console.log(dataLivros);  
             renderBooks(dataLivros);
         }).catch(error => {
             console.error('Erro ao buscar livros:', error);  
@@ -309,20 +309,19 @@ $(document).ready(function() {
             }
 
             // Função para exibir uma página
-            async function displayPage(page) {
+            async function displayPage(page, filteredBooks = bookItems) {
                 let start = (page - 1) * rowsPerPage;
                 let end = start + rowsPerPage;
-                let rowsToDisplay = bookItems.slice(start, end);
+                let rowsToDisplay = filteredBooks.slice(start, end);
         
                 // Limpar a tabela atual
                 $(".list").html('');
         
                 // Adicionar cada livro como uma nova linha na tabela
                 for (const book of rowsToDisplay) {
-                    let disponivel;
-                    book.qtdDisponivel >= 1 ? disponivel = true : disponivel = false;
+                    let disponivel = book.qtdDisponivel >= 1 ? "Sim" : "Não";
                     let row = `
-                        <tr class="row" data-id="${book.idLivro}">
+                        <tr class="row" data-id="${book.idLivro}" data-nome="${book.nome}"  data-autor="${book.autor}" data-genero="${book.genero}" data-idade="${book.idadeIndicativa}" data-descricao="${book.descricao}" data-qtdDisponivel="${book.qtdDisponivel}" data-qtdTotal="${book.qtdTotal}" data-preco="${book.preco}">
                             <td>${book.nome}</td>
                             <td>${book.autor}</td>
                             <td>${book.genero}</td>
@@ -337,7 +336,6 @@ $(document).ready(function() {
                                 <button class="btn-delete">🗑️</button>
                             </td>
                         </tr>
-                        
                     `;
         
                     $(".list").append(row);
@@ -360,6 +358,7 @@ $(document).ready(function() {
                                                 <th>Qtd. Alugada</th>
                                                 <th>Data de Aluguel</th>
                                                 <th>Data de Devolução</th>
+                                                <th>Data Prev.Devolução</th>
                                             </tr>
                                         </thead>
                                         <tbody class="customer-list">
@@ -369,9 +368,11 @@ $(document).ready(function() {
                                             <td>${cliente.usuario.telefone}</td>
                                             <td>${cliente.usuario.endereco}</td>
                                             <td>${cliente.livro.preco}</td>
-                                            <td>${cliente.qtdAlugada}</td>
+                                            <td>${cliente.totaLivrosAlugados}</td>
                                             <td>${cliente.dataEmprestimo}</td>
                                             <td>${cliente.dataDevolucao}</td>
+                                            <td>${cliente.dataPrevDevolucao}</td>
+
                                         </tr>
                                         </tbody>
                                     </table>
@@ -386,21 +387,157 @@ $(document).ready(function() {
         
                 // Atualiza a exibição da página atual
                 $("#current-page").text(page);
-        
+
+                    
                 // Adiciona eventos de clique nas linhas dos livros
-                $('.row').off('click').on('click', function() {
+                $('.row').off('click').on('click', function(event) {
+
+                    if ($(event.target).is('.btn-edit')) {
+                        event.stopPropagation();
+                        
+                        let row = $(event.target).closest('.row');
+
+                        let bookData = {
+                            id: row.data('id'),
+                            nome: row.data('nome'),
+                            autor: row.data('autor'),
+                            genero: row.data('genero'),
+                            idade: row.data('idade'),
+                            descricao: row.data('descricao'),
+                            qtdDisponivel: row.data('qtddisponivel'),
+                            qtdTotal: row.data('qtdtotal'),
+                            preco: row.data('preco')
+                        };
+
+                        editar(bookData);
+                        return;
+                    } else if ($(event.target).is('.btn-delete')) {
+                        event.stopPropagation();
+                        let row = $(event.target).closest('.row');
+
+                        let bookData = {
+                            id: row.data('id'),
+                            nome: row.data('nome')
+                        };
+
+                        excluir(bookData);
+                        return;
+                    }
+
                     let customerRow = $(this).next('.customer-table');
-        
-                    // Se a linha de clientes já estiver visível, ocultar e sair
+            
+                        // Se a linha de clientes já estiver visível, ocultar e sair
                     if (customerRow.is(':visible')) {
                         customerRow.hide();
                         return;
                     }
-        
+            
                     // Exibir a linha de clientes
                     customerRow.show();
-                });
+                }); 
+                
+ 
             }
+
+            const editar = (data)=>{
+                $('#formContainer').html(`
+                    <div class="container-form-transp"> 
+                        
+                        <form id="formEditarLivro">
+                        <div class="cancelBtn">
+                            <p id="cancelBtnP">
+                                X
+                            </p>
+                        </div>
+                            
+                            <h3>Editar Livro</h3>
+
+                            <label for="nomeLivro">Nome do Livro:</label>
+                            <input type="text" id="nomeLivro" name="nomeLivro" required>
+
+                            <label for="autorLivro">Autor:</label>
+                            <input type="text" id="autorLivro" name="autorLivro" required>
+
+                            <label for="descricao">Descrição:</label>
+                            <input type="text" id="descricao" name="descricao" required>
+
+                            <label for="preco">Preço:</label>
+                            <input type="number" id="preco" name="preco" required step="0.1">
+
+                            <label for="idadeIndicativa">Idade Indicativa:</label>
+                            <input type="number" id="idadeIndicativa" name="idadeIndicativa" required>
+
+                            <label for="generoLivro">Gênero:</label>
+                            <input type="text" id="generoLivro" name="generoLivro" required>
+
+                            <label for="qtdDisponivel">Quantidade Disponível:</label>
+                            <input type="number" id="qtdDisponivel" name="qtdDisponivel" required>
+
+                            <label for="qtdTotal">Quantidade Total:</label>
+                            <input type="number" id="qtdTotal" name="qtdTotal" required>
+
+                            <button type="submit" id="editarLivarBtn">Confirmar</button>
+                        </form>
+                    </div>
+                `);
+
+                $('#nomeLivro').val(data.nome);
+                $('#autorLivro').val(data.autor);
+                $('#descricao').val(data.descricao);
+                $('#preco').val(data.preco);
+                $('#idadeIndicativa').val(data.idade);
+                $('#generoLivro').val(data.genero);
+                $('#qtdDisponivel').val(data.qtdDisponivel);
+                $('#qtdTotal').val(data.qtdTotal);
+
+                $('#cancelBtnP').off('click').on('click', function () {
+                    console.log("clicou")
+                    $('.container-form-transp').remove();
+                });
+            };
+
+            const excluir = (data)=>{
+                $('#formContainer').html(`
+                    <div class="container-form-transp"> 
+                        
+                        <div class="container-excluir">
+                        
+                            <h3>Você deseja excluir o livro "${data.nome}" do banco de dados?</h3>
+
+
+
+                            <div>
+                                <button id="confirmBtnConfirm">SIM</button>
+                                <button id="cancelBtnConfirtmCancel">NÃO</button>
+                            </div>
+                        
+                        </div>
+                    </div>
+                `);
+
+                $("#cancelBtnConfirtmCancel").off('click').on('click', function() {
+                    $('.container-form-transp').remove();
+                });
+
+                $("#confirmBtnConfirm").off('click').on('click', function() {
+                    $('.container-form-transp').remove();
+                });
+            };
+
+            function filterBooks(term) {
+                return bookItems.filter(book => 
+                    book.nome.toLowerCase().includes(term.toLowerCase())
+                );
+            }
+
+            $("#search").off("input").on("input", function() {
+                const searchTerm = $(this).val().trim();
+                const filteredBooks = filterBooks(searchTerm);
+                totalRows = filteredBooks.length;
+                totalPages = Math.ceil(totalRows / rowsPerPage);
+                currentPage = 1; 
+                displayPage(currentPage, filteredBooks);
+            });
         
             // Função para lidar com a paginação
             function handlePagination() {

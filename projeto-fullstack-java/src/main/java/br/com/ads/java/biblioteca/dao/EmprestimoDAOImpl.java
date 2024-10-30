@@ -96,7 +96,7 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
     public List<Emprestimo> findByIdLivro(int idLivro) {
         System.out.println("Parâmetro idLivro recebido no dao: " + idLivro);
         List<Emprestimo> emprestimos = new ArrayList<>();
-        String sql = "SELECT emprestimos.id_emprestimo, emprestimos.data_emprestimo, emprestimos.data_devolucao, emprestimos.data_previ_devolucao, "
+        String sql = "SELECT emprestimos.id_emprestimo, emprestimos.data_emprestimo, emprestimos.data_devolucao, emprestimos.data_previ_devolucao, emprestimos.quantidade, "
                    + "usuarios.id_usuario, usuarios.nome AS nome_usuario, usuarios.email, usuarios.telefone, usuarios.data_nascimento, usuarios.endereco, "
                    + "livros.preco, livros.id "
                    + "FROM emprestimos "
@@ -131,7 +131,8 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
                         livro, 
                         rs.getDate("data_emprestimo").toLocalDate(),
                         rs.getDate("data_previ_devolucao") != null ? rs.getDate("data_previ_devolucao").toLocalDate() : null,
-                        rs.getDate("data_devolucao") != null ? rs.getDate("data_devolucao").toLocalDate() : null
+                        rs.getDate("data_devolucao") != null ? rs.getDate("data_devolucao").toLocalDate() : null,
+                        rs.getInt("quantidade")
                     );
                       
                     emprestimos.add(emprestimo);
