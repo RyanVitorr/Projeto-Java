@@ -5,5 +5,6 @@ $(document).ready(function() {
         $('#navbar').toggleClass('collapsed');
         $('.main-content').toggleClass('collapsed');
         $('#menuBurger').toggleClass('collapsed');
+        $('#img').toggleClass('collapsed');
     });
 });

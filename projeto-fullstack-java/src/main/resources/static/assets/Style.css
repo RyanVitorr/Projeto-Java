@@ -18,6 +18,13 @@ body, html {
     transition: width 0.3s ease;
 }
 
+#img {
+    width: 100%;
+    height: 10vmin;
+    margin-top: 45px;
+    border-bottom: 2px solid #79a7d8;
+}
+
 .navbar ul {
     list-style-type: none;
     padding: 0;
@@ -27,7 +34,14 @@ body, html {
     padding: 15px;
 }
 
+.navbar ul li:hover {
+    background-color: #4a89cc;
+}
+
+
 .navbar ul li a {
+    width: 100%;
+    height: 100%;
     color: white;
     text-decoration: none;
     display: block;
@@ -37,7 +51,6 @@ body, html {
 .menu-burger {
     font-size: 20px; /* Reduz o tamanho do ícone */
     cursor: pointer;
-    padding: 10px;
     position: absolute;
     right: 10px; /* Alinha à direita */
     top: 10px;   /* Distância do topo */
@@ -62,6 +75,10 @@ body, html {
 .navbar.collapsed ul li a {
     display: none; /* Esconde o texto ao recolher */
 }
+
+#img.collapsed {
+    display: none;
+} 
 
 .main-content.collapsed {
     margin-left: 50px;
@@ -138,14 +155,13 @@ form label {
     z-index: 999; /* Coloca o formulário acima de outros elementos */
     display: none; /* Inicialmente escondido */
     display: block;    
-    max-height: 650px;
-    width: 70%;
+    max-height: 48rem;
+    width: 100%;
     overflow-y: auto;
 }
 
 .container-form {
-    display: flex;
-    flex-direction: column;
+    display: block;
     align-items: top;
     justify-content: center;
     gap: 2vmin;
@@ -155,6 +171,42 @@ form label {
 }
 
 /* Estilos para o container dos botões e formulários */
+#container-section-pagamento, #container-section-form {
+    display: none;
+}
+
+#container-section-pagamento > div, #container-section-form > div {
+    width: 100%;
+} 
+
+#section-form-container > h3, #section-pagamento-container > h3 {
+    text-align: left;
+}
+
+#container-section-form {
+    display: flex;
+    margin-top: 25px;
+    width: 100%;
+    gap: 2vmin;
+}
+
+.container-form section {
+    cursor: pointer;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.container-form h3 {
+    margin: 0;
+}
+
+/* Adiciona um efeito visual quando uma seção está expandida */
+.container-form section.expanded {
+    background-color: #f9f9f9;
+}
+
+
 #formContainer {
     margin-top: 20px;
 }
