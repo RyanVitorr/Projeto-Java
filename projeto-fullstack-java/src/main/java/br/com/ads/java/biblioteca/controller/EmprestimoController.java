@@ -22,6 +22,7 @@ public class EmprestimoController {
     @Autowired
     private EmprestimoService emprestimoService;
 
+    // idlivro
     @GetMapping("/porLivro")
     public ResponseEntity<List<Emprestimo>> buscarEmprestimosPorIdLivro(@RequestParam("idLivro") int idLivro) {
         System.out.println("Parâmetro idLivro recebido: " + idLivro);
@@ -40,11 +41,13 @@ public class EmprestimoController {
         }
     }
     
+    // idusuario
     @GetMapping("/porUsuario")
     public List<Emprestimo> buscarEmprestimosPorIdUsuario(@RequestParam("idUsuario") int idUsuario) {
         return emprestimoService.buscarEmprestimosPorIdUsuario(idUsuario);
     }
 
+    //todos
     @GetMapping("/todos")
     public ResponseEntity<List<Emprestimo>> buscarEmprestimos() {
         try {
@@ -59,14 +62,15 @@ public class EmprestimoController {
         }
     }
 
-    @GetMapping("/dashboard")
-    public List<Emprestimo> dashboard(@RequestParam(value = "dataEmprestimo", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date dataEmprestimo) {
-        if (dataEmprestimo == null) {  
-            return emprestimoService.buscarEmprestimosDash();
-        }else {
-            java.sql.Date sqlDate = new java.sql.Date(dataEmprestimo.getTime());
-            return emprestimoService.dashboard(sqlDate);
-        }
-            
+    // dados dash
+    @GetMapping("/dadosDash")
+    public List<Emprestimo> dadosDash(@RequestParam(value = "dataEmprestimo", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date dataEmprestimo) {
+        return emprestimoService.buscarDadosDash(dataEmprestimo);
+    }
+
+    // historico
+    @GetMapping("/historico")
+    public List<Emprestimo> historicoDash(@RequestParam(value = "dataEmprestimo", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date dataEmprestimo) {
+        return emprestimoService.historicoDash(dataEmprestimo);
     }
 }

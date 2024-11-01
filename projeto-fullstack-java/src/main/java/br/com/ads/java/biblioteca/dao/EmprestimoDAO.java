@@ -15,8 +15,11 @@ public interface EmprestimoDAO {
 
     List<Emprestimo> buscarEmprestimos();
 
-    List<Emprestimo> buscarEmprestimosDash();
-    List<Emprestimo> dashboard(Date dataEmprestimo);
+    // dados dash
+    List<Emprestimo> buscarDadosDash(Date dataEmprestimo);
+
+    // historico dash
+    List<Emprestimo> historicoDash(Date dataEmprestimo);
 
 }
 

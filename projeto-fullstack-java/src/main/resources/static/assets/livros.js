@@ -3,6 +3,8 @@ $(document).ready(function() {
     let dataLivros;
 
     $('.navbar ul li a:contains("Livros")').on('click', function() {
+        $('.navbar ul li a').removeClass('toggleBackground');
+        $('.navbar ul li a:contains("Livros")').addClass('toggleBackground');
      
         $('.main-content').html(`
             <h2>Gestão de Livros</h2>

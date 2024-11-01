@@ -4,6 +4,8 @@ $(document).ready(function() {
     let dataEmprestimos;
 
     $('.navbar ul li a:contains("Clientes")').on('click', function() {
+        $('.navbar ul li a').removeClass('toggleBackground');
+        $('.navbar ul li a:contains("Clientes")').addClass('toggleBackground');
 
         $.ajax({
             url: 'usuarios/todos',

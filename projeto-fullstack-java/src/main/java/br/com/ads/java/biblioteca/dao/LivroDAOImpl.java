@@ -30,8 +30,7 @@ public class LivroDAOImpl implements LivroDAO {
                     rs.getString("idade_indicativa"),
                     rs.getString("descricao"),
                     rs.getInt("qtd_disponivel"),
-                    rs.getInt("qtd_total"),
-                    rs.getFloat("preco")
+                    rs.getInt("qtd_total")
                 ));
             }
         } catch (SQLException e) {

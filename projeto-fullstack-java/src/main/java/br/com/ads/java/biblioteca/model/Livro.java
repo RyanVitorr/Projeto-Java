@@ -17,11 +17,10 @@ public class Livro {
     private String descricao;
     private int qtdDisponivel; 
     private int qtdTotal;
-    private float preco;
 
 
     // Construtor ajustado para incluir idLivro
-    public Livro(String nome, String autor, String genero, String idadeIndicativa, String descricao, int qtdDisponivel, int qtdTotal, float preco) {
+    public Livro(String nome, String autor, String genero, String idadeIndicativa, String descricao, int qtdDisponivel, int qtdTotal) {
         this.nome = nome;
         this.autor = autor;
         this.genero = genero;
@@ -29,16 +28,14 @@ public class Livro {
         this.descricao = descricao;
         this.qtdDisponivel = qtdDisponivel;
         this.qtdTotal = qtdTotal;
-        this.preco = preco;
     }
 
-    public Livro(int idLivro, float preco) {
+    public Livro(int idLivro) {
         this.idLivro = idLivro;
-        this.preco = preco;
     }
 
     // Construtor com ID (para casos onde o ID é necessário)
-    public Livro(int idLivro, String nome, String autor, String genero, String idadeIndicativa, String descricao, int qtdDisponivel, int qtdTotal, float preco) {
+    public Livro(int idLivro, String nome, String autor, String genero, String idadeIndicativa, String descricao, int qtdDisponivel, int qtdTotal) {
         this.idLivro = idLivro;
         this.nome = nome;
         this.autor = autor;
@@ -47,13 +44,11 @@ public class Livro {
         this.descricao = descricao;
         this.qtdDisponivel = qtdDisponivel;
         this.qtdTotal = qtdTotal;
-        this.preco = preco;
     }
 
-    public Livro(int idLivro, String nome, float preco) {
+    public Livro(int idLivro, String nome) {
         this.idLivro = idLivro;
         this.nome = nome;
-        this.preco = preco;
     }
 
     // Getters e setters
@@ -121,13 +116,7 @@ public class Livro {
         this.qtdTotal = qtdTotal;
     }
 
-    public float getPreco() {
-        return preco;
-    }
 
-    public void setPreco(float preco) {
-        this.preco = preco;
-    }
 
     // get com idlivro
     public String toStringIdLivro() {
@@ -137,7 +126,6 @@ public class Livro {
                 ", genero='" + genero + '\'' +
                 ", idadeIndicativa='" + idadeIndicativa + '\'' +
                 ", descricao='" + descricao + '\'' +
-                ", preço=" + preco +
                 '}';
     }
 }

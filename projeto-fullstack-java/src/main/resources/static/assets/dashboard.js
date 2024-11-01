@@ -5,6 +5,8 @@ $(document).ready(function () {
     });
 
     const generetHtml = ()=>{
+        $('.navbar ul li a').removeClass('toggleBackground');
+        $('.navbar ul li a:contains("Dashboard")').addClass('toggleBackground');
         const dashboardHTML = `
         <div class="dashboard-container">
             <div class="dashboard-header">
@@ -56,8 +58,10 @@ $(document).ready(function () {
                             <th>ID do Livro</th>
                             <th>Nome do Livro</th>
                             <th>Preço</th>
+                             <th>Qtd</th>
                             <th>Data do Empréstimo</th>
                             <th>Data de Devolução</th>
+                            <th>Data para Devolução</th>
                         </tr>
                     </thead>
                     <tbody id="tbody" class="list">
@@ -66,85 +70,76 @@ $(document).ready(function () {
             </div>
         </div>`;
 
-        $('.main-content').html(dashboardHTML); // Insere o HTML no elemento dashboard
+        $('.main-content').html(dashboardHTML); 
         
-        // Chama a função para buscar os dados via AJAX após o HTML ser inserido
-        fetchDashboardData();
+       
+        fetchDashboardData(null);
+        fetchDashboardHistorico(null);
     };
 
-    // Função para atualizar os dados do dashboard
-    function updateDashboard(data) {
-        $('#totalLivros').text(data[0].totaLivros);
-        $('#totalLivrosAlugados').text(data[0].totaLivrosAlugados);
-        $('#totalRecebido').text(`R$ ${data[0].livrosAtrasados.toFixed(2)}`);
-        $('#totalAtraso').text(data[0].livrosAtrasados);
-        $('#totalAreceber').text(`R$ ${data[0].livrosAtrasados.toFixed(2)}`);
+  
+    function updateDashboard(data, historico) {
+       console.log("chamou update")
+       console.log("data é: " + data);
+       console.log("historico é: " + JSON.stringify(historico));
+        if (data && data.length > 0) {
+            $('#totalLivros').text(data[0].totalLivros);
+            $('#totalLivrosAlugados').text(data[0].totaLivrosAlugados);
+            $('#totalRecebido').text(`R$ ${data[0].livrosAtrasados.toFixed(2)}`);
+            $('#totalAtraso').text(data[0].livrosAtrasados);
+            $('#totalAreceber').text(`R$ ${data[0].livrosAtrasados.toFixed(2)}`);
+        }
         
-        data.forEach(emprestimo => {
-            console.log('Empréstimo:', emprestimo); // Verifique o que está sendo iterado
-            const row = `
-                <tr>
-                    <td>${emprestimo.usuario.nome}</td>
-                    <td>${emprestimo.usuario.email}</td>
-                    <td>${emprestimo.livro.idLivro}</td>
-                    <td>${emprestimo.livro.nome}</td>
-                     <td>R$ ${emprestimo.livro.preco.toFixed(2)}</td>
-                    <td>${new Date(emprestimo.dataEmprestimo).toLocaleDateString('pt-BR')}</td>
-                    <td>${emprestimo.dataDevolucao ? new Date(emprestimo.dataDevolucao).toLocaleDateString('pt-BR') : 'Não Devolvido'}</td>
-                </tr>
-            `;
-            $('#tbody').append(row);
-        });
-    };
-
-    // Função para renderizar o gráfico
-    function renderChart(devolvidos, atrasados) {
-        const ctx = document.getElementById('devolucaoAtrasoChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: ['Devolvidos', 'Atrasados'],
-                datasets: [{
-                    label: 'Livros',
-                    data: [devolvidos, atrasados],
-                    backgroundColor: ['#28a745', '#dc3545'],
-                    borderColor: ['#28a745', '#dc3545'],
-                    borderWidth: 2,
-                    hoverOffset: 4
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            font: {
-                                size: 14,
-                                family: 'Arial'
-                            }
-                        }
-                    },
-                },
-                animation: {
-                    animateScale: true,
-                    animateRotate: true
-                }
-            }
-        });
+       
+        if (historico && Array.isArray(historico)) {
+            console.log("verificou historico")
+            historico.forEach(emprestimo => {
+                console.log('Empréstimo:', emprestimo); 
+                const row = `
+                    <tr>
+                        <td>${emprestimo.usuario.nome}</td>
+                        <td>${emprestimo.usuario.email}</td>
+                        <td>${emprestimo.livro.idLivro}</td>
+                        <td>${emprestimo.livro.nome}</td>
+                        <td>R$ ${emprestimo.preco.toFixed(2)}</td>
+                        <td>${emprestimo.quantidade}</td>
+                        <td>${new Date(emprestimo.dataEmprestimo).toLocaleDateString('pt-BR')}</td>
+                        <td>${emprestimo.dataDevolucao ? new Date(emprestimo.dataDevolucao).toLocaleDateString('pt-BR') : 'Não Devolvido'}</td>
+                        <td>${new Date(emprestimo.dataPrevDevolucao).toLocaleDateString('pt-BR')}</td>
+                    </tr>
+                `;
+                $('#tbody').append(row);
+            });
+        }
     }
-
-    // Função para buscar os dados do dashboard via AJAX
+    
     function fetchDashboardData(dataEmprestimo) {
         $.ajax({
-            url: '/emprestimos/dashboard', 
+            url: '/emprestimos/dadosDash', 
             type: 'GET',
             data: {
                 dataEmprestimo: dataEmprestimo || null, 
             },
             success: function (data) {
                 console.log(data);
-                updateDashboard(data); 
+                updateDashboard(data, null); 
+            },
+            error: function (xhr, status, error) {
+                console.error('Erro ao buscar dados do dashboard:', error);
+            }
+        });
+    }
+
+    function fetchDashboardHistorico(dataEmprestimo) {
+        $.ajax({
+            url: '/emprestimos/historico', 
+            type: 'GET',
+            data: {
+                dataEmprestimo: dataEmprestimo || null, 
+            },
+            success: function (historico) {
+                console.log(historico);
+                updateDashboard(null, historico); 
             },
             error: function (xhr, status, error) {
                 console.error('Erro ao buscar dados do dashboard:', error);
@@ -157,8 +152,9 @@ $(document).ready(function () {
         const startDate = $('#startDate').val();
         const endDate = $('#endDate').val();
 
-        // Faz a requisição AJAX para obter os dados filtrados
-        fetchDashboardData(startDate, endDate);
+        
+        fetchDashboardData(startDate);
+        fetchDashboardHistorico(startDate);
     });
 
     generetHtml();

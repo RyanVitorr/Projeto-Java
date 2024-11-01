@@ -18,9 +18,9 @@ const fetchAjax = ()=>{
 };
 
 $(document).ready(function() { 
-    console.log("emprestimo 1");
-
     $('body').on('click', '.navbar ul li a:contains("Emprestimo"), #alugarLivro', function () {
+        $('.navbar ul li a').removeClass('toggleBackground');
+        $('.navbar ul li a:contains("Emprestimo")').addClass('toggleBackground');
 
         if($('#formEmprestarLivro').length > 0){
             return;

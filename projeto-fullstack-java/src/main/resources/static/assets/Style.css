@@ -31,13 +31,17 @@ body, html {
 }
 
 .navbar ul li {
-    padding: 15px;
+    height: 5vmin;
+    cursor: pointer;
 }
 
 .navbar ul li:hover {
     background-color: #4a89cc;
 }
 
+.toggleBackground {
+    background-color:  #4a89cc;
+}
 
 .navbar ul li a {
     width: 100%;
@@ -45,6 +49,8 @@ body, html {
     color: white;
     text-decoration: none;
     display: block;
+    text-align: center left;
+    padding: 15px;
 }
 
 /* Menu hamburguer dentro da navbar (ajustado) */
@@ -72,7 +78,7 @@ body, html {
     width: 50px;
 }
 
-.navbar.collapsed ul li a {
+.navbar.collapsed ul {
     display: none; /* Esconde o texto ao recolher */
 }
 

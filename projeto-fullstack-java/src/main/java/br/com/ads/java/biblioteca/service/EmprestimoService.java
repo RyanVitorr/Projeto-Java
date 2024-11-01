@@ -32,12 +32,13 @@ public class EmprestimoService {
         return emprestimoDAO.buscarEmprestimos();
     }
 
-    
-    public List<Emprestimo> buscarEmprestimosDash() {
-        return emprestimoDAO.buscarEmprestimosDash();
+    // dados dash
+    public List<Emprestimo> buscarDadosDash(Date dataEmprestimo) {
+        return emprestimoDAO.buscarDadosDash(dataEmprestimo);
     }
 
-    public List<Emprestimo> dashboard(Date dataEmprestimo) {
-        return emprestimoDAO.dashboard(dataEmprestimo);
+    // historico dash
+    public List<Emprestimo> historicoDash(Date dataEmprestimo) {
+        return emprestimoDAO.historicoDash(dataEmprestimo);
     }
 }
