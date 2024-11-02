@@ -16,4 +16,7 @@ public class LivroService {
         return livroDAO.findAll();
     }
 
+    public Livro salvarLivro(Livro livro){
+        return livroDAO.salvar(livro);
+    }
 }

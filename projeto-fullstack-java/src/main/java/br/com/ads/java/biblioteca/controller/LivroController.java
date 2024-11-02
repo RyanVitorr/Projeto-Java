@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 @RestController
@@ -22,4 +25,11 @@ public class LivroController {
     public List<Livro> buscarTodosLivrosr() {
         return livroService.buscarTodosLivros();
     } 
+
+    @PostMapping("/cadastrar")
+    public Livro cadastroDeLivro(@RequestBody Livro livro) {
+        
+        return livroService.salvarLivro(livro);
+    }
+    
 }
