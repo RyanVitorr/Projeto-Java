@@ -39,5 +39,30 @@ public class LivroDAOImpl implements LivroDAO {
         return livros;
     }
 
+    @Override
+    public Livro salvar(Livro Livro) {
+        
+        String sql = "ISERT INTO livros (nome, autor, genero, idadeIndicativa, descricao, qtdDisponivel, qtdTotal) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)){
+            stmt.setString(1, Livro.getNome());
+            stmt.setString(2, Livro.getAutor());
+            stmt.setString(3, Livro.getGenero());
+            stmt.setString(4, Livro.getIdadeIndicativa());
+            stmt.setString(5, Livro.getDescricao());
+            stmt.setInt(6, Livro.getQtdDisponivel());
+            stmt.setInt(7, Livro.getQtdTotal());
+
+            stmt.executeUpdate();
+            System.out.println("Livro cadastrado com sucesso!");
+
+        }
+
+        catch (SQLException e) {
+            e.printStackTrace();
+    }
+            return Livro;
+
    
+}
 }
