@@ -1,9 +1,8 @@
 
-// Classe UsuarioController 
-package br.com.ads.java.biblioteca.controller; // Certifique-se de que o pacote está correto
+package br.com.ads.java.biblioteca.controller;
 
-import br.com.ads.java.biblioteca.model.Usuario; // Importando a classe Usuario
-import br.com.ads.java.biblioteca.service.UsuarioService; // Importando a classe UsuarioService
+import br.com.ads.java.biblioteca.model.Usuario; 
+import br.com.ads.java.biblioteca.service.UsuarioService; 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,14 +13,22 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
+    // cadastrar novo usuario
     @PostMapping("/cadastrar")
     public Usuario cadastrarUsuario(@RequestBody Usuario usuario) {
         return usuarioService.cadastrarUsuario(usuario);
     }
 
+    //pegar tds os usuarios
     @PostMapping("/todos")
     public Usuario buscarTodos() {
         return usuarioService.buscarTodos();
+    }
+
+    // atualizar usuario 
+    @PostMapping("/atualizar")
+    public Usuario atualizarUsuario(@RequestBody Usuario usuario) {
+        return usuarioService.atualizarUsuario(usuario);
     }
 
 } 

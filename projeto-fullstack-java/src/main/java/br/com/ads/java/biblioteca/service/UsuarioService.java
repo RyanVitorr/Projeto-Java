@@ -19,4 +19,9 @@ public class UsuarioService {
     public Usuario buscarTodos() {
         return usuarioDAO.buscarTodos();
     }
+
+    public Usuario atualizarUsuario(Usuario usuario) {
+        return usuarioDAO.atualizar(usuario);
+    }
+
 }

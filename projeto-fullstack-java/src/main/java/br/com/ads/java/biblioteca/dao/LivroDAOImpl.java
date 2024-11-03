@@ -43,19 +43,19 @@ public class LivroDAOImpl implements LivroDAO {
 
     // cadastrar novo livro
     @Override
-    public Livro salvar(Livro Livro) {
+    public Livro salvar(Livro livro) {
         
         String sql = "INSERT INTO livros (nome, autor, genero, idade_indicativa, descricao, qtd_disponivel, qtd_total, preco) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)){
-            stmt.setString(1, Livro.getNome());
-            stmt.setString(2, Livro.getAutor());
-            stmt.setString(3, Livro.getGenero());
-            stmt.setInt(4, Livro.getIdadeIndicativa());
-            stmt.setString(5, Livro.getDescricao());
-            stmt.setInt(6, Livro.getQtdDisponivel());
-            stmt.setInt(7, Livro.getQtdTotal());
-            stmt.setFloat(8, Livro.getPreco());
+            stmt.setString(1, livro.getNome());
+            stmt.setString(2, livro.getAutor());
+            stmt.setString(3, livro.getGenero());
+            stmt.setInt(4, livro.getIdadeIndicativa());
+            stmt.setString(5, livro.getDescricao());
+            stmt.setInt(6, livro.getQtdDisponivel());
+            stmt.setInt(7, livro.getQtdTotal());
+            stmt.setFloat(8, livro.getPreco());
 
             stmt.executeUpdate();
             System.out.println("Livro cadastrado com sucesso!");
@@ -63,6 +63,6 @@ public class LivroDAOImpl implements LivroDAO {
         }catch (SQLException e) {
             e.printStackTrace();
         }
-        return Livro;   
+        return livro;   
     }
 }

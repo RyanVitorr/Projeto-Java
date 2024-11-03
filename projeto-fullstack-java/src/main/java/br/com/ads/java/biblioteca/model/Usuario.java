@@ -5,6 +5,7 @@ import java.time.LocalDate;
 public class Usuario {
     private int id;
     private String nome;
+    private int cpf;
     private String email;
     private String telefone;
     private LocalDate dataNascimento; 
@@ -47,6 +48,22 @@ public class Usuario {
         this.nome = nome;
     }
 
+    public void setCpf(int cpf){
+        this.cpf = cpf;
+    }
+
+    public int getCpf(){
+        return cpf;
+    }
+
+    public void setId( int id) {
+        this.id = id;
+    }
+
+    public int getId(int id) {
+        return id;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -82,6 +99,7 @@ public class Usuario {
     // get emprestimo
     public String toString() {
         return "Usuario{" +
+                "id='" + id + '\'' +
                 "nome='" + nome + '\'' +
                 ", email='" + email + '\'' +
                 ", telefone='" + telefone + '\'' +
