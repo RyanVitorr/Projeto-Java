@@ -13,14 +13,31 @@ public class Livro {
     private String nome;
     private String autor;
     private String genero;
-    private String idadeIndicativa; 
+    private int idadeIndicativa; 
     private String descricao;
     private int qtdDisponivel; 
     private int qtdTotal;
+    private float preco;
 
 
-    // Construtor ajustado para incluir idLivro
-    public Livro(String nome, String autor, String genero, String idadeIndicativa, String descricao, int qtdDisponivel, int qtdTotal) {
+    // usa para pegar tds os dados do livro
+    public Livro(int idLivro, String nome, String autor, String genero, int idadeIndicativa, String descricao, int qtdDisponivel, int qtdTotal, float preco) {
+        this.idLivro = idLivro;
+        this.nome = nome;
+        this.autor = autor;
+        this.genero = genero;
+        this.idadeIndicativa = idadeIndicativa;
+        this.descricao = descricao;
+        this.qtdDisponivel = qtdDisponivel;
+        this.qtdTotal = qtdTotal;
+        this.preco = preco;
+    }
+
+
+    public Livro() {}
+
+    // usa no idUsuario
+    public Livro(String nome, String autor, String genero, int idadeIndicativa, String descricao, int qtdDisponivel, int qtdTotal) {
         this.nome = nome;
         this.autor = autor;
         this.genero = genero;
@@ -30,25 +47,23 @@ public class Livro {
         this.qtdTotal = qtdTotal;
     }
 
-    public Livro(int idLivro) {
-        this.idLivro = idLivro;
-    }
-
-    // Construtor com ID (para casos onde o ID é necessário)
-    public Livro(int idLivro, String nome, String autor, String genero, String idadeIndicativa, String descricao, int qtdDisponivel, int qtdTotal) {
-        this.idLivro = idLivro;
-        this.nome = nome;
-        this.autor = autor;
-        this.genero = genero;
-        this.idadeIndicativa = idadeIndicativa;
-        this.descricao = descricao;
-        this.qtdDisponivel = qtdDisponivel;
-        this.qtdTotal = qtdTotal;
-    }
-
+    // usa no historico do dashboard
     public Livro(int idLivro, String nome) {
         this.idLivro = idLivro;
         this.nome = nome;
+    }
+
+
+    // usa para criar um novo livro
+    public Livro(String nome, String autor, String genero, int idadeIndicativa, String descricao, int qtdDisponivel, int qtdTotal, float preco) {
+        this.nome = nome;
+        this.autor = autor;
+        this.genero = genero;
+        this.idadeIndicativa = idadeIndicativa;
+        this.descricao = descricao;
+        this.qtdDisponivel = qtdDisponivel;
+        this.qtdTotal = qtdTotal;
+        this.preco = preco;
     }
 
     // Getters e setters
@@ -58,6 +73,14 @@ public class Livro {
 
     public void setIdLivro(int idLivro) {
         this.idLivro = idLivro;
+    }
+
+    public void setPreco(float preco) {
+        this.preco = preco;
+    }
+
+    public float getPreco() {
+        return preco;
     }
 
     public String getNome() {
@@ -84,11 +107,11 @@ public class Livro {
         this.genero = genero;
     }
 
-    public String getIdadeIndicativa() {
+    public int getIdadeIndicativa() {
         return idadeIndicativa;
     }
 
-    public void setIdadeIndicativa(String idadeIndicativa) {
+    public void setIdadeIndicativa(int idadeIndicativa) {
         this.idadeIndicativa = idadeIndicativa;
     }
 

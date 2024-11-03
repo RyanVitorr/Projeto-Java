@@ -58,10 +58,11 @@ $(document).ready(function () {
                             <th>ID do Livro</th>
                             <th>Nome do Livro</th>
                             <th>Preço</th>
-                             <th>Qtd</th>
-                            <th>Data do Empréstimo</th>
-                            <th>Data de Devolução</th>
-                            <th>Data para Devolução</th>
+                            <th>Qtd</th>
+                            <th>Data Empréstimo</th>
+                            <th>Data Devolução</th>
+                            <th>Data prev Devolução</th>
+                            <th>Multa</th>
                         </tr>
                     </thead>
                     <tbody id="tbody" class="list">
@@ -81,17 +82,18 @@ $(document).ready(function () {
     function updateDashboard(data, historico) {
        console.log("chamou update")
        console.log("data é: " + data);
-       console.log("historico é: " + JSON.stringify(historico));
+       console.log("historico é: " + historico);
         if (data && data.length > 0) {
             $('#totalLivros').text(data[0].totalLivros);
             $('#totalLivrosAlugados').text(data[0].totaLivrosAlugados);
-            $('#totalRecebido').text(`R$ ${data[0].livrosAtrasados.toFixed(2)}`);
+            $('#totalRecebido').text(`R$ ${data[0].lucroTotal.toFixed(2)}`);
             $('#totalAtraso').text(data[0].livrosAtrasados);
-            $('#totalAreceber').text(`R$ ${data[0].livrosAtrasados.toFixed(2)}`);
+            
         }
         
        
         if (historico && Array.isArray(historico)) {
+            let totalMulta = 0;
             console.log("verificou historico")
             historico.forEach(emprestimo => {
                 console.log('Empréstimo:', emprestimo); 
@@ -106,10 +108,14 @@ $(document).ready(function () {
                         <td>${new Date(emprestimo.dataEmprestimo).toLocaleDateString('pt-BR')}</td>
                         <td>${emprestimo.dataDevolucao ? new Date(emprestimo.dataDevolucao).toLocaleDateString('pt-BR') : 'Não Devolvido'}</td>
                         <td>${new Date(emprestimo.dataPrevDevolucao).toLocaleDateString('pt-BR')}</td>
+                        <td>R$ ${emprestimo.valorMulta.toFixed(2)}</td>
                     </tr>
                 `;
+                totalMulta = totalMulta + emprestimo.valorMulta;
                 $('#tbody').append(row);
             });
+
+            $('#totalAreceber').text(`R$ ${totalMulta.toFixed(2)}`);
         }
     }
     
@@ -138,7 +144,6 @@ $(document).ready(function () {
                 dataEmprestimo: dataEmprestimo || null, 
             },
             success: function (historico) {
-                console.log(historico);
                 updateDashboard(null, historico); 
             },
             error: function (xhr, status, error) {

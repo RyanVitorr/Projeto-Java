@@ -154,7 +154,7 @@ form label {
     display: block;
 }
 
-#formNovoCliente, #formEmprestarLivro, #formNovoLivro, #formEditarLivro {
+#formNovoCliente, #formEmprestarLivro, #formEditarLivro {
     padding: 20px; /* Espaçamento interno */
     border: 1px solid #ccc; /* Borda leve */
     box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Sombra para destaque */
@@ -163,6 +163,18 @@ form label {
     display: block;    
     max-height: 48rem;
     width: 100%;
+    overflow-y: auto;
+}
+
+#formNovoLivro {
+    padding: 20px;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 999;
+    display: none;
+    display: block;
+    max-height: 90%;
+    width: 70%;
     overflow-y: auto;
 }
 
@@ -181,7 +193,7 @@ form label {
     display: none;
 }
 
-#container-section-pagamento > div, #container-section-form > div {
+#container-section-pagamento > div #container-section-form > div {
     width: 100%;
 } 
 
@@ -195,6 +207,14 @@ form label {
     width: 100%;
     gap: 2vmin;
 }
+
+#container-section-form > div:nth-child(1){
+    width: 50%;
+}
+#container-section-form > div:nth-child(2){
+    width: 70%;
+}
+
 
 .container-form section {
     cursor: pointer;
@@ -340,10 +360,15 @@ form button[type="submit"]:hover {
     padding: 8px;
     text-align: left;
     border-bottom: 1px solid #ddd;
+    text-align: center;
 }
 
 .list > tr {
     color: white;
+}
+.list > tr > td {
+    text-align: center;
+    max-width: 180px;
 }
 
 .customer-list-table > thead > tr {

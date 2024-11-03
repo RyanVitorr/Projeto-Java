@@ -3,6 +3,7 @@ package br.com.ads.java.biblioteca.dao;
 import br.com.ads.java.biblioteca.model.Emprestimo;
 import br.com.ads.java.biblioteca.model.Livro;
 import br.com.ads.java.biblioteca.model.Usuario;
+import br.com.ads.java.biblioteca.model.Multa;
 import br.com.ads.java.biblioteca.utils.DatabaseUtil;
 
 import java.sql.*;
@@ -66,7 +67,7 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
                         rs.getString("nome"),
                         rs.getString("autor"),
                         rs.getString("genero"),
-                        rs.getString("idade_indicativa"),
+                        rs.getInt("idade_indicativa"),
                         rs.getString("descricao"),
                         rs.getInt("qtd_disponivel"),
                         rs.getInt("qtd_total")
@@ -149,7 +150,8 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
                     "(SELECT COUNT(*) FROM livros) AS total_livros, " +
                     "(SELECT COUNT(*) FROM emprestimos WHERE " +
                     "(data_devolucao IS NULL AND data_previ_devolucao < CURRENT_DATE)) AS livros_atrasados, " +
-                    "(SELECT COUNT(*) FROM emprestimos) AS total_livros_alugados " +
+                    "(SELECT COUNT(*) FROM emprestimos) AS total_livros_alugados, " +
+                    "(SELECT SUM(preco) FROM emprestimos) AS lucro_total " + 
                     "FROM emprestimos e " +
                     "WHERE (? IS NULL OR e.data_emprestimo = ?)";
     
@@ -165,7 +167,8 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
                     emprestimos.add(new Emprestimo(
                         rs.getInt("total_livros"),
                         rs.getInt("livros_atrasados"),
-                        rs.getInt("total_livros_alugados")
+                        rs.getInt("total_livros_alugados"),
+                        rs.getFloat("lucro_total")
                     ));
                     
                     System.out.println("Total de registros encontrados: " + emprestimos.size());
@@ -215,16 +218,23 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
                         rs.getString("email")
                     );
     
+
+                    Multa multa = new Multa();
+                    multa.setDataPrevDevolucao(rs.getDate("data_previ_devolucao"));
+                    multa.setDataDevolucao(rs.getDate("data_devolucao"));
+    
+                    float valorCalculado = multa.calcularValorMulta();
+
                     emprestimos.add(new Emprestimo(
                         rs.getInt("id_emprestimo"), 
                         usuario,
-                        livro,   
+                        livro,
                         rs.getFloat("preco"), 
                         rs.getDate("data_emprestimo").toLocalDate(),
                         rs.getDate("data_previ_devolucao") != null ? rs.getDate("data_previ_devolucao").toLocalDate() : null,
                         rs.getDate("data_devolucao") != null ? rs.getDate("data_devolucao").toLocalDate() : null,
-                        rs.getInt("quantidade"), // Aqui, deve ser total_livros_alugados / fazer o msm quando for adicionar um emprestimo ao database
-                        rs.getInt("quantidade") // E a quantidade deve ser passada aqui / fazer o msm quando for adicionar um emprestimo ao database
+                        rs.getInt("quantidade"),
+                        valorCalculado
                     ));
 
                 }

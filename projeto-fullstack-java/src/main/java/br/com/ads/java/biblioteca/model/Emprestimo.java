@@ -3,8 +3,6 @@ import java.time.LocalDate;
 
 public class Emprestimo {
     private int idEmprestimo; 
-    private Usuario usuario; 
-    private Livro livro;      
     private int livroId;     
     private int usuarioId;   
     private LocalDate dataEmprestimo;  
@@ -15,9 +13,16 @@ public class Emprestimo {
     private float preco;
     private LocalDate dataDevolucao;
     private int quantidade;
+    private float lucroTotal;
+    private float valorMulta;
+
+    private Usuario usuario; 
+    private Livro livro;     
+    private Multa multa; 
+
     
     // dados historico emprestimo
-    public Emprestimo(int idEmprestimo, Usuario usuario, Livro livro, float preco, LocalDate dataEmprestimo, LocalDate dataPrevDevolucao, LocalDate dataDevolucao, int totaLivrosAlugados, int quantidade) {
+    public Emprestimo(int idEmprestimo, Usuario usuario, Livro livro, float preco, LocalDate dataEmprestimo, LocalDate dataPrevDevolucao, LocalDate dataDevolucao, int quantidade, float valorMulta) {
         this.idEmprestimo = idEmprestimo;
         this.usuario = usuario;
         this.livro = livro;
@@ -25,8 +30,8 @@ public class Emprestimo {
         this.dataEmprestimo = dataEmprestimo;
         this.dataPrevDevolucao = dataPrevDevolucao;
         this.dataDevolucao = dataDevolucao;
-        this.totaLivrosAlugados = totaLivrosAlugados;
         this.quantidade = quantidade;
+        this.valorMulta = valorMulta;
     }
 
     // dados api idlivro
@@ -54,10 +59,11 @@ public class Emprestimo {
 
 
     // dados dashboard
-    public Emprestimo(int totalLivros, int livrosAtrasados, int totaLivrosAlugados) {
+    public Emprestimo(int totalLivros, int livrosAtrasados, int totaLivrosAlugados, float lucroTotal) {
         this.totalLivros = totalLivros;
         this.livrosAtrasados = livrosAtrasados;
         this.totaLivrosAlugados = totaLivrosAlugados;
+        this.lucroTotal = lucroTotal;
     }
 
 
@@ -76,12 +82,21 @@ public class Emprestimo {
         return idEmprestimo;
     }
 
+
+    public float getValorMulta(){
+        return valorMulta;
+    }
+
     public Usuario getUsuario() {
         return usuario;
     }
 
     public Livro getLivro() {
         return livro;
+    }
+
+    public float getLucroTotal(){
+        return lucroTotal;
     }
 
     public int getLivroId() {
@@ -124,9 +139,22 @@ public class Emprestimo {
         return quantidade;
     }
 
+    public Multa getMulta(){
+        return multa;
+    }
+
     // setters
+
+    public void setValorMulta(float valorMulta){
+        this.valorMulta = valorMulta;
+    }
+
     public void setIdEmprestimo(int idEmprestimo) {
         this.idEmprestimo = idEmprestimo;
+    }
+
+    public void setLucroTotal(float lucroTotal){
+        this.lucroTotal = lucroTotal;
     }
 
     public void setUsuario(Usuario usuario) {
@@ -173,17 +201,21 @@ public class Emprestimo {
         this.dataDevolucao = dataDevolucao;
     }
 
+    public void setMulta(Multa multa){
+        this.multa = multa;
+    }
+
     public void setQuantidade(int quantidade) {
         this.quantidade = quantidade;
     }
     
     @Override
     public String toString() {
-        return "Emprestimo [idEmprestimo=" + idEmprestimo + ", usuario=" + usuario + ", livro=" + livro + ", livroId="
+        return "Emprestimo [idEmprestimo=" + idEmprestimo + ", usuario=" + usuario + ", livro=" + livro + ", multa=" + multa + ", livroId="
                 + livroId + ", usuarioId=" + usuarioId + ", dataEmprestimo=" + dataEmprestimo + ", dataPrevDevolucao="
                 + dataPrevDevolucao + ", totalLivros=" + totalLivros + ", livrosAtrasados=" + livrosAtrasados
                 + ", totaLivrosAlugados=" + totaLivrosAlugados + ", preco=" + preco + ", dataDevolucao=" + dataDevolucao
-                + ", quantidade=" + quantidade + "]";
+                + ", quantidade=" + quantidade + ", lucroTotal=" + lucroTotal + "]";
     }
 
     

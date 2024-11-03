@@ -16,6 +16,7 @@ public class LivroDAOImpl implements LivroDAO {
         this.connection = DatabaseUtil.getConnection();
     }
 
+    // todos os livros
     @Override
     public List<Livro> findAll() {
         List<Livro> livros = new ArrayList<>();
@@ -27,10 +28,11 @@ public class LivroDAOImpl implements LivroDAO {
                     rs.getString("nome"),
                     rs.getString("autor"),
                     rs.getString("genero"),
-                    rs.getString("idade_indicativa"),
+                    rs.getInt("idade_indicativa"),
                     rs.getString("descricao"),
                     rs.getInt("qtd_disponivel"),
-                    rs.getInt("qtd_total")
+                    rs.getInt("qtd_total"),
+                    rs.getFloat("preco")
                 ));
             }
         } catch (SQLException e) {
@@ -39,30 +41,28 @@ public class LivroDAOImpl implements LivroDAO {
         return livros;
     }
 
+    // cadastrar novo livro
     @Override
     public Livro salvar(Livro Livro) {
         
-        String sql = "ISERT INTO livros (nome, autor, genero, idadeIndicativa, descricao, qtdDisponivel, qtdTotal) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO livros (nome, autor, genero, idade_indicativa, descricao, qtd_disponivel, qtd_total, preco) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)){
             stmt.setString(1, Livro.getNome());
             stmt.setString(2, Livro.getAutor());
             stmt.setString(3, Livro.getGenero());
-            stmt.setString(4, Livro.getIdadeIndicativa());
+            stmt.setInt(4, Livro.getIdadeIndicativa());
             stmt.setString(5, Livro.getDescricao());
             stmt.setInt(6, Livro.getQtdDisponivel());
             stmt.setInt(7, Livro.getQtdTotal());
+            stmt.setFloat(8, Livro.getPreco());
 
             stmt.executeUpdate();
             System.out.println("Livro cadastrado com sucesso!");
 
-        }
-
-        catch (SQLException e) {
+        }catch (SQLException e) {
             e.printStackTrace();
+        }
+        return Livro;   
     }
-            return Livro;
-
-   
-}
 }

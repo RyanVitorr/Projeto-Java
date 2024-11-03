@@ -24,31 +24,53 @@ $(document).ready(function() {
                     <div class="container-form-transp"> 
                         
                         <form id="formNovoLivro">
-                        <div class="cancelBtn">
-                            <p id="cancelBtnP">
-                                X
-                            </p>
-                        </div>
+                            <div class="cancelBtn">
+                                <p id="cancelBtnP">
+                                    X
+                                </p>
+                            </div>
                             
                             <h3>Registrar Novo Livro</h3>
                             <label for="nomeLivro">Nome do Livro:</label>
-                            <input type="text" id="nomeLivro" name="nomeLivro" required>
+                            <input type="text" id="nomeLivro" name="nomeLivro" required placeholder="Digite o nome do livro">
+
                             <label for="autorLivro">Autor:</label>
-                            <input type="text" id="autorLivro" name="autorLivro" required>
+                            <input type="text" id="autorLivro" name="autorLivro" required placeholder="Digite o nome do autor">
+
+                            <label for="descricaoLivro">Descrição:</label>
+                            <input type="text" id="descricaoLivro" name="descricaoLivro" required placeholder="Digite a descrição do livro">
+
                             <label for="idadeIndicativa">Idade Indicativa:</label>
-                            <input type="number" id="idadeIndicativa" name="idadeIndicativa" required>
+                            <input type="number" id="idadeIndicativa" name="idadeIndicativa" required min="0" max="18" placeholder="Digite a idade indicativa">
+
                             <label for="generoLivro">Gênero:</label>
-                            <input type="text" id="generoLivro" name="generoLivro" required>
+                            <input type="text" id="generoLivro" name="generoLivro" required placeholder="Digite o gênero do livro">
+
+                            <label for="precoLivro">Preço do Livro:</label>
+                            <input type="text" id="precoLivro" name="precoLivro" required placeholder="Digite o preço (ex: 20,00)">
+
                             <label for="qtdDisponivel">Quantidade Disponível:</label>
-                            <input type="number" id="qtdDisponivel" name="qtdDisponivel" required>
-                            <button type="submit">Registrar Livro</button>
+                            <input type="number" id="qtdDisponivel" name="qtdDisponivel" required min="0" step="1" placeholder="Digite a quantidade disponível">
+
+                            <label for="qtdTotal">Quantidade Total:</label>
+                            <input type="number" id="qtdTotal" name="qtdTotal" required min="0" step="1" placeholder="Digite a quantidade total">
+
+                            <button id="submiteRegistroLivro" type="submit">Registrar Livro</button>
+
                         </form>
                     </div>
                 `).find('#formNovoLivro').show();
+                
+                $('#precoLivro').mask('000.000.000,00', { reverse: true });
 
                 $('#cancelBtnP').off('click').on('click', function () {
                     console.log("clicou")
                     $('.container-form-transp').remove();
+                });
+
+                $("#formNovoLivro").off('submit').on('submit', function(e) {
+                    e.preventDefault(); 
+                    envioFormButton();
                 });
             }
         });
@@ -119,38 +141,63 @@ $(document).ready(function() {
         });
 
         // Função para adicionar um novo livro ao array de objetos ao enviar o formulário (vou modificar. ass: Ryan)
-        $(document).on('submit', '#add-book-form', function(e) {
-            e.preventDefault(); 
-           
-            const bookName = $('#name').val();
-            const bookAuthor = $('#book-author').val();
-            const bookGenre = $('#book-genre').val();
-            const bookAge = $('#book-age').val();
-            const bookDescription = $('#book-description').val();
-            const bookQuantityAvailable = $('#book-quantity-available').val();
-            const bookQuantityTotal = $('#book-quantity-total').val();
+        const envioFormButton = ()=>{
+
+            const bookName = $('#nomeLivro').val();
+            const bookAuthor = $('#autorLivro').val();
+            const bookGenre = $('#generoLivro').val();
+            const bookAge = $('#idadeIndicativa').val();
+            const bookDescription = $('#descricaoLivro').val();
+            const preco = $('#precoLivro').val();
+            const bookQuantityAvailable = $('#qtdDisponivel').val();
+            const bookQuantityTotal = $('#qtdTotal').val();
     
             
             let newBook = {
                 id: dataLivros.length + 1, 
-                name: bookName,
-                author: bookAuthor,
-                genre: bookGenre,
-                age: bookAge,
-                description: bookDescription,
-                quantityAvailable: bookQuantityAvailable,
-                quantityTotal: bookQuantityTotal
+                nome: bookName,
+                autor: bookAuthor,
+                genero: bookGenre,
+                preco: preco,
+                idadeIndicativa: parseInt(bookAge, 10), 
+                descricao: bookDescription,
+                qtdDisponivel: parseInt(bookQuantityAvailable, 10), 
+                qtdTotal: parseInt(bookQuantityTotal, 10), 
+                preco: parseFloat(preco.replace(',', '.')) 
             };
+
+            let livroAjax = {
+                nome: bookName,
+                autor: bookAuthor,
+                genero: bookGenre,
+                idadeIndicativa: parseInt(bookAge, 10), 
+                descricao: bookDescription,
+                qtdDisponivel: parseInt(bookQuantityAvailable, 10), 
+                qtdTotal: parseInt(bookQuantityTotal, 10), 
+                preco: parseFloat(preco.replace(',', '.')) 
+            };
+
+            $.ajax({
+                url: 'livro/cadastrar',
+                type: 'POST',
+                contentType: 'application/json', 
+                data: JSON.stringify(livroAjax), 
+                success: function(response) {
+                    console.log('Livro cadastrado com sucesso:', response);
+                    alert("Livro cadastrado com sucesso:");
+                    dataLivros.push(newBook);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Erro na requisição:', xhr.responseText);
+                    
+                }
+            });
     
-            dataLivros.push(newBook);
-    
-            console.log(dataLivros);
-    
-            $('#add-book-form')[0].reset();
-            $('#add-book-form-section').hide(); 
+            $('#formNovoLivro')[0].reset();
+            $('.container-form-transp').remove();
     
             renderBooks(dataLivros);
-        });
+        };
 
         // Função para renderizar os livros na tabela
         async function renderBooks(bookItems) {
@@ -240,7 +287,7 @@ $(document).ready(function() {
                                             <td>${cliente.usuario.cpf}</td>
                                             <td>${cliente.usuario.telefone}</td>
                                             <td>${cliente.usuario.endereco}</td>
-                                            <td>${cliente.livro.preco}</td>
+                                            <td>${cliente.preco}</td>
                                             <td>${cliente.totaLivrosAlugados}</td>
                                             <td>${cliente.dataEmprestimo}</td>
                                             <td>${cliente.dataDevolucao}</td>

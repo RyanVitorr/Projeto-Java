@@ -26,13 +26,7 @@ public class MultaDAOImpl implements MultaDAO {
             ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                multas.add(new Multa(
-                    rs.getString("data_devolucao"), 
-                    rs.getString("dataAluguel"), 
-                    rs.getInt("idEmprestimo"), 
-                    rs.getFloat("preco"),
-                    rs.getString("dataAtual")
-                ));
+                
             }
 
         } catch (SQLException e) {
@@ -55,13 +49,7 @@ public class MultaDAOImpl implements MultaDAO {
            ResultSet rs = stmt.executeQuery(sql)) {
 
            while (rs.next()) {
-                multas.add(new Multa(
-                   rs.getString("data_devolucao"), 
-                   rs.getString("dataAluguel"), 
-                   rs.getInt("idEmprestimo"), 
-                   rs.getFloat("preco"),
-                   rs.getString("dataAtual")
-                ));
+               
            }
 
         } catch (SQLException e) {
@@ -88,13 +76,7 @@ public class MultaDAOImpl implements MultaDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     
-                    multas.add(new Multa(
-                        rs.getString("data_devolucao"), 
-                        rs.getString("dataAluguel"), 
-                        rs.getInt("idEmprestimo"), 
-                        rs.getFloat("preco"),
-                        rs.getString("dataAtual")
-                    ));
+                    
                       
                 }
             }
