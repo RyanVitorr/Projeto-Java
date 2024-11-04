@@ -19,4 +19,6 @@ public class LivroService {
     public Livro salvarLivro(Livro livro){
         return livroDAO.salvar(livro);
     }
+public void excluirLivro(int idLivro) {
+    livroDAO.excluir(idLivro);
 }

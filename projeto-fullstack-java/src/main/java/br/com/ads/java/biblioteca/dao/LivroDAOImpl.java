@@ -65,4 +65,23 @@ public class LivroDAOImpl implements LivroDAO {
         }
         return livro;   
     }
+
+  // excluir livro
+    @Override
+    public void excluir(int idLivro) {
+        String sql = "DELETE FROM livros WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, idLivro);
+            int rowsAffected = stmt.executeUpdate();
+            
+            if (rowsAffected > 0) {
+                System.out.println("Livro excluído com sucesso!");
+            } else {
+                System.out.println("Nenhum livro encontrado com o ID fornecido.");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

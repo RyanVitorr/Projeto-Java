@@ -33,3 +33,8 @@ public class LivroController {
     }
     
 }
+
+@DeleteMapping("/excluir/{id}")
+public void excluirLivro(@PathVariable int id) {
+    livroService.excluirLivro(id);
+}
