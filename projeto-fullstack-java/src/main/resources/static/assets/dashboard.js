@@ -24,15 +24,16 @@ $(document).ready(function () {
                     <h3>Total de Livros</h3>
                     <p id="totalLivros">0</p>
                 </div>
+
+                <div class="stat-card total-usuarios">
+                    <h3>Total de Clientes</h3>
+                    <p id="totalClientes">0</p>
+                </div>
             
-                <div class="stat-card total-livros">
+            
+                <div class="stat-card total-livros-alugados">
                     <h3>Total de Livros Alugados</h3>
                     <p id="totalLivrosAlugados">0</p>
-                </div>
-             
-                <div class="stat-card total-atraso">
-                    <h3>Total de Livros em Atraso</h3>
-                    <p id="totalAtraso">0</p>
                 </div>
 
                 <div class="stat-card total-recebido">
@@ -40,7 +41,12 @@ $(document).ready(function () {
                     <p id="totalRecebido">R$ 0,00</p>
                 </div>
 
-                <div class="stat-card total-arecer">
+                <div class="stat-card total-atraso">
+                    <h3>Total de Livros em Atraso</h3>
+                    <p id="totalAtraso">0</p>
+                </div>
+
+                <div class="stat-card total-a-receber">
                     <h3>Total a receber pelos atrasos</h3>
                     <p id="totalAreceber">R$ 0,00</p>
                 </div>
@@ -88,6 +94,8 @@ $(document).ready(function () {
             $('#totalLivrosAlugados').text(data[0].totaLivrosAlugados);
             $('#totalRecebido').text(`R$ ${data[0].lucroTotal.toFixed(2)}`);
             $('#totalAtraso').text(data[0].livrosAtrasados);
+            $('#totalClientes').text(data[0].totalUsuarios);
+            
             
         }
         

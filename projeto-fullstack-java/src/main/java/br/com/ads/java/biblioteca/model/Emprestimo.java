@@ -15,6 +15,7 @@ public class Emprestimo {
     private int quantidade;
     private float lucroTotal;
     private float valorMulta;
+    private int totalUsuarios;
 
     private Usuario usuario; 
     private Livro livro;     
@@ -59,11 +60,12 @@ public class Emprestimo {
 
 
     // dados dashboard
-    public Emprestimo(int totalLivros, int livrosAtrasados, int totaLivrosAlugados, float lucroTotal) {
+    public Emprestimo(int totalLivros, int livrosAtrasados, int totaLivrosAlugados, float lucroTotal, int totalUsuarios) {
         this.totalLivros = totalLivros;
         this.livrosAtrasados = livrosAtrasados;
         this.totaLivrosAlugados = totaLivrosAlugados;
         this.lucroTotal = lucroTotal;
+        this.totalUsuarios = totalUsuarios;
     }
 
 
@@ -143,10 +145,18 @@ public class Emprestimo {
         return multa;
     }
 
+    public int getTotalUsuarios() {
+        return totalUsuarios;
+    }
+
     // setters
 
     public void setValorMulta(float valorMulta){
         this.valorMulta = valorMulta;
+    }
+
+    public void setTotalUsuarios(int totalUsuarios) {
+        this.totalUsuarios = totalUsuarios;
     }
 
     public void setIdEmprestimo(int idEmprestimo) {
@@ -215,7 +225,7 @@ public class Emprestimo {
                 + livroId + ", usuarioId=" + usuarioId + ", dataEmprestimo=" + dataEmprestimo + ", dataPrevDevolucao="
                 + dataPrevDevolucao + ", totalLivros=" + totalLivros + ", livrosAtrasados=" + livrosAtrasados
                 + ", totaLivrosAlugados=" + totaLivrosAlugados + ", preco=" + preco + ", dataDevolucao=" + dataDevolucao
-                + ", quantidade=" + quantidade + ", lucroTotal=" + lucroTotal + "]";
+                + ", quantidade=" + quantidade + ", lucroTotal=" + lucroTotal + ", totalUsuarios=" + totalUsuarios +"]";
     }
 
     

@@ -147,13 +147,14 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
     public List<Emprestimo> buscarDadosDash(Date dataEmprestimo) {
         List<Emprestimo> emprestimos = new ArrayList<>();
         String sql = "SELECT " +
-                    "(SELECT COUNT(*) FROM livros) AS total_livros, " +
-                    "(SELECT COUNT(*) FROM emprestimos WHERE " +
-                    "(data_devolucao IS NULL AND data_previ_devolucao < CURRENT_DATE)) AS livros_atrasados, " +
-                    "(SELECT COUNT(*) FROM emprestimos) AS total_livros_alugados, " +
-                    "(SELECT SUM(preco) FROM emprestimos) AS lucro_total " + 
-                    "FROM emprestimos e " +
-                    "WHERE (? IS NULL OR e.data_emprestimo = ?)";
+             "(SELECT COUNT(*) FROM livros) AS total_livros, " +
+             "(SELECT COUNT(*) FROM usuarios) AS total_usuarios, " +
+             "(SELECT COUNT(*) FROM emprestimos WHERE data_devolucao IS NULL AND data_previ_devolucao < CURRENT_DATE) AS livros_atrasados, " +
+             "(SELECT COUNT(*) FROM emprestimos) AS total_livros_alugados, " +
+             "(SELECT SUM(preco) FROM emprestimos) AS lucro_total " +
+             "FROM emprestimos e " +
+             "WHERE (? IS NULL OR e.data_emprestimo = ?)";
+
     
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             java.sql.Date sqlDate = (dataEmprestimo != null) ? new java.sql.Date(dataEmprestimo.getTime()) : null;
@@ -168,7 +169,8 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
                         rs.getInt("total_livros"),
                         rs.getInt("livros_atrasados"),
                         rs.getInt("total_livros_alugados"),
-                        rs.getFloat("lucro_total")
+                        rs.getFloat("lucro_total"),
+                        rs.getInt("total_usuarios")
                     ));
                     
                     System.out.println("Total de registros encontrados: " + emprestimos.size());
