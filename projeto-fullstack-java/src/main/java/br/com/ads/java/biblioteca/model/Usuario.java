@@ -5,7 +5,7 @@ import java.time.LocalDate;
 public class Usuario {
     private int id;
     private String nome;
-    private int cpf;
+    private String cpf;
     private String email;
     private String telefone;
     private LocalDate dataNascimento; 
@@ -15,12 +15,19 @@ public class Usuario {
     public Usuario() {}
     
     // Construtor para receber dados do banco
-    public Usuario(int id, String nome, String email, String telefone, LocalDate dataNascimento, String endereco) {
+    public Usuario(int id, String nome, String cpf, String email, String telefone, String endereco, LocalDate dataNascimento){
+        this.id = id;
         this.nome = nome;
+        this.cpf = cpf;
         this.email = email;
         this.telefone = telefone;
-        this.dataNascimento = dataNascimento;
         this.endereco = endereco;
+        this.dataNascimento = dataNascimento;
+    }
+
+    public Usuario(int id){
+        this.id = id;
+        
     }
 
     public Usuario(String nome, String email) {
@@ -28,19 +35,8 @@ public class Usuario {
         this.email = email;
     }
     
-    // Construtor que referencia cada variável
-    public Usuario(String nome, String email, String telefone, LocalDate dataNascimento, LocalDate dataRegistro, String endereco) {
-        this.nome = nome;
-        this.email = email;
-        this.telefone = telefone;
-        this.dataNascimento = dataNascimento;
-        
-        this.endereco = endereco;
-    }
-    // os Getters e Setters provavelmente não serão necessários ass: Ryan
-
-      // Getters e Setters
-      public String getNome() {
+    // Getters e Setters
+    public String getNome() {
         return nome;
     }
 
@@ -48,15 +44,15 @@ public class Usuario {
         this.nome = nome;
     }
 
-    public void setCpf(int cpf){
+    public void setCpf(String cpf){
         this.cpf = cpf;
     }
 
-    public int getCpf(){
+    public String getCpf(){
         return cpf;
     }
 
-    public void setId( int id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -96,17 +92,15 @@ public class Usuario {
         this.endereco = endereco;
     }
 
-    // get emprestimo
+    @Override
     public String toString() {
-        return "Usuario{" +
-                "id='" + id + '\'' +
-                "nome='" + nome + '\'' +
-                ", email='" + email + '\'' +
-                ", telefone='" + telefone + '\'' +
-                ", dataNascimento=" + dataNascimento +
-                ", endereco='" + endereco + '\'' +
-                '}';
+        return "Usuario [id=" + id + ", nome=" + nome + ", cpf=" + cpf + ", email=" + email + ", telefone=" + telefone
+                + ", dataNascimento=" + dataNascimento + ", endereco=" + endereco + "]";
     }
+
+    
+
+  
    
 }
 

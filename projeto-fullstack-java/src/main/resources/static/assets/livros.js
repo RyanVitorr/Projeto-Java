@@ -238,7 +238,7 @@ $(document).ready(function() {
                 $(".list").html('');
         
                 // Adicionar cada livro como uma nova linha na tabela
-                for (const book of rowsToDisplay) {
+                for (let book of rowsToDisplay) {
                     let disponivel = book.qtdDisponivel >= 1 ? "Sim" : "Não";
                     let row = `
                         <tr class="row" data-id="${book.idLivro}" data-nome="${book.nome}"  data-autor="${book.autor}" data-genero="${book.genero}" data-idade="${book.idadeIndicativa}" data-descricao="${book.descricao}" data-qtdDisponivel="${book.qtdDisponivel}" data-qtdTotal="${book.qtdTotal}" data-preco="${book.preco}">
@@ -261,11 +261,10 @@ $(document).ready(function() {
                     $(".list").append(row);
 
                     // Buscar clientes para cada livro assim que a linha é adicionada
-                    const clientes = await fetchClientesForBook(book.idLivro);
+                    let clientes = await fetchClientesForBook(book.idLivro);
                     if (clientes.length > 0) {
-                        clientes.forEach(cliente => {
-                            let clienteRow = `
-                            <tr class="customer-table" style="display: none;">
+                        console.log(clientes);
+                        $('.list').append(`<tr class="customer-table" style="display: none;">
                                 <td colspan="8">
                                     <table class="table customer-list-table">
                                         <thead>
@@ -281,24 +280,23 @@ $(document).ready(function() {
                                                 <th>Data Prev.Devolução</th>
                                             </tr>
                                         </thead>
-                                        <tbody class="customer-list">
-                                        <tr>
-                                            <td>${cliente.usuario.nome}</td>
-                                            <td>${cliente.usuario.cpf}</td>
-                                            <td>${cliente.usuario.telefone}</td>
-                                            <td>${cliente.usuario.endereco}</td>
-                                            <td>${cliente.preco}</td>
-                                            <td>${cliente.totaLivrosAlugados}</td>
-                                            <td>${cliente.dataEmprestimo}</td>
-                                            <td>${cliente.dataDevolucao}</td>
-                                            <td>${cliente.dataPrevDevolucao}</td>
-
-                                        </tr>
-                                        </tbody>
+                                        <tbody class="customer-list list-${book.idLivro}"></tbody>
                                     </table>
                                 </td>
-                            </tr>`;
-                            $('.list').append(clienteRow);
+                        </tr>`);
+
+                        clientes.forEach(cliente => {
+                            $(`.list-${book.idLivro}`).append(`<tr>
+                                <td>${cliente.usuario.nome}</td>
+                                <td>${cliente.usuario.cpf}</td>
+                                <td>${cliente.usuario.telefone}</td>
+                                <td>${cliente.usuario.endereco}</td>
+                                <td>${cliente.preco}</td>
+                                <td>${cliente.quantidade}</td>
+                                <td>${cliente.dataEmprestimo}</td>
+                                <td>${cliente.dataDevolucao}</td>
+                                <td>${cliente.dataPrevDevolucao}</td>
+                            </tr>`);  
                         });
                     } else {
                         console.log(`Nenhum cliente encontrado para o livro ID: ${book.idLivro}`);

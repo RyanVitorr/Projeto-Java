@@ -1,15 +1,20 @@
 // Implementação UsuarioDAOImpl 
 package br.com.ads.java.biblioteca.dao;
+import br.com.ads.java.biblioteca.model.Livro;
 import br.com.ads.java.biblioteca.model.Usuario;
 import java.sql.Connection;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import br.com.ads.java.biblioteca.utils.DatabaseUtil;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.NoResultException;
 import org.springframework.stereotype.Repository;
+import java.sql.Statement;
+
 
 @Repository
 public class UsuarioDAOImpl implements UsuarioDAO {
@@ -28,14 +33,26 @@ public class UsuarioDAOImpl implements UsuarioDAO {
     }
 
     @Override
-    public Usuario buscarTodos() {
-        String jpql = "SELECT * FROM usuarios";
-        try {
-            return entityManager.createQuery(jpql, Usuario.class)
-                    .getSingleResult();
-        } catch (NoResultException e) {
-            return null;
+    public List<Usuario> buscarTodos() {
+        String sql = "SELECT * FROM usuarios";
+        List<Usuario> usuarios = new ArrayList<>();
+        try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                usuarios.add(new Usuario(
+                    rs.getInt("id_usuario"),
+                    rs.getString("nome"),
+                    rs.getString("cpf"),
+                    rs.getString("email"),
+                    rs.getString("telefone"),
+                    rs.getString("endereco"),
+                    rs.getDate("data_nascimento") != null ? rs.getDate("data_nascimento").toLocalDate() : null
+                ));
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        return usuarios;
     }
 
     @Override
@@ -44,7 +61,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
     
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, usuario.getNome());
-            stmt.setInt(2, usuario.getCpf());
+            stmt.setString(2, usuario.getCpf());
             stmt.setString(3, usuario.getEmail());
             stmt.setString(4, usuario.getTelefone());
             stmt.setDate(5, java.sql.Date.valueOf(usuario.getDataNascimento()));

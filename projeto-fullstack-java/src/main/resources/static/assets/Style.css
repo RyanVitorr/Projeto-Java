@@ -154,7 +154,7 @@ form label {
     display: block;
 }
 
-#formNovoCliente, #formEmprestarLivro, #formEditarLivro {
+#formEmprestarLivro {
     padding: 20px; /* Espaçamento interno */
     border: 1px solid #ccc; /* Borda leve */
     box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Sombra para destaque */
@@ -166,7 +166,7 @@ form label {
     overflow-y: auto;
 }
 
-#formNovoLivro {
+#formNovoCliente, #formNovoLivro, #formEditarLivro {
     padding: 20px;
     border: 1px solid #ccc;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);

@@ -54,8 +54,8 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
         List<Emprestimo> Emprestimos = new ArrayList<>();
         String sql = "SELECT emprestimos.*, livros.* "
            + "FROM emprestimos "
-           + "JOIN livros ON emprestimos.id = livros.id "
-           + "WHERE emprestimos.id_usuarios = ?"; 
+           + "JOIN livros ON emprestimos.id_emprestimo = livros.id "
+           + "WHERE emprestimos.id_usuario= ?"; 
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, idUsuario);
@@ -72,7 +72,6 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
                         rs.getInt("qtd_disponivel"),
                         rs.getInt("qtd_total")
                     );
-
 
                     Emprestimo emprestimo = new Emprestimo(
                         rs.getInt("id_emprestimo"), 
@@ -101,7 +100,7 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
         System.out.println("Parâmetro idLivro recebido no dao: " + idLivro);
         List<Emprestimo> emprestimos = new ArrayList<>();
         String sql = "SELECT emprestimos.id_emprestimo, emprestimos.data_emprestimo, emprestimos.data_devolucao, emprestimos.data_previ_devolucao, emprestimos.quantidade, "
-                   + "usuarios.id_usuario, usuarios.nome AS nome_usuario, usuarios.email, usuarios.telefone, usuarios.data_nascimento, usuarios.endereco, "
+                   + "usuarios.id_usuario, usuarios.nome AS nome_usuario, usuarios.cpf, usuarios.email, usuarios.telefone, usuarios.data_nascimento, usuarios.endereco, "
                    + "livros.preco, livros.id "
                    + "FROM emprestimos "
                    + "JOIN usuarios ON emprestimos.id_usuario = usuarios.id_usuario "
@@ -118,10 +117,11 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
                     Usuario usuario = new Usuario(
                         rs.getInt("id_usuario"),
                         rs.getString("nome_usuario"),
+                        rs.getString("cpf"),
                         rs.getString("email"),
-                        rs.getString("telefone"),
-                        rs.getDate("data_nascimento") != null ? rs.getDate("data_nascimento").toLocalDate() : null, 
-                        rs.getString("endereco")
+                        rs.getString("telefone"),                     
+                        rs.getString("endereco"),
+                        rs.getDate("data_nascimento") != null ? rs.getDate("data_nascimento").toLocalDate() : null
                     );
     
                     emprestimos.add(new Emprestimo(

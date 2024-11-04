@@ -11,8 +11,9 @@ public interface EmprestimoDAO {
     List<Emprestimo> findByIdLivro(int idLivro);
 
     // Busca todos os empréstimos por id do usuário
-    List<Emprestimo> findByIdUsuario(int idUsuario);
+    List<Emprestimo> findByIdUsuario(int clienteId);
 
+    // todos
     List<Emprestimo> buscarEmprestimos();
 
     // dados dash

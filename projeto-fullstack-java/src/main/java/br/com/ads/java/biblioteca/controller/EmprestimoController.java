@@ -42,9 +42,9 @@ public class EmprestimoController {
     }
     
     // idusuario
-    @GetMapping("/porUsuario")
-    public List<Emprestimo> buscarEmprestimosPorIdUsuario(@RequestParam("idUsuario") int idUsuario) {
-        return emprestimoService.buscarEmprestimosPorIdUsuario(idUsuario);
+    @GetMapping("/porCliente")
+    public List<Emprestimo> buscarEmprestimosPorIdUsuario(@RequestParam("clienteId") int clienteId) {
+        return emprestimoService.buscarEmprestimosPorIdUsuario(clienteId);
     }
 
     //todos

@@ -1,12 +1,12 @@
 // Classe UsuarioService 
-package br.com.ads.java.biblioteca.service; // Certifique-se de que o pacote esteja correto
-
-import br.com.ads.java.biblioteca.dao.UsuarioDAO; // Certifique-se de importar a classe UsuarioDAO
+package br.com.ads.java.biblioteca.service; 
+import java.util.List;
+import br.com.ads.java.biblioteca.dao.UsuarioDAO; 
 import br.com.ads.java.biblioteca.model.Usuario; 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service // Certifique-se de que 'Service' está com S maiúsculo
+@Service
 public class UsuarioService {
 
     @Autowired
@@ -16,7 +16,7 @@ public class UsuarioService {
         return usuarioDAO.salvar(usuario);
     }
 
-    public Usuario buscarTodos() {
+    public List<Usuario> buscarTodos() {
         return usuarioDAO.buscarTodos();
     }
 

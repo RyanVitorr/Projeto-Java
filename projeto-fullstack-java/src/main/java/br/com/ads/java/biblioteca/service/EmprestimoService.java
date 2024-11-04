@@ -23,8 +23,8 @@ public class EmprestimoService {
     }
 
     // Busca empréstimos por ID do usuário
-    public List<Emprestimo> buscarEmprestimosPorIdUsuario(int idUsuario) {
-        return emprestimoDAO.findByIdUsuario(idUsuario);
+    public List<Emprestimo> buscarEmprestimosPorIdUsuario(int clienteId) {
+        return emprestimoDAO.findByIdUsuario(clienteId);
     }
 
     
