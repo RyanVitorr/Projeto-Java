@@ -33,25 +33,54 @@ $(document).ready(function() {
                             </div>
 
                             <h3>Registrar Novo Cliente</h3>
+      
+                                
                             <label for="nomeCompleto">Nome Completo:</label>
                             <input type="text" id="nomeCompleto" name="nomeCompleto" required>
-                            <label for="cpf">CPF:</label>
-                            <input type="text" id="cpf" name="cpf" required>
-                            <label for="idade">Idade:</label>
-                            <input type="number" id="idade" name="idade" required>
-                            <label for="telefone">Telefone:</label>
-                            <input type="text" id="telefone" name="telefone" required>
+                               
+                            <label for="email">Email:</label>
+                            <input type="email" id="email" name="email" required>
+
+                            <div class="container-form-cadastroCliente">
+                                <div>
+                                    <label for="cpf">CPF:</label>
+                                    <input type="text" id="cpf" name="cpf" required>
+                                </div>
+
+                                <div>
+                                    <label for="telefone">Telefone:</label>
+                                    <input type="text" id="telefone" name="telefone" required>
+                                </div>
+
+                                <div>
+                                    <label for="idade">Nascimento:</label>
+                                    <input type="number" id="idade" name="idade" required>
+                                </div>
+                            </div>
+                               
                             <label for="endereco">Endereço:</label>
                             <input type="text" id="endereco" name="endereco" required>
+                                
+                            
+
+                            
+
                             <button type="submit">Registrar Cliente</button>
                         </form>
                     </div>
 
                 `).find('#formNovoCliente').show();
 
+                $('#precoLivro').mask('000.000.000,00', { reverse: true });
+
                 $('#cancelBtnP').off('click').on('click', function () {
                     console.log("clicou")
                     $('.container-form-transp').remove();
+                });
+
+                $("#formNovoCliente").off('submit').on('submit', function(e) {
+                    e.preventDefault(); 
+                    envioFormButton();
                 });
             }
         });  
@@ -59,14 +88,16 @@ $(document).ready(function() {
         $('#conteudo-principal').html(`
             <div class="table-wrapper">
                 <div id="div-filter">
-                    <label for="entries">Exibir</label>
-                    <select id="entries">
-                        <option value="10">10</option>
-                        <option value="20">20</option>
-                        <option value="30">30</option>
-                    </select>
-                    <span>resultados por página</span>
-                    <input type="text" id="search" placeholder="Buscar...">
+                    <div class="filter-exibir-container">
+                        <label for="entries">Exibir</label>
+                        <select id="entries">
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="30">30</option>
+                        </select>
+                        <span>resultados por página</span>
+                    </div>
+                    <div class="pesquisa-container"><input type="text" id="search" placeholder="Buscar..."></div>
                 </div>
                 <div class="table-container">
                     <table class="table">
@@ -118,29 +149,58 @@ $(document).ready(function() {
             console.error('Erro ao buscar Clientes:', error);  
         });
 
-        // Função para adicionar um novo client ao array de objetos ao enviar o formulário (Ryan vai modificar)
-        $(document).on('submit', '#add-book-form', function(e) {
-            e.preventDefault(); 
-           
-            const clienteName = $('#name').val();
-            const clienteCpf = $('#book-author').val();
-            const clienteTelefone = $('#book-genre').val();
-    
+        // Função para adicionar um novo cliente ao array de objetos ao enviar o formulário (vou modificar. ass: Ryan)
+        const envioFormButton = ()=>{
+
+            const clienteNome = $('#nomeCompleto').val();
+            const clienteCpf = $('#cpf').val();        
+            const clienteEmail= $('#email').val();
+            const clienteTelefone = $('#telefone').val();
+            const clienteEndereço = $('#endereco').val();
+            const clienteNascimento = $('#idade').val(); 
             
-            let newCliente = {
-                nome: clienteName,
-                cpf: clienteCpf,
+            let newClient = {
+                id: dataLivros.length + 1, 
+                clienteNome: clienteNome,
+                clienteCpf: clienteCpf,
+                clienteEmail: clienteEmail,
+                clienteTelefone: clienteTelefone,
+                clienteEndereço: clienteEndereço, 
+                clienteNascimento: clienteNascimento,                 
             };
+
+            let clientAjax = {
+                nome: bookName,
+                autor: bookAuthor,
+                genero: bookGenre,
+                idadeIndicativa: parseInt(bookAge, 10), 
+                descricao: bookDescription,
+                qtdDisponivel: parseInt(bookQuantityAvailable, 10), 
+                qtdTotal: parseInt(bookQuantityTotal, 10), 
+                preco: parseFloat(preco.replace(',', '.')) 
+            };
+
+            $.ajax({
+                url: 'livro/livro',
+                type: 'POST',
+                contentType: 'application/json', 
+                data: JSON.stringify(clientAjax), 
+                success: function(response) {
+                    console.log('Livro cadastrado com sucesso:', response);
+                    alert("Livro cadastrado com sucesso:");
+                    dataClientes.push(newClient);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Erro na requisição:', xhr.responseText);
+                    
+                }
+            });
     
-            dataClientes.push(newCliente);
+            $('#formNovoLivro')[0].reset();
+            $('.container-form-transp').remove();
     
-            console.log(dataClientes);
-    
-            $('#add-book-form')[0].reset();
-            $('#add-book-form-section').hide(); 
-    
-            renderClientes(dataClientes);
-        });
+            renderBooks(dataClientes);
+        };
 
         // Função para renderizar os livros na tabela
         async function renderClientes(clientsItems) {

@@ -44,9 +44,7 @@ public class LivroDAOImpl implements LivroDAO {
     // cadastrar novo livro
     @Override
     public Livro salvar(Livro livro) {
-        
         String sql = "INSERT INTO livros (nome, autor, genero, idade_indicativa, descricao, qtd_disponivel, qtd_total, preco) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-
         try (PreparedStatement stmt = connection.prepareStatement(sql)){
             stmt.setString(1, livro.getNome());
             stmt.setString(2, livro.getAutor());
@@ -68,20 +66,22 @@ public class LivroDAOImpl implements LivroDAO {
 
     // excluir livro
     @Override
-    public void excluir(int idLivro) {
+    public void excluir(int idLivro) throws SQLException{
         String sql = "DELETE FROM livros WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, idLivro);
             int rowsAffected = stmt.executeUpdate();
-            
-            if (rowsAffected > 0) {
-                System.out.println("Livro excluído com sucesso!");
-            } else {
-                System.out.println("Nenhum livro encontrado com o ID fornecido.");
+    
+            if (rowsAffected == 0) {
+                throw new SQLException("Nenhum livro encontrado com o ID fornecido.");
             }
-
         } catch (SQLException e) {
-            e.printStackTrace();
+            
+            if (e.getMessage().contains("violação de chave estrangeira")) {
+                throw new SQLException("Erro: Este livro está vinculado a registros de empréstimos e não pode ser excluído.");
+            }
+           
+            throw e;
         }
     }
 }

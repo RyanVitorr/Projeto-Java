@@ -78,14 +78,16 @@ $(document).ready(function() {
         $('#conteudo-principal').html(`
             <div class="table-wrapper">
                 <div id="div-filter">
-                    <label for="entries">Exibir</label>
-                    <select id="entries">
-                        <option value="10">10</option>
-                        <option value="20">20</option>
-                        <option value="30">30</option>
-                    </select>
-                    <span>resultados por página</span>
-                    <input type="text" id="search" placeholder="Buscar...">
+                    <div class="filter-exibir-container">
+                        <label for="entries">Exibir</label>
+                        <select id="entries">
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="30">30</option>
+                        </select>
+                        <span>resultados por página</span>
+                    </div>
+                    <div class="pesquisa-container"><input type="text" id="search" placeholder="Buscar..."></div>
                 </div>
                 <div class="table-container">
                     <table class="table">
@@ -106,6 +108,8 @@ $(document).ready(function() {
                         <tbody class="list"></tbody>
                     </table>
                 </div>
+
+
                 <div class="pagination">
                     <button class="prev">Anterior</button>
                     <span>Página <span id="current-page">1</span></span>
@@ -113,6 +117,12 @@ $(document).ready(function() {
                 </div>
             </div>
         `);
+
+        /*  <div class="pagination">
+                <button class="prev">Anterior</button>
+                <span>Página <span id="current-page">1</span></span>
+                <button class="next">Próxima</button>
+            </div> */
 
         const fetchLivros = ()=> {
             return new Promise((resolve, reject) => {
@@ -418,7 +428,7 @@ $(document).ready(function() {
                 $('#formContainer').html(`
                     <div class="container-form-transp"> 
                         
-                        <div class="container-excluir">
+                        <div class="container-excluir" data-id="${data.id}">
                         
                             <h3>Você deseja excluir o livro "${data.nome}" do banco de dados?</h3>
 
@@ -437,10 +447,32 @@ $(document).ready(function() {
                     $('.container-form-transp').remove();
                 });
 
-                $("#confirmBtnConfirm").off('click').on('click', function() {
-                    $('.container-form-transp').remove();
+                $("#confirmBtnConfirm").off('click').on('click', function(e) {
+                    let idLivroDel = $($(this)).parents(".container-excluir").data('id');
+                    let formatIdLivro = parseInt(idLivroDel);
+                    console.log(formatIdLivro);
+                    fetchExcluirLivro(formatIdLivro);
                 });
             };
+
+            async function fetchExcluirLivro(bookId) {
+                console.log("bookId:", bookId); 
+                return new Promise((resolve, reject) => {
+                    $.ajax({
+                        url: `livro/livro/${bookId}`,  
+                        type: 'DELETE',    
+                        success: function(data) {
+                            console.log("Dados recebidos:", data);
+                            resolve(data);  
+                            $('.container-form-transp').remove();
+                        },
+                        error: function(xhr, status, error) {
+                            alert('Erro: ' + xhr.responseText); 
+                        }
+                    });
+                    
+                });
+            }
 
             function filterBooks(term) {
                 return bookItems.filter(book => 

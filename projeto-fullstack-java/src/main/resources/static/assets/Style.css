@@ -16,13 +16,20 @@ body, html {
     top: 0;
     left: 0;
     transition: width 0.3s ease;
+    box-shadow: 0 4px 8px rgb(114, 134, 114);
+    
 }
 
 #img {
     width: 100%;
-    height: 10vmin;
+    height: 15vmin;
     margin-top: 45px;
-    border-bottom: 2px solid rgb(195 77 37 / 56%);
+    border-bottom: 2px solid rgb(119 68 68);
+}
+
+#img > img {
+    width: 100%;
+    height: 100%;
 }
 
 .navbar ul {
@@ -36,11 +43,11 @@ body, html {
 }
 
 .navbar ul li:hover {
-    background-color: rgb(195 77 37 / 56%);
+    background-color: rgb(119 68 68);
 }
 
 .toggleBackground {
-    background-color:  rgb(195 77 37 / 56%);
+    background-color:  rgb(119 68 68);
 }
 
 .navbar ul li a {
@@ -103,7 +110,7 @@ body, html {
 button {
     padding: 10px 20px;
     margin: 10px;
-    background-color: rgb(189, 95, 63);
+    background-color: rgb(165, 42, 42);
     color: #fff;
     border: none;
     cursor: pointer;
@@ -113,7 +120,7 @@ button {
 }
 
 button:hover {
-    background-color: rgb(165, 42, 42);
+    background-color:  rgb(119 68 68);
 }
 
 /* Estilos gerais para os formulários */
@@ -122,7 +129,7 @@ form {
     padding: 20px;
     background-color: #f8f9fa;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgb(73, 118, 73);
     width: 70%;
 }
 
@@ -145,8 +152,8 @@ form input, form select {
 }
 
 form input:focus, form select:focus {
-    border-color: #007BFF;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    border-color: rgb(73, 118, 73);
+    box-shadow: 0 0 5px rgb(73, 118, 73);
     outline: none;
 }
 
@@ -156,6 +163,17 @@ form label {
     margin-bottom: 5px;
     display: block;
 }
+
+.container-form-cadastroCliente {
+    display: flex;
+    width: 100%;
+    height: 10vmin;
+    gap: 2.5vmin;
+}
+.container-form-cadastroCliente > div {
+    width: 50%;
+}
+
 
 #formEmprestarLivro {
     padding: 20px; /* Espaçamento interno */
@@ -179,6 +197,9 @@ form label {
     max-height: 90%;
     width: 70%;
     overflow-y: auto;
+}
+#formNovoCliente {
+    width: 50%;
 }
 
 .container-form {
@@ -288,7 +309,7 @@ form label {
 /* Estilos para o botão de envio nos formulários */
 form button[type="submit"] {
     padding: 10px;
-    background-color: #007BFF;
+    background-color:rgb(119 68 68);
     border: none;
     border-radius: 4px;
     color: white;
@@ -298,7 +319,7 @@ form button[type="submit"] {
 }
 
 form button[type="submit"]:hover {
-    background-color: #007BFF;
+    background-color: rgb(119 68 68);
 }
 
 
@@ -323,14 +344,14 @@ form button[type="submit"]:hover {
 
 .btn-add {
     padding: 10px 15px;
-    background-color: rgb(189, 95, 63);
+    background-color:  rgb(165, 42, 42);
     color: #fff;
     border: none;
     cursor: pointer;
     border-radius: 5px;
 }
 .btn-add:hover {
-    background-color: rgb(165, 42, 42);
+    background-color: rgb(119 68 68);
 }
 
 #div-filter {
@@ -339,12 +360,13 @@ form button[type="submit"]:hover {
     width: 100%;
     height: 5vmin;
     gap: 1vmin;
-    color: white;
+    color: black;
+    font-weight: bolder;
 }
 
 
 .table-container {
-    height: 42.5rem; 
+    height: 41.3rem; 
     overflow-y: auto;
     box-shadow: 0 4px 8px rgb(114, 134, 114);
     border-radius: 8px;
@@ -377,8 +399,11 @@ form button[type="submit"]:hover {
 }
 .list > tr > td {
     text-align: center;
-    max-width: 180px;
     color: black;
+    justify-content: center;
+}
+.list > tr > td:nth-child(5){
+    max-width: 200px;
 }
 
 .customer-list-table > thead > tr {
@@ -425,37 +450,43 @@ form button[type="submit"]:hover {
 }
 
 #entries, #search {
-    margin-left: 10px;
     padding: 5px;
 }
 
 .pagination {
-    margin-top: 10px;
     display: flex;
-    justify-content: center;
+    justify-content: right;
     align-items: center;
-    color: white;
+    color: black;
+    font-weight: bolder;
 }
 
-.pagination button {
+.next, .prev{
     padding: 5px 10px;
     margin: 0 5px;
     border: none;
-    background-color: rgb(189, 95, 63);
+    background-color: rgb(165, 42, 42) ;
     color: #fff;
     cursor: pointer;
     border-radius: 5px;
     font-weight: bolder;
 }
-.pagination button:hover {
-    background-color:  rgb(165, 42, 42);
+.next:hover, .prev:hover {
+    background-color:  rgb(119 68 68);
 }
 
-.pagination button:disabled {
-    background-color: #cccccc;
+.next:disabled, .prev:disabled {
+    background-color: rgb(119 68 68);
 }
 
-.pagination > span {
+.page-numbers .page-button{
+    background-color: transparent;
+    padding: 5px 5px;
+    color: black;
+    margin: 0;
+}
+
+.page-numbers > span {
     font-weight: bolder;
     color: black;
 }
@@ -473,13 +504,13 @@ form button[type="submit"]:hover {
     justify-content: center;
     width: 25px;
     height: 25px;
-    background-color: #007bff2e;
+    background-color: rgb(165, 42, 42);
     border-radius: 5px;
     font-size: 1.5vmin;
     cursor: pointer;
 }
 .cancelBtn > p:hover {
-    background-color: #007BFF;
+    background-color:  rgb(165, 42, 42);
 }
 /*-------------------------- dashboard----------------------------- */
 * {
@@ -514,7 +545,7 @@ body {
 }
 
 .dashboard-header h1 {
-    color: #007BFF;
+    color: rgb(73, 118, 73);
     font-size: 24px;
 }
 
@@ -532,7 +563,7 @@ input[type="date"] {
 
 button#filterBtn {
     padding: 8px 12px;
-    background-color: #007BFF;
+    background-color:   rgb(165, 42, 42);
     color: white;
     border: none;
     border-radius: 4px;
@@ -541,7 +572,7 @@ button#filterBtn {
 }
 
 button#filterBtn:hover {
-    background-color: #007BFF;
+    background-color: rgb(119 68 68);
 }
 
 .stats-container {
@@ -555,9 +586,9 @@ button#filterBtn:hover {
     background-color: #fff; /* Cor de fundo dos cartões */
     padding: 20px; /* Espaçamento interno */
     border-radius: 8px; /* Cantos arredondados */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra para efeito de profundidade */
+    box-shadow: 0 4px 8px rgb(114, 134, 114); /* Sombra para efeito de profundidade */
     text-align: center; /* Centraliza o texto */
-    border-top: 5px solid #007BFF; /* Borda superior */
+    border-top: 5px solid  rgb(165, 42, 42); /* Borda superior */
     transition: all 0.3s ease; /* Transição suave para hover */
     max-width: 350px; /* Define uma largura máxima para os cartões */
     width: 100%; /* Largura total dentro do grid */
@@ -565,22 +596,23 @@ button#filterBtn:hover {
 
 .stat-card:hover {
     transform: scale(1.05); /* Efeito de aumento ao passar o mouse */
+    border-top: 5px solid  rgb(119 68 68); 
 }
 
 .stat-card h3 {
     margin-bottom: 10px; /* Espaçamento abaixo do título */
     font-size: 18px; /* Tamanho da fonte do título */
-    color: #333; /* Cor do título */
+    color: black; /* Cor do título */
 }
 
 .stat-card p {
     font-size: 24px; /* Tamanho da fonte do conteúdo */
     font-weight: bold; /* Negrito para o conteúdo */
-    color: #007BFF; /* Cor do conteúdo */
+    color:rgb(93, 138, 93); /* Cor do conteúdo */
 }
 
 .total-recebido p {
-    color: #007BFF; /* Cor para total recebido */
+    color: #14ac06; /* Cor para total recebido */
 }
 
 .total-atraso p {
@@ -588,7 +620,7 @@ button#filterBtn:hover {
 }
 
 .total-a-receber > p {
-    color: #14ac06;
+    color:  rgb(93, 138, 93);
 }
 
 .charts-container {
@@ -607,7 +639,6 @@ canvas {
 /*-----------tabela dashboard----------*/
 /* Estilização da tabela de histórico de aluguéis */
 .table-dashboard {
-    background-color: #333;
     height: 450px;
 }
 
@@ -635,19 +666,41 @@ canvas {
 }
 
 
-input[type="text"], input[type="email"], input[type="password"], textarea {
-    width: 20%;
-    padding: 10px;
+#search, textarea {
+    width: 100%;
+    padding: 5px 10px;
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    margin-bottom: 20px;
     box-sizing: border-box;
     background-color: #f0f0f0; /* Cor de fundo suave */
 }
 
-input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, textarea:focus {
-    border-color: rgb(93, 138, 93); /* Terracota Suave */
+#search:focus, textarea:focus {
+    border-color: rgb(165, 42, 42); /* Terracota Suave */
     outline: none;
-    background-color: #fff; /* Foco claro */
+    background-color: rgba(109, 146, 109, 0.158); /* Foco claro */
+}
+
+.hidden-page {
+    display: none;
+}
+
+.filter-exibir-container, .pesquisa-container {
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 4px;
+    width: 20%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    gap: 1vmin;
+    box-shadow: 0 4px 8px rgb(114, 134, 114);
+}
+
+.table-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5vmin;
 }
