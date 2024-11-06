@@ -2,7 +2,7 @@ let dataLivros;
 
 const fetchAjax = ()=>{
     $.ajax({
-        url: 'livro/todos',
+        url: 'livro/livro',
         type: 'GET',
         cache: false,
         success: function(data) {

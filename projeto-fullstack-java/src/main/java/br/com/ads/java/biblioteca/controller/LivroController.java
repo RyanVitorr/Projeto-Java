@@ -4,7 +4,9 @@ import br.com.ads.java.biblioteca.model.Livro;
 import br.com.ads.java.biblioteca.service.LivroService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,20 +23,22 @@ public class LivroController {
     @Autowired
     private LivroService livroService;
 
-    @GetMapping("/todos")
+    @GetMapping("/livro")
     public List<Livro> buscarTodosLivrosr() {
         return livroService.buscarTodosLivros();
     } 
 
-    @PostMapping("/cadastrar")
+    @PostMapping("/livro")
     public Livro cadastroDeLivro(@RequestBody Livro livro) {
         
         return livroService.salvarLivro(livro);
     }
+
+    @DeleteMapping("/livro/{id}")
+    public void excluirLivro(@PathVariable int id) {
+        livroService.excluirLivro(id);
+    }
+
     
 }
 
-@DeleteMapping("/excluir/{id}")
-public void excluirLivro(@PathVariable int id) {
-    livroService.excluirLivro(id);
-}

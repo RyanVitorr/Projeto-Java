@@ -66,7 +66,7 @@ public class LivroDAOImpl implements LivroDAO {
         return livro;   
     }
 
-  // excluir livro
+    // excluir livro
     @Override
     public void excluir(int idLivro) {
         String sql = "DELETE FROM livros WHERE id = ?";

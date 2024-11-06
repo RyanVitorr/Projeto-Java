@@ -117,7 +117,7 @@ $(document).ready(function() {
         const fetchLivros = ()=> {
             return new Promise((resolve, reject) => {
                 $.ajax({
-                    url: 'livro/todos',
+                    url: 'livro/livro',
                     type: 'GET',
                     cache: false,
                     success: function(data) {
@@ -178,7 +178,7 @@ $(document).ready(function() {
             };
 
             $.ajax({
-                url: 'livro/cadastrar',
+                url: 'livro/livro',
                 type: 'POST',
                 contentType: 'application/json', 
                 data: JSON.stringify(livroAjax), 

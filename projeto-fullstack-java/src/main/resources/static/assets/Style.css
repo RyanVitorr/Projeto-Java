@@ -10,7 +10,7 @@ body, html {
 .navbar {
     width: 200px;
     height: 100vh;
-    background-color: #333;
+    background-color: rgb(105, 136, 105);
     color: white;
     position: fixed;
     top: 0;
@@ -22,7 +22,7 @@ body, html {
     width: 100%;
     height: 10vmin;
     margin-top: 45px;
-    border-bottom: 2px solid #79a7d8;
+    border-bottom: 2px solid rgb(195 77 37 / 56%);
 }
 
 .navbar ul {
@@ -36,11 +36,11 @@ body, html {
 }
 
 .navbar ul li:hover {
-    background-color: #4a89cc;
+    background-color: rgb(195 77 37 / 56%);
 }
 
 .toggleBackground {
-    background-color:  #4a89cc;
+    background-color:  rgb(195 77 37 / 56%);
 }
 
 .navbar ul li a {
@@ -72,6 +72,9 @@ body, html {
     transition: margin-left 0.3s ease;
     max-height: 896px;
 }
+.main-content > h2 {
+    color: rgb(73, 118, 73);
+}
 
 /* Quando a navbar estiver escondida */
 .navbar.collapsed {
@@ -100,8 +103,8 @@ body, html {
 button {
     padding: 10px 20px;
     margin: 10px;
-    background-color: #007BFF;
-    color: white;
+    background-color: rgb(189, 95, 63);
+    color: #fff;
     border: none;
     cursor: pointer;
     border-radius: 5px;
@@ -110,7 +113,7 @@ button {
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: rgb(165, 42, 42);
 }
 
 /* Estilos gerais para os formulários */
@@ -301,7 +304,6 @@ form button[type="submit"]:hover {
 
 /*----------------- tabela---------------------*/
 #conteudo-principal {
-    background-color: #333;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -321,11 +323,14 @@ form button[type="submit"]:hover {
 
 .btn-add {
     padding: 10px 15px;
-    background-color: #007BFF;
+    background-color: rgb(189, 95, 63);
     color: #fff;
     border: none;
     cursor: pointer;
     border-radius: 5px;
+}
+.btn-add:hover {
+    background-color: rgb(165, 42, 42);
 }
 
 #div-filter {
@@ -341,7 +346,8 @@ form button[type="submit"]:hover {
 .table-container {
     height: 42.5rem; 
     overflow-y: auto;
-    border: 1px solid black;
+    box-shadow: 0 4px 8px rgb(114, 134, 114);
+    border-radius: 8px;
 }
 
 .table {
@@ -353,6 +359,7 @@ form button[type="submit"]:hover {
     position: sticky;
     top: 0;
     background-color: #fff; 
+   
     z-index: 1;
 }
 
@@ -361,6 +368,8 @@ form button[type="submit"]:hover {
     text-align: left;
     border-bottom: 1px solid #ddd;
     text-align: center;
+    color: rgb(93, 138, 93);
+    font-weight: bolder;
 }
 
 .list > tr {
@@ -369,6 +378,7 @@ form button[type="submit"]:hover {
 .list > tr > td {
     text-align: center;
     max-width: 180px;
+    color: black;
 }
 
 .customer-list-table > thead > tr {
@@ -377,7 +387,7 @@ form button[type="submit"]:hover {
 }
 
 .table tr.row:hover {
-    background-color: #f1f1f1;
+    background-color:  rgb(105, 136, 105);
 }
 
 .list > tr.row:hover {
@@ -393,15 +403,15 @@ form button[type="submit"]:hover {
 }
 
 .table-container::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: #f8f9fa;
 }
 
 .table-container::-webkit-scrollbar-thumb {
-    background: #888;
+    background: rgb(93, 138, 93);
 }
 
 .table-container::-webkit-scrollbar-thumb:hover {
-    background: #555;
+    background: rgb(93, 138, 93);
 }
 
 .container {
@@ -412,15 +422,6 @@ form button[type="submit"]:hover {
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
-}
-
-.btn-add {
-    padding: 10px 15px;
-    background-color: #007BFF;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
 }
 
 #entries, #search {
@@ -440,14 +441,23 @@ form button[type="submit"]:hover {
     padding: 5px 10px;
     margin: 0 5px;
     border: none;
-    background-color: #007bff;
+    background-color: rgb(189, 95, 63);
     color: #fff;
     cursor: pointer;
     border-radius: 5px;
+    font-weight: bolder;
+}
+.pagination button:hover {
+    background-color:  rgb(165, 42, 42);
 }
 
 .pagination button:disabled {
     background-color: #cccccc;
+}
+
+.pagination > span {
+    font-weight: bolder;
+    color: black;
 }
 
 .cancelBtn {
@@ -622,4 +632,22 @@ canvas {
     gap: 3.5vmin;
     border-radius: 8px;
     background-color: white;
+}
+
+
+input[type="text"], input[type="email"], input[type="password"], textarea {
+    width: 20%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    background-color: #f0f0f0; /* Cor de fundo suave */
+}
+
+input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, textarea:focus {
+    border-color: rgb(93, 138, 93); /* Terracota Suave */
+    outline: none;
+    background-color: #fff; /* Foco claro */
 }
