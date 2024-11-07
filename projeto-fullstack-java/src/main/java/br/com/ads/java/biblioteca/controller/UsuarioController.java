@@ -15,19 +15,19 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     // cadastrar novo usuario
-    @PostMapping("/cadastrar")
+    @PostMapping
     public Usuario cadastrarUsuario(@RequestBody Usuario usuario) {
         return usuarioService.cadastrarUsuario(usuario);
     }
 
     //pegar tds os usuarios
-    @GetMapping("/todos")
+    @GetMapping
     public List<Usuario> buscarTodos() {
         return usuarioService.buscarTodos();
     }
 
     // atualizar usuario 
-    @PostMapping("/atualizar")
+    @PostMapping("/{id}")
     public Usuario atualizarUsuario(@RequestBody Usuario usuario) {
         return usuarioService.atualizarUsuario(usuario);
     }

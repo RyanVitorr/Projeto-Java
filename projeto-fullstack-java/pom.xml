@@ -30,19 +30,19 @@
         <java.version>17</java.version>
     </properties>
     <dependencies>
-        <!-- Thymeleaf -->
+      
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
 
-        <!-- Web -->
+        
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- DevTools (opcional para reiniciar automaticamente durante o desenvolvimento) -->
+        
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
@@ -50,29 +50,29 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- PostgreSQL driver -->
+       
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.7.4</version> <!-- ou a versão mais recente -->
+            <version>42.7.4</version>
             <scope>runtime</scope>
         </dependency>
 
 
-        <!-- Spring Data JPA para interação com banco de dados -->
+        
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
-        <!-- Hibernate (opcional, mas pode ajudar em algumas situações) -->
+       
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>5.6.14.Final</version> <!-- Verifique a versão mais recente -->
+            <version>5.6.14.Final</version> 
         </dependency>
 
-        <!-- Testes -->
+        
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -86,7 +86,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>br.com.ads.java.biblioteca.Application</mainClass> <!-- Defina a sua classe principal aqui -->
+                    <mainClass>br.com.ads.java.biblioteca.Application</mainClass> 
                 </configuration>
             </plugin>
         </plugins>

@@ -1,6 +1,29 @@
 $(document).ready(function() { 
     // Quando clicar na opção "Livros" no menu lateral
     let dataLivros;
+    const generos = [
+        { nome: "Fantasia" },
+        { nome: "Distopia" },
+        { nome: "Ficção Científica" },
+        { nome: "Romance" },
+        { nome: "Aventura" },
+        { nome: "Terror" },
+        { nome: "Policial" },
+        { nome: "Histórico" },
+        { nome: "Biografia" },
+        { nome: "Comédia" },
+        { nome: "Drama" },
+        { nome: "Mistério" },
+        { nome: "Fantasia Épica" },
+        { nome: "Thriller" },
+        { nome: "Literatura Infantil" },
+        { nome: "Poesia" },
+        { nome: "Erótico" },
+        { nome: "Guerra" },
+        { nome: "Espionagem" },
+        { nome: "Autoajuda" },
+        { nome: "Clássico" }
+    ];
 
     $('.navbar ul li a:contains("Livros")').on('click', function() {
         $('.navbar ul li a').removeClass('toggleBackground');
@@ -31,35 +54,66 @@ $(document).ready(function() {
                             </div>
                             
                             <h3>Registrar Novo Livro</h3>
-                            <label for="nomeLivro">Nome do Livro:</label>
-                            <input type="text" id="nomeLivro" name="nomeLivro" required placeholder="Digite o nome do livro">
 
-                            <label for="autorLivro">Autor:</label>
-                            <input type="text" id="autorLivro" name="autorLivro" required placeholder="Digite o nome do autor">
+                            <div class="container-form-cadastroCliente">
+                                <div>
+                                    <label for="nomeLivro">Nome do Livro:</label>
+                                    <input type="text" id="nomeLivro" name="nomeLivro" required placeholder="Digite o nome do livro">
+                                </div>
 
-                            <label for="descricaoLivro">Descrição:</label>
-                            <input type="text" id="descricaoLivro" name="descricaoLivro" required placeholder="Digite a descrição do livro">
+                                <div>
+                                    <label for="autorLivro">Autor:</label>
+                                    <input type="text" id="autorLivro" name="autorLivro" required placeholder="Digite o nome do autor">
+                                </div>
 
-                            <label for="idadeIndicativa">Idade Indicativa:</label>
-                            <input type="number" id="idadeIndicativa" name="idadeIndicativa" required min="0" max="18" placeholder="Digite a idade indicativa">
+                                 <div>
+                                    <label for="generoLivro">Gênero:</label>
+                                    <select id="generoLivro" name="generoLivro" required>
+                                        <option value="" disabled selected>Selecione o gênero do livro</option>
+                                    </select>
+                                </div>
+                            </div>
 
-                            <label for="generoLivro">Gênero:</label>
-                            <input type="text" id="generoLivro" name="generoLivro" required placeholder="Digite o gênero do livro">
+                            <div class="container-form-cadastroCliente">
+                                <div>
+                                    <label for="descricaoLivro">Descrição:</label>
+                                    <input type="text" id="descricaoLivro" name="descricaoLivro" required placeholder="Digite a descrição do livro">
+                                </div>
 
-                            <label for="precoLivro">Preço do Livro:</label>
-                            <input type="text" id="precoLivro" name="precoLivro" required placeholder="Digite o preço (ex: 20,00)">
+                                <div>
+                                    <label for="idadeIndicativa">Idade Indicativa:</label>
+                                    <input type="number" id="idadeIndicativa" name="idadeIndicativa" required min="0" max="18" placeholder="Digite a idade indicativa">
+                                </div>
+                            </div>
 
-                            <label for="qtdDisponivel">Quantidade Disponível:</label>
-                            <input type="number" id="qtdDisponivel" name="qtdDisponivel" required min="0" step="1" placeholder="Digite a quantidade disponível">
+                            <div class="container-form-cadastroCliente">
+                               
 
-                            <label for="qtdTotal">Quantidade Total:</label>
-                            <input type="number" id="qtdTotal" name="qtdTotal" required min="0" step="1" placeholder="Digite a quantidade total">
+                                <div>
+                                    <label for="precoLivro">Preço do Livro:</label>
+                                    <input type="text" id="precoLivro" name="precoLivro" required placeholder="Digite o preço (ex: 20,00)">
+                                </div>
+
+                                <div>
+                                    <label for="qtdDisponivel">Quantidade Disponível:</label>
+                                    <input type="number" id="qtdDisponivel" name="qtdDisponivel" required min="0" step="1" placeholder="Digite a quantidade disponível">
+                                </div>
+
+                                <div>
+                                    <label for="qtdTotal">Quantidade Total:</label>
+                                    <input type="number" id="qtdTotal" name="qtdTotal" required min="0" step="1" placeholder="Digite a quantidade total">
+                                </div>
+                            </div>
 
                             <button id="submiteRegistroLivro" type="submit">Registrar Livro</button>
 
                         </form>
                     </div>
                 `).find('#formNovoLivro').show();
+
+                $.each(generos, function(index, genero) {
+                    $('#generoLivro').append($("<option>").val(genero.nome).text(genero.nome));
+                });
                 
                 $('#precoLivro').mask('000.000.000,00', { reverse: true });
 
@@ -193,9 +247,14 @@ $(document).ready(function() {
                 contentType: 'application/json', 
                 data: JSON.stringify(livroAjax), 
                 success: function(response) {
-                    console.log('Livro cadastrado com sucesso:', response);
-                    alert("Livro cadastrado com sucesso:");
-                    dataLivros.push(newBook);
+                    if(!response){
+                        alert("O livro cadastrado já existe na base de dados");
+                    }else {
+                        console.log('Livro cadastrado com sucesso:', response);
+                        alert("Livro cadastrado com sucesso!");
+                        dataLivros.push(newBook);
+                    }
+                    
                 },
                 error: function(xhr, status, error) {
                     console.error('Erro na requisição:', xhr.responseText);
@@ -275,7 +334,7 @@ $(document).ready(function() {
                     if (clientes.length > 0) {
                         console.log(clientes);
                         $('.list').append(`<tr class="customer-table" style="display: none;">
-                                <td colspan="8">
+                                <td colspan="10">
                                     <table class="table customer-list-table">
                                         <thead>
                                             <tr>
@@ -304,7 +363,7 @@ $(document).ready(function() {
                                 <td>${cliente.preco}</td>
                                 <td>${cliente.quantidade}</td>
                                 <td>${cliente.dataEmprestimo}</td>
-                                <td>${cliente.dataDevolucao}</td>
+                                <td>${cliente.dataDevolucao ? new Date(cliente.dataDevolucao).toLocaleDateString('pt-BR') : 'Não Devolvido'}</td>
                                 <td>${cliente.dataPrevDevolucao}</td>
                             </tr>`);  
                         });
@@ -315,7 +374,6 @@ $(document).ready(function() {
         
                 // Atualiza a exibição da página atual
                 $("#current-page").text(page);
-
                     
                 // Adiciona eventos de clique nas linhas dos livros
                 $('.row').off('click').on('click', function(event) {
@@ -380,39 +438,71 @@ $(document).ready(function() {
                             
                             <h3>Editar Livro</h3>
 
-                            <label for="nomeLivro">Nome do Livro:</label>
-                            <input type="text" id="nomeLivro" name="nomeLivro" required>
+                            <div class="container-form-cadastroCliente">
+                                <div>
+                                    <label for="nomeLivro">Nome do Livro:</label>
+                                    <input type="text" id="nomeLivro" name="nomeLivro" required placeholder="Digite o nome do livro">
+                                </div>
 
-                            <label for="autorLivro">Autor:</label>
-                            <input type="text" id="autorLivro" name="autorLivro" required>
+                                <div>
+                                    <label for="autorLivro">Autor:</label>
+                                    <input type="text" id="autorLivro" name="autorLivro" required placeholder="Digite o nome do autor">
+                                </div>
 
-                            <label for="descricao">Descrição:</label>
-                            <input type="text" id="descricao" name="descricao" required>
+                                 <div>
+                                    <label for="generoLivro">Gênero:</label>
+                                    <select id="generoLivro" name="generoLivro" required>
+                                        <option value="" disabled selected>Selecione o gênero do livro</option>
+                                    </select>
+                                </div>
+                            </div>
 
-                            <label for="preco">Preço:</label>
-                            <input type="number" id="preco" name="preco" required step="0.1">
+                            <div class="container-form-cadastroCliente">
+                                <div>
+                                    <label for="descricaoLivro">Descrição:</label>
+                                    <input type="text" id="descricaoLivro" name="descricaoLivro" required placeholder="Digite a descrição do livro">
+                                </div>
 
-                            <label for="idadeIndicativa">Idade Indicativa:</label>
-                            <input type="number" id="idadeIndicativa" name="idadeIndicativa" required>
+                                <div>
+                                    <label for="idadeIndicativa">Idade Indicativa:</label>
+                                    <input type="number" id="idadeIndicativa" name="idadeIndicativa" required min="0" max="18" placeholder="Digite a idade indicativa">
+                                </div>
+                            </div>
 
-                            <label for="generoLivro">Gênero:</label>
-                            <input type="text" id="generoLivro" name="generoLivro" required>
+                            <div class="container-form-cadastroCliente">
+                      
+                                <div>
+                                    <label for="precoLivro">Preço do Livro:</label>
+                                    <input type="text" id="precoLivro" name="precoLivro" required placeholder="Digite o preço (ex: 20,00)">
+                                </div>
 
-                            <label for="qtdDisponivel">Quantidade Disponível:</label>
-                            <input type="number" id="qtdDisponivel" name="qtdDisponivel" required>
+                                <div>
+                                    <label for="qtdDisponivel">Quantidade Disponível:</label>
+                                    <input type="number" id="qtdDisponivel" name="qtdDisponivel" required min="0" step="1" placeholder="Digite a quantidade disponível">
+                                </div>
 
-                            <label for="qtdTotal">Quantidade Total:</label>
-                            <input type="number" id="qtdTotal" name="qtdTotal" required>
+                                <div>
+                                    <label for="qtdTotal">Quantidade Total:</label>
+                                    <input type="number" id="qtdTotal" name="qtdTotal" required min="0" step="1" placeholder="Digite a quantidade total">
+                                </div>
+                            </div>
 
                             <button type="submit" id="editarLivarBtn">Confirmar</button>
                         </form>
                     </div>
                 `);
 
+                $.each(generos, function(index, genero) {
+                    $('#generoLivro').append($("<option>").val(genero.nome).text(genero.nome));
+                });
+
+                $('#precoLivro').mask('000.000.000,00', { reverse: true });
+
+                
                 $('#nomeLivro').val(data.nome);
                 $('#autorLivro').val(data.autor);
-                $('#descricao').val(data.descricao);
-                $('#preco').val(data.preco);
+                $('#descricaoLivro').val(data.descricao);
+                $('#precoLivro').val(data.preco);
                 $('#idadeIndicativa').val(data.idade);
                 $('#generoLivro').val(data.genero);
                 $('#qtdDisponivel').val(data.qtdDisponivel);

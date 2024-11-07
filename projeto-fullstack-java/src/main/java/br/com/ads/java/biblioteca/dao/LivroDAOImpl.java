@@ -43,8 +43,9 @@ public class LivroDAOImpl implements LivroDAO {
 
     // cadastrar novo livro
     @Override
-    public Livro salvar(Livro livro) {
-        String sql = "INSERT INTO livros (nome, autor, genero, idade_indicativa, descricao, qtd_disponivel, qtd_total, preco) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    public Livro salvar(Livro livro) { 
+        String sql = "INSERT INTO livros (nome, autor, genero, idade_indicativa, descricao, qtd_disponivel, qtd_total, preco) VALUES (?, ?, ?, ?, ?, ?, ?, ?) " +
+                        "ON CONFLICT (nome, autor) DO NOTHING";
         try (PreparedStatement stmt = connection.prepareStatement(sql)){
             stmt.setString(1, livro.getNome());
             stmt.setString(2, livro.getAutor());
@@ -55,8 +56,17 @@ public class LivroDAOImpl implements LivroDAO {
             stmt.setInt(7, livro.getQtdTotal());
             stmt.setFloat(8, livro.getPreco());
 
-            stmt.executeUpdate();
-            System.out.println("Livro cadastrado com sucesso!");
+            int linhasAfetadas = stmt.executeUpdate();
+
+            if (linhasAfetadas > 0) {
+                System.out.println("Livro cadastrado com sucesso!");
+                return livro;
+            } else {
+                System.out.println("O livro já existe na base de dados.");
+                return null;  
+            }
+
+            
 
         }catch (SQLException e) {
             e.printStackTrace();

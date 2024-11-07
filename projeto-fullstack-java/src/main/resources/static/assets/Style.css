@@ -80,6 +80,7 @@ body, html {
     max-height: 896px;
 }
 .main-content > h2 {
+    margin: 0 10px;
     color: rgb(73, 118, 73);
 }
 
@@ -151,6 +152,10 @@ form input, form select {
     background-color: #fff;
 }
 
+#idadeIndicativa {
+    width: 50%;
+}
+
 form input:focus, form select:focus {
     border-color: rgb(73, 118, 73);
     box-shadow: 0 0 5px rgb(73, 118, 73);
@@ -195,11 +200,8 @@ form label {
     display: none;
     display: block;
     max-height: 90%;
-    width: 70%;
-    overflow-y: auto;
-}
-#formNovoCliente {
     width: 50%;
+    overflow-y: auto;
 }
 
 .container-form {
@@ -360,7 +362,7 @@ form button[type="submit"]:hover {
     width: 100%;
     height: 5vmin;
     gap: 1vmin;
-    color: black;
+    color: rgb(93, 138, 93);
     font-weight: bolder;
 }
 
@@ -406,9 +408,20 @@ form button[type="submit"]:hover {
     max-width: 200px;
 }
 
-.customer-list-table > thead > tr {
-    color: black;
+.customer-list-table > thead > tr > th{
+    color: rgb(165, 42, 42);
 
+}
+.customer-list {
+    background-color: rgb(137 207 137 / 16%) ;
+}
+.customer-list > tr {
+    color: white;
+}
+.customer-list > tr > td {
+    text-align: center;
+    color: black;
+    justify-content: center;
 }
 
 .table tr.row:hover {

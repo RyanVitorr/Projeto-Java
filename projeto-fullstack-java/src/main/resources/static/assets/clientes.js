@@ -54,7 +54,7 @@ $(document).ready(function() {
 
                                 <div>
                                     <label for="idade">Nascimento:</label>
-                                    <input type="number" id="idade" name="idade" required>
+                                    <input type="date" id="idade" name="idade" required>
                                 </div>
                             </div>
                                
@@ -71,7 +71,9 @@ $(document).ready(function() {
 
                 `).find('#formNovoCliente').show();
 
-                $('#precoLivro').mask('000.000.000,00', { reverse: true });
+                $('#cpf').mask('000.000.000-00');
+                $('#telefone').mask('(00) 00000-0000');
+                
 
                 $('#cancelBtnP').off('click').on('click', function () {
                     console.log("clicou")
@@ -127,7 +129,7 @@ $(document).ready(function() {
         const fetchClientes = ()=> {
             return new Promise((resolve, reject) => {
                 $.ajax({
-                    url: 'usuarios/todos',
+                    url: 'usuarios',
                     type: 'GET',
                     cache: false,
                     success: function(data) {    
@@ -158,9 +160,24 @@ $(document).ready(function() {
             const clienteTelefone = $('#telefone').val();
             const clienteEndereço = $('#endereco').val();
             const clienteNascimento = $('#idade').val(); 
+
+            if (!clienteCpf || !validarCPF(clienteCpf)) {
+                alert("Por favor, insira um CPF válido.");
+                return false; 
+            }
+            
+            if (!clienteTelefone || !validarTelefone(clienteTelefone)) {
+                alert("Por favor, insira um telefone válido.");
+                return false; 
+            }
+           
+            if (!clienteNascimento || !validarDataNascimento(clienteNascimento)) {
+                alert("Por favor, insira uma data de nascimento válida no formato 'yyyy-mm-dd'.");
+                return false;
+            }
             
             let newClient = {
-                id: dataLivros.length + 1, 
+                id: dataClientes.length + 1, 
                 clienteNome: clienteNome,
                 clienteCpf: clienteCpf,
                 clienteEmail: clienteEmail,
@@ -170,37 +187,56 @@ $(document).ready(function() {
             };
 
             let clientAjax = {
-                nome: bookName,
-                autor: bookAuthor,
-                genero: bookGenre,
-                idadeIndicativa: parseInt(bookAge, 10), 
-                descricao: bookDescription,
-                qtdDisponivel: parseInt(bookQuantityAvailable, 10), 
-                qtdTotal: parseInt(bookQuantityTotal, 10), 
-                preco: parseFloat(preco.replace(',', '.')) 
+                nome: clienteNome,
+                cpf: clienteCpf,
+                email: clienteEmail,
+                telefone: clienteTelefone, 
+                endereco: clienteEndereço,
+                dataNascimento: clienteNascimento, 
             };
 
+            console.log(clienteNascimento);
+
             $.ajax({
-                url: 'livro/livro',
+                url: 'usuarios',
                 type: 'POST',
                 contentType: 'application/json', 
                 data: JSON.stringify(clientAjax), 
                 success: function(response) {
-                    console.log('Livro cadastrado com sucesso:', response);
-                    alert("Livro cadastrado com sucesso:");
-                    dataClientes.push(newClient);
+                    if(!response){
+                        alert("O Cliente cadastrado já existe na base de dados");
+                    }else {
+                        console.log('Cliente cadastrado com sucesso:', response);
+                        alert("Cliente cadastrado com sucesso:");
+                        dataClientes.push(newClient);
+                        renderClientes(dataClientes);
+                    }
                 },
                 error: function(xhr, status, error) {
-                    console.error('Erro na requisição:', xhr.responseText);
-                    
+                    console.error('Erro na requisição:', xhr.responseText);   
                 }
             });
     
-            $('#formNovoLivro')[0].reset();
+            $('#formNovoCliente')[0].reset();
             $('.container-form-transp').remove();
     
-            renderBooks(dataClientes);
+           
         };
+
+        const validarCPF = (cpf)=>{
+            const regexCpf = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
+            return regexCpf.test(cpf);
+        }
+
+        const validarTelefone = (telefone)=>{
+            const regexTelefone = /^\(\d{2}\) \d{5}-\d{4}$/; 
+            return regexTelefone.test(telefone);
+        }
+
+        const validarDataNascimento = (data)=>{
+            const regexData = /^\d{4}-\d{2}-\d{2}$/;
+            return regexData.test(data);
+        }
 
         // Função para renderizar os livros na tabela
         async function renderClientes(clientsItems) {

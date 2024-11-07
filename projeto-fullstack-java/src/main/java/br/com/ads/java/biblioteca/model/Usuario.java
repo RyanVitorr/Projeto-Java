@@ -10,11 +10,24 @@ public class Usuario {
     private String telefone;
     private LocalDate dataNascimento; 
     private String endereco;
+    private LocalDate dataCadastro;
     
     // Construtor vazio
     public Usuario() {}
     
     // Construtor para receber dados do banco
+    public Usuario(int id, String nome, String cpf, String email, String telefone, String endereco, LocalDate dataNascimento, LocalDate dataCadastro){
+        this.id = id;
+        this.nome = nome;
+        this.cpf = cpf;
+        this.email = email;
+        this.telefone = telefone;
+        this.endereco = endereco;
+        this.dataNascimento = dataNascimento;
+        this.dataCadastro = dataCadastro;
+    }
+
+    // sem o datacadastro 
     public Usuario(int id, String nome, String cpf, String email, String telefone, String endereco, LocalDate dataNascimento){
         this.id = id;
         this.nome = nome;
@@ -23,6 +36,10 @@ public class Usuario {
         this.telefone = telefone;
         this.endereco = endereco;
         this.dataNascimento = dataNascimento;
+    }
+
+    public void setDataCadastro(LocalDate dataCadastro) {
+        this.dataCadastro = dataCadastro;
     }
 
     public Usuario(int id){
@@ -56,7 +73,7 @@ public class Usuario {
         this.id = id;
     }
 
-    public int getId(int id) {
+    public int getId() {
         return id;
     }
 
@@ -96,6 +113,10 @@ public class Usuario {
     public String toString() {
         return "Usuario [id=" + id + ", nome=" + nome + ", cpf=" + cpf + ", email=" + email + ", telefone=" + telefone
                 + ", dataNascimento=" + dataNascimento + ", endereco=" + endereco + "]";
+    }
+
+    public LocalDate getDataCadastro() {
+        return dataCadastro;
     }
 
     
