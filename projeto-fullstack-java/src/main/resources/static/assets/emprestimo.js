@@ -52,27 +52,11 @@ $(document).ready(function() {
                                         <label for="livroPesquisa">Pesquisar Livro:</label>
                                         <input type="text" id="livroPesquisa" placeholder="Pesquise o livro...">
                                         <ul id="livroLista"></ul>
+                                        <div id="container-lista-livros"></div>
 
-                                        <label for="idLivroEmprestimo">Id do Livro:</label>
-                                        <input type="text" id="idLivroEmprestimo" name="idLivroEmprestimo" readonly>
+                                       
 
-                                        <label for="nomeLivroEmprestimo">Nome do Livro:</label>
-                                        <input type="text" id="nomeLivroEmprestimo" name="nomeLivroEmprestimo" readonly>
-
-                                        <label for="autorLivroEmprestimo">Autor:</label>
-                                        <input type="text" id="autorLivroEmprestimo" name="autorLivroEmprestimo" readonly>
-
-                                        <label for="idadeIndicativaEmprestimo">Idade Indicativa:</label>
-                                        <input type="number" id="idadeIndicativaEmprestimo" name="idadeIndicativaEmprestimo" readonly>
-
-                                        <label for="generoLivroEmprestimo">Gênero:</label>
-                                        <input type="text" id="generoLivroEmprestimo" name="generoLivroEmprestimo" readonly>
-
-                                        <label for="precoFormLivroEmprestimo">Preço:</label>
-                                        <input type="text" id="precoFormLivroEmprestimo" name="precoFormLivroEmprestimo">
-
-                                        <label for="qtdDesejadaEmprestimo">Quantidade:</label>
-                                        <input type="number" id="qtdDesejadaEmprestimo" name="qtdDesejadaEmprestimo" min="1">
+                                        
                                     </div>
                                 </div>
                             </section>
@@ -166,33 +150,79 @@ $(document).ready(function() {
             }
     
             $('#livroLista li').on('click', function() {
-                $('#idLivroEmprestimo').val($(this).data('id'));
-                $('#nomeLivroEmprestimo').val($(this).data('nome'));
-                $('#autorLivroEmprestimo').val($(this).data('autor'));
-                $('#idadeIndicativaEmprestimo').val($(this).data('idade'));
-                $('#generoLivroEmprestimo').val($(this).data('genero'));
-                let precoLivroOrig = parseFloat($(this).data('preco'));
-                let precoFormatado = precoLivroOrig.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-                $('#precoFormLivroEmprestimo').val(precoFormatado);
-                precoLivro = precoLivroOrig ;
-                console.log(precoLivro);
-                $('#qtdDesejadaEmprestimo').val(1);
+                let idLivro = $(this).data('id');
+                let nomeLivro = $(this).data('nome');
+                let nomeAutor = $(this).data('autor');
+                let generoLivro = $(this).data('genero');
+                let precoLivro = $(this).data('preco');
+                let precoFormatado = precoLivro.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+                
+
+                let html = `
+                    <div class="contain-livro" data-id="${idLivro}" data-qtd="${nomeLivro}" data-precoUni="${precoLivro}" data-preco="${precoLivro}">
+                        <div class="id-contain">
+                            <span>Id</span>
+                            <p class="idLivroEmprestimo">${idLivro}</p>
+                        </div>
+
+                        <div class="nome-contain">
+                            <span>Nome livro</span>
+                            <p class="nomeLivroEmprestimo">${nomeLivro}</p>
+                        </div>
+
+                        <div class="autor-contain">
+                            <span>Autor</span>
+                            <p class="autorLivroEmprestimo">${nomeAutor}</p>
+                        </div>
+
+                        <div class="genero-contain">
+                            <span>Gênero</span>
+                            <p class="generoLivroEmprestimo">${generoLivro}</p>
+                        </div>
+
+                        <div class="preco-contain">
+                            <span>Preço</span>
+                            <p class="precoFormLivroEmprestimo">${precoFormatado}</p>
+                        </div>
+
+                        <div class="qtd-contain">
+                            <span>Quantidade:</span>
+                            <input type="number" class="qtdDesejadaEmprestimo" name="qtdDesejadaEmprestimo" min="1" value="1">
+                        </div>
+        
+                    </div>
+                `;
+
+                $("#container-lista-livros").append(html);
+
                 $('#livroLista').html('');
+
+                $('.qtdDesejadaEmprestimo').off('input').on('input', function() {
+                    let quantidade = $(this).val();
+                    
+                    if (quantidade <= 0) {
+                        quantidade = 1;
+                        $(this).val(quantidade); 
+                    }
+                
+                    let container = $(this).closest('.contain-livro');
+                    
+                    let precoLivro = parseFloat(container.data('precoUni'));
+                    
+                    if (!isNaN(quantidade) && !isNaN(precoLivro)) {
+                        let valorTotal = quantidade * precoLivro;
+
+                        let valorForm = valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  
+                        container.find('.precoFormLivroEmprestimo').html(valorForm);
+                        container.data('preco', valorTotal);
+                    }
+                });
+                
             });
 
-            $('#qtdDesejadaEmprestimo').on('input', function() {
-                let quantidade = $(this).val();
-                if(quantidade <= 0){
-                    quantidade = 1;
-                    $('#qtdDesejadaEmprestimo').val(quantidade);
-                }
-                console.log("input click");
-                if (!isNaN(quantidade) && !isNaN(precoLivro)) {
-                    let valorTotal = quantidade * precoLivro;
-                    console.log(valorTotal);
-                    $('#precoFormLivroEmprestimo').val(valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })); 
-                }
-            });
+           
         });
     }); 
 

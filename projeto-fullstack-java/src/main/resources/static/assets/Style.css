@@ -241,7 +241,6 @@ form label {
     width: 70%;
 }
 
-
 .container-form section {
     cursor: pointer;
     border: 1px solid #ccc;
@@ -256,6 +255,52 @@ form label {
 /* Adiciona um efeito visual quando uma seção está expandida */
 .container-form section.expanded {
     background-color: #f9f9f9;
+}
+
+#container-lista-livros{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 1.5vmin;
+    overflow: auto;
+}
+
+.contain-livro {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.contain-livro > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 40%;
+}
+
+.qtdDesejadaEmprestimo {
+    width: 100%;
+    margin: 0;
+    height: 5vmin;
+    text-align: center;
+    border: 1px solid black;
+    border-radius: 0;
+}
+
+.contain-livro > div > span, p {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    height: 3vmin;
+    border: 1px solid black;
+    font-weight: bolder;
+    font-size: 1.5vmin;
+}
+.contain-livro > div > p {
+    height: 5vmin;
+    font-weight: 400;
 }
 
 
