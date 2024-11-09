@@ -35,11 +35,17 @@ $(document).ready(function() {
                             <h3>Registrar Novo Cliente</h3>
       
                                 
-                            <label for="nomeCompleto">Nome Completo:</label>
-                            <input type="text" id="nomeCompleto" name="nomeCompleto" required>
-                               
-                            <label for="email">Email:</label>
-                            <input type="email" id="email" name="email" required>
+                            <div class="container-form-cadastroCliente">
+                                <div>
+                                    <label for="nomeCompleto">Nome Completo:</label>
+                                    <input type="text" id="nomeCompleto" name="nomeCompleto" required>
+                                </div>
+                                            
+                                <div>
+                                    <label for="email">Email:</label>
+                                    <input type="email" id="email" name="email" required>
+                                </div>
+                            </div>
 
                             <div class="container-form-cadastroCliente">
                                 <div>

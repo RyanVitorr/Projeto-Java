@@ -1,9 +1,16 @@
-/* Estilos básicos */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body, html {
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f2f5;
     overflow-y: hidden;
+    height: 100dvh;
 }
 
 /* Estilo da navbar lateral */
@@ -38,7 +45,7 @@ body, html {
 }
 
 .navbar ul li {
-    height: 5vmin;
+    height: 3rem;
     cursor: pointer;
 }
 
@@ -60,37 +67,37 @@ body, html {
     padding: 15px;
 }
 
-/* Menu hamburguer dentro da navbar (ajustado) */
+
 .menu-burger {
-    font-size: 20px; /* Reduz o tamanho do ícone */
+    font-size: 20px; 
     cursor: pointer;
     position: absolute;
-    right: 10px; /* Alinha à direita */
-    top: 10px;   /* Distância do topo */
+    right: 10px;
+    top: 10px;   
     background-color: transparent;
     border: none;
     color: white;
 }
 
-/* Estilo do conteúdo principal */
+
 .main-content {
     margin-left: 200px;
-    padding: 20px;
+    padding: 10px 20px;
     transition: margin-left 0.3s ease;
-    max-height: 896px;
+    height: 100%;
 }
 .main-content > h2 {
     margin: 0 10px;
     color: rgb(73, 118, 73);
 }
 
-/* Quando a navbar estiver escondida */
+
 .navbar.collapsed {
     width: 50px;
 }
 
 .navbar.collapsed ul {
-    display: none; /* Esconde o texto ao recolher */
+    display: none; 
 }
 
 #img.collapsed {
@@ -102,12 +109,12 @@ body, html {
 }
 
 .menu-burger.collapsed {
-    right: 10px; /* Continua alinhado à direita */
+    right: 10px; 
 }
 
 /*---------------------css clientes ----------------------*/
 
-/* Estilos para os botões */
+
 button {
     padding: 10px 20px;
     margin: 10px;
@@ -124,9 +131,8 @@ button:hover {
     background-color:  rgb(119 68 68);
 }
 
-/* Estilos gerais para os formulários */
+
 form {
-    margin-top: 20px;
     padding: 20px;
     background-color: #f8f9fa;
     border-radius: 8px;
@@ -179,15 +185,14 @@ form label {
     width: 50%;
 }
 
-
 #formEmprestarLivro {
-    padding: 20px; /* Espaçamento interno */
-    border: 1px solid #ccc; /* Borda leve */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Sombra para destaque */
-    z-index: 999; /* Coloca o formulário acima de outros elementos */
-    display: none; /* Inicialmente escondido */
+    padding: 20px; 
+    border: 1px solid #ccc; 
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2); 
+    z-index: 999; 
+    display: none; 
     display: block;    
-    max-height: 48rem;
+    max-height: 100%;
     width: 100%;
     overflow-y: auto;
 }
@@ -214,7 +219,6 @@ form label {
     width: 100%;
 }
 
-/* Estilos para o container dos botões e formulários */
 #container-section-pagamento, #container-section-form {
     display: none;
 }
@@ -225,24 +229,39 @@ form label {
 
 #section-form-container > h3, #section-pagamento-container > h3 {
     text-align: left;
+    color: rgb(73, 118, 73);
 }
 
 #container-section-form {
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     margin-top: 25px;
-    width: 100%;
+    width: 70%;
     gap: 2vmin;
 }
 
-#container-section-form > div:nth-child(1){
-    width: 50%;
+#container-section-form > div {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgb(114, 134, 114);
+    padding: 10px;
 }
+
+#container-section-form > div:nth-child(1){
+
+}
+
 #container-section-form > div:nth-child(2){
-    width: 70%;
+    height: 600px;
+    overflow: hidden;
 }
 
 .container-form section {
-    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     border: 1px solid #ccc;
     padding: 10px;
     margin-bottom: 10px;
@@ -250,9 +269,9 @@ form label {
 
 .container-form h3 {
     margin: 0;
+    width: 100%;
 }
 
-/* Adiciona um efeito visual quando uma seção está expandida */
 .container-form section.expanded {
     background-color: #f9f9f9;
 }
@@ -263,12 +282,17 @@ form label {
     width: 100%;
     gap: 1.5vmin;
     overflow: auto;
+    padding: 10px;
+    height: 77%;
 }
 
 .contain-livro {
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 8px;
+    padding: 5px;
+    box-shadow: 0 4px 8px rgb(114, 134, 114);
 }
 .contain-livro > div {
     display: flex;
@@ -283,26 +307,76 @@ form label {
     margin: 0;
     height: 5vmin;
     text-align: center;
-    border: 1px solid black;
     border-radius: 0;
+    border: none;
+    font-weight: 700;
 }
 
-.contain-livro > div > span, p {
+.contain-livro div span, p {
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     width: 100%;
     height: 3vmin;
-    border: 1px solid black;
     font-weight: bolder;
-    font-size: 1.5vmin;
-}
-.contain-livro > div > p {
-    height: 5vmin;
-    font-weight: 400;
+    font-size: 1.8vmin;
+    border-bottom: 1px solid black;
+    color:  rgb(165, 42, 42);
 }
 
+.contain-livro > div > p {
+    height: 5vmin;
+    font-weight: 700;
+    font-size: 1.5vmin;
+    border-bottom: none;
+    color: black;
+}
+
+#div-principal-preco-mes {
+    display: flex;
+    justify-content: center;
+}
+
+#contain-preco-mes {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    width: 60%;
+    box-shadow: 0 4px 8px rgb(114, 134, 114);
+    gap: 2.4vmin;
+}
+
+#div-mes {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    gap: .5vmin;
+}
+#div-mes > label, #tempoAluguel {
+    width: 90%;
+    margin-bottom: 0;
+}
+
+#tempoAluguel {
+    width: 60%;
+}
+
+#div-total-p {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    width: 30%;
+    height: 100%;
+    font-weight: bold;
+}
+#div-total-p > p {
+    border-bottom: none;
+    color: black;
+}
 
 #formContainer {
     margin-top: 20px;
@@ -322,11 +396,17 @@ form label {
     background-color: #000000c2;
 }
 
-/* Estilo para os campos de pesquisa */
 #clientePesquisa, #livroPesquisa {
     background: url('https://img.icons8.com/material-outlined/24/000000/search--v1.png') no-repeat scroll 7px 7px;
     padding-left: 30px;
     margin-bottom: 0px;
+}
+#clientePesquisa {
+    margin-bottom: 2vmin;
+}
+
+.div-lista-relative {
+    position: relative;
 }
 
 #clienteLista, #livroLista {
@@ -337,6 +417,8 @@ form label {
     overflow-y: auto;
     border: 1px solid #ddd;
     border-radius: 4px;
+    position: absolute;
+    z-index: 999;
 }
 
 #clienteLista li, #livroLista li {
@@ -353,7 +435,6 @@ form label {
     background-color: #e9ecef;
 }
 
-/* Estilos para o botão de envio nos formulários */
 form button[type="submit"] {
     padding: 10px;
     background-color:rgb(119 68 68);
@@ -377,6 +458,7 @@ form button[type="submit"]:hover {
     justify-content: flex-start;
     overflow: hidden;
     padding: 10px;
+    height: 95%;
 }
 
 .add-container {
@@ -405,7 +487,7 @@ form button[type="submit"]:hover {
     display: flex;
     align-items: center;
     width: 100%;
-    height: 5vmin;
+    height: 3rem;
     gap: 1vmin;
     color: rgb(93, 138, 93);
     font-weight: bolder;
@@ -413,7 +495,7 @@ form button[type="submit"]:hover {
 
 
 .table-container {
-    height: 41.3rem; 
+    max-height: 75%;
     overflow-y: auto;
     box-shadow: 0 4px 8px rgb(114, 134, 114);
     border-radius: 8px;
@@ -421,6 +503,7 @@ form button[type="submit"]:hover {
 
 .table {
     width: 100%;
+    max-height: 100%;
     border-collapse: collapse;
 }
 
@@ -571,26 +654,16 @@ form button[type="submit"]:hover {
     background-color:  rgb(165, 42, 42);
 }
 /*-------------------------- dashboard----------------------------- */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f0f2f5;
-    padding: 20px;
-    color: #333;
-}
 
 .dashboard-container {
     width: 90%;
+    overflow: hidden;
+    height: 95%;
     margin: 0 auto;
     padding: 20px;
     background-color: #fff;
     border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 10px rgb(114, 134, 114);
 }
 
 .dashboard-header {
@@ -634,47 +707,48 @@ button#filterBtn:hover {
 }
 
 .stats-container {
-    display: grid; /* Define o layout como grid */
-    grid-template-columns: repeat(3, 1fr); /* Três colunas iguais */
-    gap: 10px; /* Espaçamento entre os cartões */
-    margin-bottom: 20px; /* Margem inferior */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 10px; 
+    margin-bottom: 20px; 
 }
 
 .stat-card {
-    background-color: #fff; /* Cor de fundo dos cartões */
-    padding: 20px; /* Espaçamento interno */
-    border-radius: 8px; /* Cantos arredondados */
-    box-shadow: 0 4px 8px rgb(114, 134, 114); /* Sombra para efeito de profundidade */
-    text-align: center; /* Centraliza o texto */
-    border-top: 5px solid  rgb(165, 42, 42); /* Borda superior */
-    transition: all 0.3s ease; /* Transição suave para hover */
-    max-width: 350px; /* Define uma largura máxima para os cartões */
-    width: 100%; /* Largura total dentro do grid */
+    background-color: #fff; 
+    padding: 10px;
+    border-radius: 8px; 
+    box-shadow: 0 4px 8px rgb(114, 134, 114); 
+    text-align: center;
+    border-top: 5px solid  rgb(165, 42, 42); 
+   
+    max-width: 350px; 
+    width: 100%; 
 }
 
 .stat-card:hover {
-    transform: scale(1.05); /* Efeito de aumento ao passar o mouse */
+    transform: scale(1.05);
     border-top: 5px solid  rgb(119 68 68); 
 }
 
 .stat-card h3 {
-    margin-bottom: 10px; /* Espaçamento abaixo do título */
-    font-size: 18px; /* Tamanho da fonte do título */
-    color: black; /* Cor do título */
+    margin-bottom: 10px;
+    font-size: 18px; 
+    color: black; 
 }
 
 .stat-card p {
-    font-size: 24px; /* Tamanho da fonte do conteúdo */
-    font-weight: bold; /* Negrito para o conteúdo */
-    color:rgb(93, 138, 93); /* Cor do conteúdo */
+    font-size: 24px; 
+    font-weight: bold; 
+    color:rgb(93, 138, 93); 
+    border-bottom: none;
 }
 
 .total-recebido p {
-    color: #14ac06; /* Cor para total recebido */
+    color: #14ac06; 
 }
 
 .total-atraso p {
-    color: #dc3545; /* Cor para total de atraso */
+    color: #dc3545; 
 }
 
 .total-a-receber > p {
@@ -682,11 +756,11 @@ button#filterBtn:hover {
 }
 
 .charts-container {
-    background-color: #fff; /* Cor de fundo da seção de gráficos */
-    padding: 20px; /* Espaçamento interno */
-    border-radius: 8px; /* Cantos arredondados */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra para efeito de profundidade */
-    text-align: center; /* Centraliza o texto */
+    background-color: #fff; 
+    padding: 20px; 
+    border-radius: 8px; 
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
+    text-align: center; 
 }
 
 canvas {
@@ -695,9 +769,9 @@ canvas {
 }
 
 /*-----------tabela dashboard----------*/
-/* Estilização da tabela de histórico de aluguéis */
+
 .table-dashboard {
-    height: 450px;
+    max-height: 55%;
 }
 
 .table-dashboard > thead {
@@ -748,7 +822,7 @@ canvas {
     padding: 10px;
     background-color: #fff;
     border-radius: 4px;
-    width: 20%;
+    width: 20rem;
     height: 100%;
     justify-content: center;
     align-items: center;
@@ -761,4 +835,5 @@ canvas {
     display: flex;
     flex-direction: column;
     gap: 1.5vmin;
+    height: 100%;
 }
