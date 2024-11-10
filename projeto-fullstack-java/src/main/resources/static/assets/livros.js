@@ -87,12 +87,6 @@ $(document).ready(function() {
                             </div>
 
                             <div class="container-form-cadastroCliente">
-                               
-
-                                <div>
-                                    <label for="precoLivro">Preço do Livro:</label>
-                                    <input type="text" id="precoLivro" name="precoLivro" required placeholder="Digite o preço (ex: 20,00)">
-                                </div>
 
                                 <div>
                                     <label for="qtdDisponivel">Quantidade Disponível:</label>
@@ -114,8 +108,6 @@ $(document).ready(function() {
                 $.each(generos, function(index, genero) {
                     $('#generoLivro').append($("<option>").val(genero.nome).text(genero.nome));
                 });
-                
-                $('#precoLivro').mask('000.000.000,00', { reverse: true });
 
                 $('#cancelBtnP').off('click').on('click', function () {
                     console.log("clicou")
@@ -123,8 +115,9 @@ $(document).ready(function() {
                 });
 
                 $("#formNovoLivro").off('submit').on('submit', function(e) {
-                    e.preventDefault(); 
-                    envioFormButton();
+                    e.preventDefault();
+                    let cadastro = "cadastro";
+                    envioFormButton(cadastro);
                 });
             }
         });
@@ -152,7 +145,6 @@ $(document).ready(function() {
                                 <th>Gênero</th>
                                 <th>Idade Indicativa</th>
                                 <th>Descrição</th>
-                                <th>Preço</th>
                                 <th>Qtd. Disponível</th>
                                 <th>Qtd. Total</th>
                                 <th>Disponivel</th>
@@ -181,7 +173,7 @@ $(document).ready(function() {
         const fetchLivros = ()=> {
             return new Promise((resolve, reject) => {
                 $.ajax({
-                    url: 'livro/livro',
+                    url: 'livro',
                     type: 'GET',
                     cache: false,
                     success: function(data) {
@@ -205,29 +197,25 @@ $(document).ready(function() {
         });
 
         // Função para adicionar um novo livro ao array de objetos ao enviar o formulário (vou modificar. ass: Ryan)
-        const envioFormButton = ()=>{
+        const envioFormButton = (control)=>{
 
             const bookName = $('#nomeLivro').val();
             const bookAuthor = $('#autorLivro').val();
             const bookGenre = $('#generoLivro').val();
             const bookAge = $('#idadeIndicativa').val();
             const bookDescription = $('#descricaoLivro').val();
-            const preco = $('#precoLivro').val();
             const bookQuantityAvailable = $('#qtdDisponivel').val();
             const bookQuantityTotal = $('#qtdTotal').val();
-    
             
             let newBook = {
                 id: dataLivros.length + 1, 
                 nome: bookName,
                 autor: bookAuthor,
                 genero: bookGenre,
-                preco: preco,
                 idadeIndicativa: parseInt(bookAge, 10), 
                 descricao: bookDescription,
                 qtdDisponivel: parseInt(bookQuantityAvailable, 10), 
-                qtdTotal: parseInt(bookQuantityTotal, 10), 
-                preco: parseFloat(preco.replace(',', '.')) 
+                qtdTotal: parseInt(bookQuantityTotal, 10),  
             };
 
             let livroAjax = {
@@ -238,35 +226,68 @@ $(document).ready(function() {
                 descricao: bookDescription,
                 qtdDisponivel: parseInt(bookQuantityAvailable, 10), 
                 qtdTotal: parseInt(bookQuantityTotal, 10), 
-                preco: parseFloat(preco.replace(',', '.')) 
             };
 
-            $.ajax({
-                url: 'livro/livro',
-                type: 'POST',
-                contentType: 'application/json', 
-                data: JSON.stringify(livroAjax), 
-                success: function(response) {
-                    if(!response){
-                        alert("O livro cadastrado já existe na base de dados");
-                    }else {
-                        console.log('Livro cadastrado com sucesso:', response);
-                        alert("Livro cadastrado com sucesso!");
-                        dataLivros.push(newBook);
-                        renderBooks(dataLivros);
-                    }
-                    
-                },
-                error: function(xhr, status, error) {
-                    console.error('Erro na requisição:', xhr.responseText);
-                    
-                }
-            });
-    
-            $('#formNovoLivro')[0].reset();
+            switch (control) {
+                case "cadastro":
+                    $.ajax({
+                        url: 'livro',
+                        type: 'POST',
+                        contentType: 'application/json', 
+                        data: JSON.stringify(livroAjax), 
+                        success: function(response) {
+                            if(!response){
+                                alert("O livro cadastrado já existe na base de dados");
+                            }else {
+                                console.log('Livro cadastrado com sucesso:', response);
+                                alert("Livro cadastrado com sucesso!");
+                                dataLivros.push(newBook);
+                                renderBooks(dataLivros);
+                            }
+                            
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Erro na requisição:', xhr.responseText);
+                            
+                        }
+                    });
+                    break;
+                case "atualizar":
+                    let id = $('#formEditarLivro').attr('data-id');
+                    livroAjax.id = id;
+                    console.log('id é: ' + id);
+                    $.ajax({
+                        url: `livro/${id}`,
+                        type: 'PUT',
+                        contentType: 'application/json', 
+                        data: JSON.stringify(livroAjax), 
+                        success: function(response) {
+                            if(!response){
+                                alert("erro ao atualizar os dados");
+                            }else {
+                                console.log('Livro atualizado com sucesso:', response);
+                                alert("Livro atualizado com sucesso!");
+                                const index = dataLivros.findIndex(livro => livro.id === response.id);
+                                if (index !== -1) {
+                                    dataLivros[index] = { ...dataLivros[index], ...response };
+                                } else {
+                                    console.log("Livro com o ID fornecido não encontrado.");
+                                    alert("Livro com o ID fornecido não encontrado.");
+                                    return;
+                                }
+                                renderBooks(dataLivros);
+                            }
+                            
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Erro na requisição:', xhr.responseText);
+                            
+                        }
+                    });
+                    break;
+            }
+            control === "cadastro" ? $('#formNovoLivro')[0].reset() : $('#formEditarLivro')[0].reset();
             $('.container-form-transp').remove();
-    
-            renderBooks(dataLivros);
         };
 
         // Função para renderizar os livros na tabela
@@ -311,13 +332,12 @@ $(document).ready(function() {
                 for (let book of rowsToDisplay) {
                     let disponivel = book.qtdDisponivel >= 1 ? "Sim" : "Não";
                     let row = `
-                        <tr class="row" data-id="${book.idLivro}" data-nome="${book.nome}"  data-autor="${book.autor}" data-genero="${book.genero}" data-idade="${book.idadeIndicativa}" data-descricao="${book.descricao}" data-qtdDisponivel="${book.qtdDisponivel}" data-qtdTotal="${book.qtdTotal}" data-preco="${book.preco}">
+                        <tr class="row" data-id="${book.idLivro}" data-nome="${book.nome}" data-autor="${book.autor}" data-genero="${book.genero}" data-idade="${book.idadeIndicativa}" data-descricao="${book.descricao}" data-qtdDisponivel="${book.qtdDisponivel}" data-qtdTotal="${book.qtdTotal}" data-preco="">
                             <td>${book.nome}</td>
                             <td>${book.autor}</td>
                             <td>${book.genero}</td>
                             <td>${book.idadeIndicativa}</td>
                             <td>${book.descricao}</td>
-                            <td>R$ ${book.preco.toFixed(2)}</td>
                             <td>${book.qtdDisponivel}</td>
                             <td>${book.qtdTotal}</td>
                             <td>${disponivel}</td>
@@ -392,8 +412,7 @@ $(document).ready(function() {
                             idade: row.data('idade'),
                             descricao: row.data('descricao'),
                             qtdDisponivel: row.data('qtddisponivel'),
-                            qtdTotal: row.data('qtdtotal'),
-                            preco: row.data('preco')
+                            qtdTotal: row.data('qtdtotal')
                         };
 
                         editar(bookData);
@@ -430,12 +449,12 @@ $(document).ready(function() {
                 $('#formContainer').html(`
                     <div class="container-form-transp"> 
                         
-                        <form id="formEditarLivro">
-                        <div class="cancelBtn">
-                            <p id="cancelBtnP">
-                                X
-                            </p>
-                        </div>
+                        <form id="formEditarLivro" data-id="${data.id}">
+                            <div class="cancelBtn">
+                                <p id="cancelBtnP">
+                                    X
+                                </p>
+                            </div>
                             
                             <h3>Editar Livro</h3>
 
@@ -471,11 +490,6 @@ $(document).ready(function() {
                             </div>
 
                             <div class="container-form-cadastroCliente">
-                      
-                                <div>
-                                    <label for="precoLivro">Preço do Livro:</label>
-                                    <input type="text" id="precoLivro" name="precoLivro" required placeholder="Digite o preço (ex: 20,00)">
-                                </div>
 
                                 <div>
                                     <label for="qtdDisponivel">Quantidade Disponível:</label>
@@ -496,14 +510,10 @@ $(document).ready(function() {
                 $.each(generos, function(index, genero) {
                     $('#generoLivro').append($("<option>").val(genero.nome).text(genero.nome));
                 });
-
-                $('#precoLivro').mask('000.000.000,00', { reverse: true });
-
-                
+       
                 $('#nomeLivro').val(data.nome);
                 $('#autorLivro').val(data.autor);
                 $('#descricaoLivro').val(data.descricao);
-                $('#precoLivro').val(data.preco);
                 $('#idadeIndicativa').val(data.idade);
                 $('#generoLivro').val(data.genero);
                 $('#qtdDisponivel').val(data.qtdDisponivel);
@@ -513,23 +523,24 @@ $(document).ready(function() {
                     console.log("clicou")
                     $('.container-form-transp').remove();
                 });
+
+                $("#formEditarLivro").off('submit').on('submit', function(e) {
+                    e.preventDefault(); 
+                    let atualizar = "atualizar"
+                    envioFormButton(atualizar);
+                });
             };
 
             const excluir = (data)=>{
                 $('#formContainer').html(`
                     <div class="container-form-transp"> 
                         
-                        <div class="container-excluir" data-id="${data.id}">
-                        
+                        <div class="container-excluir" data-id="${data.id}">     
                             <h3>Você deseja excluir o livro "${data.nome}" do banco de dados?</h3>
-
-
-
                             <div>
                                 <button id="confirmBtnConfirm">SIM</button>
                                 <button id="cancelBtnConfirtmCancel">NÃO</button>
-                            </div>
-                        
+                            </div> 
                         </div>
                     </div>
                 `);
@@ -550,7 +561,7 @@ $(document).ready(function() {
                 console.log("bookId:", bookId); 
                 return new Promise((resolve, reject) => {
                     $.ajax({
-                        url: `livro/livro/${bookId}`,  
+                        url: `livro/${bookId}`,  
                         type: 'DELETE',    
                         success: function(data) {
                             console.log("Dados recebidos:", data);

@@ -6,5 +6,5 @@ import br.com.ads.java.biblioteca.model.Usuario;
 public interface UsuarioDAO {
     Usuario salvar(Usuario usuario);
     List<Usuario> buscarTodos();
-    Usuario atualizar(Usuario usuario);
+    Usuario atualizar(long id, Usuario usuario);
 }

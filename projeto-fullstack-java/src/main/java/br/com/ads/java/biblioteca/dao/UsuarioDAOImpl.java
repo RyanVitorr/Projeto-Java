@@ -80,7 +80,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 
     // atualizar dados cliente
     @Override
-    public Usuario atualizar(Usuario usuario) {
+    public Usuario atualizar(long id, Usuario usuario) {
         String sql = "UPDATE Usuarios SET nome = ?, cpf = ?, email = ?, telefone = ?, data_nascimento = ?, endereco = ? WHERE id_usuario = ?";
     
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {

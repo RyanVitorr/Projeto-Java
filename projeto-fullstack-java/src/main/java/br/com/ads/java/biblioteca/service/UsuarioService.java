@@ -20,8 +20,8 @@ public class UsuarioService {
         return usuarioDAO.buscarTodos();
     }
 
-    public Usuario atualizarUsuario(Usuario usuario) {
-        return usuarioDAO.atualizar(usuario);
+    public Usuario atualizarUsuario(long id, Usuario usuario) {
+        return usuarioDAO.atualizar(id, usuario);
     }
 
 }

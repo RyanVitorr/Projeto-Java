@@ -17,11 +17,10 @@ public class Livro {
     private String descricao;
     private int qtdDisponivel; 
     private int qtdTotal;
-    private float preco;
 
 
     // usa para pegar tds os dados do livro
-    public Livro(int idLivro, String nome, String autor, String genero, int idadeIndicativa, String descricao, int qtdDisponivel, int qtdTotal, float preco) {
+    public Livro(int idLivro, String nome, String autor, String genero, int idadeIndicativa, String descricao, int qtdDisponivel, int qtdTotal) {
         this.idLivro = idLivro;
         this.nome = nome;
         this.autor = autor;
@@ -30,7 +29,6 @@ public class Livro {
         this.descricao = descricao;
         this.qtdDisponivel = qtdDisponivel;
         this.qtdTotal = qtdTotal;
-        this.preco = preco;
     }
 
     public Livro() {}
@@ -52,19 +50,6 @@ public class Livro {
         this.nome = nome;
     }
 
-
-    // usa para criar um novo livro
-    public Livro(String nome, String autor, String genero, int idadeIndicativa, String descricao, int qtdDisponivel, int qtdTotal, float preco) {
-        this.nome = nome;
-        this.autor = autor;
-        this.genero = genero;
-        this.idadeIndicativa = idadeIndicativa;
-        this.descricao = descricao;
-        this.qtdDisponivel = qtdDisponivel;
-        this.qtdTotal = qtdTotal;
-        this.preco = preco;
-    }
-
     // Getters e setters
     public int getIdLivro() {
         return idLivro;
@@ -72,14 +57,6 @@ public class Livro {
 
     public void setIdLivro(int idLivro) {
         this.idLivro = idLivro;
-    }
-
-    public void setPreco(float preco) {
-        this.preco = preco;
-    }
-
-    public float getPreco() {
-        return preco;
     }
 
     public String getNome() {

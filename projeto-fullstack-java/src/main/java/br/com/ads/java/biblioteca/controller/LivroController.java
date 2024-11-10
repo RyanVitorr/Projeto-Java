@@ -1,6 +1,7 @@
 // Classe LivroController 
 package br.com.ads.java.biblioteca.controller;
 import br.com.ads.java.biblioteca.model.Livro;
+import br.com.ads.java.biblioteca.model.Usuario;
 import br.com.ads.java.biblioteca.service.LivroService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.sql.SQLException;
 import java.util.List;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
@@ -27,18 +29,18 @@ public class LivroController {
     @Autowired
     private LivroService livroService;
 
-    @GetMapping("/livro")
+    @GetMapping
     public List<Livro> buscarTodosLivrosr() {
         return livroService.buscarTodosLivros();
     } 
 
-    @PostMapping("/livro")
+    @PostMapping
     public Livro cadastroDeLivro(@RequestBody Livro livro) {
         
         return livroService.salvarLivro(livro);
     }
 
-    @DeleteMapping("/livro/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> excluirLivro(@PathVariable int id) throws SQLException {
         try {
             livroService.excluirLivro(id); 
@@ -51,6 +53,12 @@ public class LivroController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Erro ao excluir o livro: " + e.getMessage());
         }
+    }
+
+    // atualizar cliente
+    @PutMapping("/{id}")
+    public Livro atualizarLivro(@PathVariable Long id, @RequestBody Livro livro) {
+        return livroService.atualizarLivro(id, livro);
     }
     
 }

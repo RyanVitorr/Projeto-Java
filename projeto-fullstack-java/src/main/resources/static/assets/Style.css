@@ -656,7 +656,7 @@ form button[type="submit"]:hover {
 /*-------------------------- dashboard----------------------------- */
 
 .dashboard-container {
-    width: 90%;
+    width: 100%;
     overflow: hidden;
     height: 95%;
     margin: 0 auto;

@@ -29,7 +29,7 @@ public class UsuarioController {
     // atualizar usuario 
     @PutMapping("/{id}")
     public Usuario atualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuario) {
-        return usuarioService.atualizarUsuario(usuario);
+        return usuarioService.atualizarUsuario(id, usuario);
     }
 
 } 

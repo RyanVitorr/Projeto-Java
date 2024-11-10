@@ -31,8 +31,7 @@ public class LivroDAOImpl implements LivroDAO {
                     rs.getInt("idade_indicativa"),
                     rs.getString("descricao"),
                     rs.getInt("qtd_disponivel"),
-                    rs.getInt("qtd_total"),
-                    rs.getFloat("preco")
+                    rs.getInt("qtd_total")
                 ));
             }
         } catch (SQLException e) {
@@ -44,7 +43,7 @@ public class LivroDAOImpl implements LivroDAO {
     // cadastrar novo livro
     @Override
     public Livro salvar(Livro livro) { 
-        String sql = "INSERT INTO livros (nome, autor, genero, idade_indicativa, descricao, qtd_disponivel, qtd_total, preco) VALUES (?, ?, ?, ?, ?, ?, ?, ?) " +
+        String sql = "INSERT INTO livros (nome, autor, genero, idade_indicativa, descricao, qtd_disponivel, qtd_total) VALUES (?, ?, ?, ?, ?, ?, ?, ?) " +
                         "ON CONFLICT (nome, autor) DO NOTHING";
         try (PreparedStatement stmt = connection.prepareStatement(sql)){
             stmt.setString(1, livro.getNome());
@@ -54,7 +53,6 @@ public class LivroDAOImpl implements LivroDAO {
             stmt.setString(5, livro.getDescricao());
             stmt.setInt(6, livro.getQtdDisponivel());
             stmt.setInt(7, livro.getQtdTotal());
-            stmt.setFloat(8, livro.getPreco());
 
             int linhasAfetadas = stmt.executeUpdate();
 
@@ -93,5 +91,29 @@ public class LivroDAOImpl implements LivroDAO {
            
             throw e;
         }
+    }
+
+    @Override
+    public Livro atualizar(long id, Livro livro){
+        String sql = "UPDATE livros SET nome = ?, autor = ?, genero = ?, descricao = ?, idade_indicativa = ?, qtd_disponivel = ?, qtd_total = ? WHERE id = ?";
+    
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, livro.getNome());
+            stmt.setString(2, livro.getAutor());
+            stmt.setString(3, livro.getGenero());
+            stmt.setString(4, livro.getDescricao());
+            stmt.setInt(5, livro.getIdadeIndicativa());
+            stmt.setInt(6, livro.getQtdDisponivel());
+            stmt.setInt(7, livro.getQtdTotal());
+            stmt.setLong(8, id);
+            
+            stmt.executeUpdate();
+            System.out.println("Atualização feita com sucesso!");
+    
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    
+        return livro;
     }
 }

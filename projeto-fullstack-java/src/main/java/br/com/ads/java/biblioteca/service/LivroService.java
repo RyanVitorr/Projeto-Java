@@ -25,4 +25,8 @@ public class LivroService {
     public void excluirLivro(int idLivro) throws SQLException{
         livroDAO.excluir(idLivro);
     }
+
+    public Livro atualizarLivro(long id, Livro livro){
+        return livroDAO.atualizar(id, livro);
+    }
 }
