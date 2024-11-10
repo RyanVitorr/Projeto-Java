@@ -43,16 +43,15 @@ public class LivroController {
         try {
             livroService.excluirLivro(id); 
             return ResponseEntity.ok("Livro excluído com sucesso!"); 
-        } catch (SQLException e) {
-            if (e.getMessage().contains("violação de chave estrangeira")) {
-                
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro: Este livro está vinculado a registros de empréstimos e não pode ser excluído.");
+        }catch (SQLException e) {
+            if (e.getMessage().contains("Este livro está vinculado a registros de empréstimos")) {
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body("Erro: Este livro está vinculado a registros de empréstimos e não pode ser excluído.");
             }
-            
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erro ao excluir o livro: " + e.getMessage());
         }
-        return null;
     }
-
     
 }
 

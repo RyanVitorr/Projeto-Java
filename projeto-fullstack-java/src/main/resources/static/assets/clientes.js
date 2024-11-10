@@ -67,10 +67,6 @@ $(document).ready(function() {
                             <label for="endereco">Endereço:</label>
                             <input type="text" id="endereco" name="endereco" required>
                                 
-                            
-
-                            
-
                             <button type="submit">Registrar Cliente</button>
                         </form>
                     </div>
@@ -88,7 +84,8 @@ $(document).ready(function() {
 
                 $("#formNovoCliente").off('submit').on('submit', function(e) {
                     e.preventDefault(); 
-                    envioFormButton();
+                    let cadastro = "cadastro";
+                    envioFormButton(cadastro);
                 });
             }
         });  
@@ -158,8 +155,7 @@ $(document).ready(function() {
         });
 
         // Função para adicionar um novo cliente ao array de objetos ao enviar o formulário (vou modificar. ass: Ryan)
-        const envioFormButton = ()=>{
-
+        const envioFormButton = (control)=>{
             const clienteNome = $('#nomeCompleto').val();
             const clienteCpf = $('#cpf').val();        
             const clienteEmail= $('#email').val();
@@ -203,29 +199,61 @@ $(document).ready(function() {
 
             console.log(clienteNascimento);
 
-            $.ajax({
-                url: 'usuarios',
-                type: 'POST',
-                contentType: 'application/json', 
-                data: JSON.stringify(clientAjax), 
-                success: function(response) {
-                    if(!response){
-                        alert("O Cliente cadastrado já existe na base de dados");
-                    }else {
-                        console.log('Cliente cadastrado com sucesso:', response);
-                        alert("Cliente cadastrado com sucesso:");
-                        dataClientes.push(newClient);
-                        renderClientes(dataClientes);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('Erro na requisição:', xhr.responseText);   
-                }
-            });
-    
-            $('#formNovoCliente')[0].reset();
+            switch (control) {
+                case "cadastro":
+                    $.ajax({
+                        url: 'usuarios',
+                        type: 'POST',
+                        contentType: 'application/json', 
+                        data: JSON.stringify(clientAjax), 
+                        success: function(response) {
+                            if(!response){
+                                alert("O Cliente cadastrado já existe na base de dados");
+                            }else {
+                                console.log('Cliente cadastrado com sucesso:', response);
+                                alert("Cliente cadastrado com sucesso:");
+                                dataClientes.push(newClient);
+                                renderClientes(dataClientes);
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Erro na requisição:', xhr.responseText);   
+                        }
+                    });
+                    break;
+                case "atualizar":
+                    let id = $(formEditarCliente).attr('data-id');
+                    clientAjax.id = id;
+                    $.ajax({
+                        url: `usuarios/${clientAjax.id}`,
+                        type: 'PUT',
+                        contentType: 'application/json', 
+                        data: JSON.stringify(clientAjax), 
+                        success: function(response) {
+                            if(!response){
+                                alert("Dados invalidos!");
+                            }else {
+                                console.log('Cliente atualizado com sucesso:', response);
+                                alert("Cliente atualizado com sucesso!");
+                                const index = dataClientes.findIndex(cliente => cliente.id === response.id);
+                                if (index !== -1) {
+                                   
+                                    dataClientes[index] = { ...dataClientes[index], ...response };
+                                } else {
+                                    console.log("Cliente com o ID fornecido não encontrado.");
+                                }
+                                renderClientes(dataClientes);
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Erro na requisição:', xhr.responseText);   
+                        }
+                    });
+                    break;
+            }
+            control === "cadastro" ? $('#formNovoCliente')[0].reset() : $('#formEditarCliente')[0].reset();
             $('.container-form-transp').remove();
-    
+            
            
         };
 
@@ -259,7 +287,7 @@ $(document).ready(function() {
                         url: 'emprestimos/porCliente',
                         type: 'GET',
                         cache: false,
-                        data: { clienteId: 1 },
+                        data: { clienteId: clienteId },
                         success: function(data) {
                             console.log("Dados recebidos:", data);  
                             resolve(data);      
@@ -284,10 +312,9 @@ $(document).ready(function() {
         
                 // Adicionar cada cliente como uma nova linha na tabela
                 for (let cliente of rowsToDisplay) {
-                    // Cria uma linha para a tabela de clientes
-                    n = n + 1;
                     let row = `
-                        <tr class="row" data-id="${n}">
+                        <tr class="row" data-id="${cliente.id}" data-nome="${cliente.nome}" data-cpf="${cliente.cpf}" data-email="${cliente.email}" data-idade="${cliente.dataNascimento
+                        }" data-telefone="${cliente.telefone}" data-endereco="${cliente.endereco}">
                             <td>${cliente.nome}</td>
                             <td>${cliente.cpf}</td>
                             <td>${cliente.email}</td>
@@ -303,7 +330,7 @@ $(document).ready(function() {
                     $(".list").append(row);
 
                     // Buscar livros para cada cliente assim que a linha é adicionada
-                    const data = await fetchLivrosForClientes(1);
+                    const data = await fetchLivrosForClientes(cliente.id);
                     if (data.length > 0) {
                         
                         $('.list').append(`<tr class="customer-table" style="display: none;">
@@ -322,12 +349,12 @@ $(document).ready(function() {
                                             <th>Data Prev. Devolução</th>
                                         </tr>
                                     </thead>
-                                    <tbody class="customer-list list-${n}"></tbody>
+                                    <tbody class="customer-list list-${cliente.id}"></tbody>
                                 </table>
                             </td>
                         </tr>`);
                         data.forEach(data => {
-                            $(`.list-${n}`).append(`<tr>
+                            $(`.list-${cliente.id}`).append(`<tr>
                                 <td>${data.livro.nome}</td>
                                 <td>${data.livro.autor}</td>
                                 <td>${data.livro.genero}</td>
@@ -340,7 +367,7 @@ $(document).ready(function() {
                             </tr>`);                           
                         });
                     } else {
-                        console.log(`Nenhum cliente encontrado para o livro ID: ${cliente.idCliente}`);
+                        console.log(`Nenhum cliente encontrado para o livro ID: ${cliente.id}`);
                     }
                 }
         
@@ -356,42 +383,37 @@ $(document).ready(function() {
                         
                         let row = $(event.target).closest('.row');
 
-                        let bookData = {
-                            id: row.data('id'),
-                            nome: row.data('nome'),
-                            autor: row.data('autor'),
-                            genero: row.data('genero'),
-                            idade: row.data('idade'),
-                            descricao: row.data('descricao'),
-                            qtdDisponivel: row.data('qtddisponivel'),
-                            qtdTotal: row.data('qtdtotal'),
-                            preco: row.data('preco')
+                        let clientData = {
+                            id: row.attr('data-id'),
+                            nome: row.attr('data-nome'),
+                            cpf: row.attr('data-cpf'),
+                            email: row.attr('data-email'),
+                            idade: row.attr('data-idade'),
+                            telefone: row.attr('data-telefone'),
+                            endereco: row.attr('data-endereco'),
                         };
-
-                        editar(bookData);
+                        console.log(clientData);
+                        editar(clientData);
                         return;
                     } else if ($(event.target).is('.btn-delete')) {
                         event.stopPropagation();
                         let row = $(event.target).closest('.row');
 
-                        let bookData = {
-                            id: row.data('id'),
-                            nome: row.data('nome')
+                        let clientData = {
+                            id: row.attr('data-id'),
+                            email: row.attr('data-email'),
+                            nome: row.attr('data-nome')
                         };
 
-                        excluir(bookData);
+                        excluir(clientData);
                         return;
                     }
-
                     let customerRow = $(this).next('.customer-table');
             
-                        // Se a linha de clientes já estiver visível, ocultar e sair
                     if (customerRow.is(':visible')) {
                         customerRow.hide();
                         return;
                     }
-            
-                    // Exibir a linha de clientes
                     customerRow.show();
                 }); 
             }
@@ -400,56 +422,68 @@ $(document).ready(function() {
                 $('#formContainer').html(`
                     <div class="container-form-transp"> 
                         
-                        <form id="formEditarLivro">
-                        <div class="cancelBtn">
-                            <p id="cancelBtnP">
-                                X
-                            </p>
-                        </div>
+                        <form id="formEditarCliente" data-id="${data.id}">
+                            <div class="cancelBtn">
+                                <p id="cancelBtnP">
+                                    X
+                                </p>
+                            </div>
                             
-                            <h3>Editar Livro</h3>
+                            <h3>Editar Cliente</h3>
 
-                            <label for="nomeLivro">Nome do Livro:</label>
-                            <input type="text" id="nomeLivro" name="nomeLivro" required>
+                            <div class="container-form-cadastroCliente">
+                                <div>
+                                    <label for="nomeCompleto">Nome Completo:</label>
+                                    <input type="text" id="nomeCompleto" name="nomeCompleto" required>
+                                </div>
+                                            
+                                <div>
+                                    <label for="email">Email:</label>
+                                    <input type="email" id="email" name="email" required>
+                                </div>
+                            </div>
 
-                            <label for="autorLivro">Autor:</label>
-                            <input type="text" id="autorLivro" name="autorLivro" required>
+                            <div class="container-form-cadastroCliente">
+                                <div>
+                                    <label for="cpf">CPF:</label>
+                                    <input type="text" id="cpf" name="cpf" required>
+                                </div>
 
-                            <label for="descricao">Descrição:</label>
-                            <input type="text" id="descricao" name="descricao" required>
+                                <div>
+                                    <label for="telefone">Telefone:</label>
+                                    <input type="text" id="telefone" name="telefone" required>
+                                </div>
 
-                            <label for="preco">Preço:</label>
-                            <input type="number" id="preco" name="preco" required step="0.1">
-
-                            <label for="idadeIndicativa">Idade Indicativa:</label>
-                            <input type="number" id="idadeIndicativa" name="idadeIndicativa" required>
-
-                            <label for="generoLivro">Gênero:</label>
-                            <input type="text" id="generoLivro" name="generoLivro" required>
-
-                            <label for="qtdDisponivel">Quantidade Disponível:</label>
-                            <input type="number" id="qtdDisponivel" name="qtdDisponivel" required>
-
-                            <label for="qtdTotal">Quantidade Total:</label>
-                            <input type="number" id="qtdTotal" name="qtdTotal" required>
-
-                            <button type="submit" id="editarLivarBtn">Confirmar</button>
+                                <div>
+                                    <label for="idade">Nascimento:</label>
+                                    <input type="date" id="idade" name="idade" required>
+                                </div>
+                            </div>
+                               
+                            <label for="endereco">Endereço:</label>
+                            <input type="text" id="endereco" name="endereco" required>
+                                
+                            <button type="submit" id="editarClienteBtn">Confirmar</button>
                         </form>
                     </div>
                 `);
 
-                $('#nomeLivro').val(data.nome);
-                $('#autorLivro').val(data.autor);
-                $('#descricao').val(data.descricao);
-                $('#preco').val(data.preco);
-                $('#idadeIndicativa').val(data.idade);
-                $('#generoLivro').val(data.genero);
-                $('#qtdDisponivel').val(data.qtdDisponivel);
-                $('#qtdTotal').val(data.qtdTotal);
+                $('#nomeCompleto').val(data.nome);
+                $('#email').val(data.email);
+                $('#cpf').val(data.cpf);
+                $('#telefone').val(data.telefone);
+                $('#idade').val(data.idade);
+                $('#endereco').val(data.endereco);
 
                 $('#cancelBtnP').off('click').on('click', function () {
                     console.log("clicou")
                     $('.container-form-transp').remove();
+                });
+
+                $("#formEditarCliente").off('submit').on('submit', function(e) {
+                    e.preventDefault(); 
+                    let atualizar = "atualizar"
+                    envioFormButton(atualizar);
                 });
             };
 
@@ -459,7 +493,7 @@ $(document).ready(function() {
                         
                         <div class="container-excluir">
                         
-                            <h3>Você deseja excluir o livro "${data.nome}" do banco de dados?</h3>
+                            <h3>Você deseja excluir o cliente "${data.nome}" do banco de dados?</h3>
 
 
 
@@ -525,8 +559,6 @@ $(document).ready(function() {
         
             handlePagination();
         }
-
-        
         
     });
 });

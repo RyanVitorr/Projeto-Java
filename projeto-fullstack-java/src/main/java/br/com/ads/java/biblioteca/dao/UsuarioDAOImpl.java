@@ -10,7 +10,6 @@ import java.sql.SQLException;
 import br.com.ads.java.biblioteca.utils.DatabaseUtil;
 import org.springframework.stereotype.Repository;
 import java.sql.Statement;
-import java.time.LocalDate;
 
 @Repository
 public class UsuarioDAOImpl implements UsuarioDAO {
@@ -20,6 +19,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
         this.connection = DatabaseUtil.getConnection();
     }
 
+    // cadastra cliente
     @Override
     public Usuario salvar(Usuario usuario) {
         String sql = "INSERT INTO usuarios (nome, cpf, email, telefone, endereco, data_nascimento) VALUES (?, ?, ?, ?, ?, ?) " +
@@ -36,18 +36,15 @@ public class UsuarioDAOImpl implements UsuarioDAO {
                 
                 java.sql.Date dataNascimentoSQL = java.sql.Date.valueOf(usuario.getDataNascimento()); 
                 stmt.setDate(6, dataNascimentoSQL);
-            } else {
-                System.out.println("O valor de Data de nascimento é nulo");
-                return null; 
             }
 
             int linhasAfetadas = stmt.executeUpdate();
 
             if (linhasAfetadas > 0) {
-                System.out.println("Livro cadastrado com sucesso!");
+                System.out.println("Cliente cadastrado com sucesso!");
                 return usuario;
             } else {
-                System.out.println("O livro já existe na base de dados.");
+                System.out.println("O Cliente já existe na base de dados.");
                 return null;  
             }
 
@@ -57,6 +54,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
         return usuario;
     }
 
+    // pegar tds os clientes
     @Override
     public List<Usuario> buscarTodos() {
         String sql = "SELECT * FROM usuarios";
@@ -80,9 +78,10 @@ public class UsuarioDAOImpl implements UsuarioDAO {
         return usuarios;
     }
 
+    // atualizar dados cliente
     @Override
     public Usuario atualizar(Usuario usuario) {
-        String sql = "UPDATE Usuario SET Nome = ?, cpf = ?, Email = ?, Telefone = ?, DataNascimento = ?, Endereco = ? WHERE id = ?";
+        String sql = "UPDATE Usuarios SET nome = ?, cpf = ?, email = ?, telefone = ?, data_nascimento = ?, endereco = ? WHERE id_usuario = ?";
     
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, usuario.getNome());

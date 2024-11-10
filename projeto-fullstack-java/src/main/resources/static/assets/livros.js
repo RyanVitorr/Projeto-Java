@@ -253,6 +253,7 @@ $(document).ready(function() {
                         console.log('Livro cadastrado com sucesso:', response);
                         alert("Livro cadastrado com sucesso!");
                         dataLivros.push(newBook);
+                        renderBooks(dataLivros);
                     }
                     
                 },
@@ -553,11 +554,20 @@ $(document).ready(function() {
                         type: 'DELETE',    
                         success: function(data) {
                             console.log("Dados recebidos:", data);
-                            resolve(data);  
+                            resolve(data);
+                            alert("Livro excluido com sucesso!")
                             $('.container-form-transp').remove();
+                            dataLivros = dataLivros.filter(livro => livro.id !== bookId);
+                            renderBooks(dataLivros);
                         },
-                        error: function(xhr, status, error) {
-                            alert('Erro: ' + xhr.responseText); 
+                        error: function(xhr, status, error) {            
+                            if (xhr.status === 409) {
+                                alert('Erro: ' + xhr.responseText); 
+                            } else {
+                                alert('Erro ao excluir o livro: ' + xhr.responseText);
+                                $('.container-form-transp').remove();
+                            }
+                            reject(xhr.responseText);
                         }
                     });
                     
