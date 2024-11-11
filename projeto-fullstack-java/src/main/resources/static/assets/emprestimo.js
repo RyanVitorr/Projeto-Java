@@ -1,13 +1,27 @@
 let dataLivros;
+let dataClientes;
 
 const fetchAjax = ()=>{
     $.ajax({
-        url: 'livro/livro',
+        url: 'livro',
         type: 'GET',
         cache: false,
         success: function(data) {
             console.log(data);
             dataLivros = data;
+        },
+        error: function(xhr, status, error) {
+            console.error('Erro na requisição:', xhr.responseText);
+            reject(error); 
+        }
+    });
+    $.ajax({
+        url: '/usuarios',
+        type: 'GET',
+        cache: false,
+        success: function(data) {
+            console.log(data);
+            dataClientes = data;
         },
         error: function(xhr, status, error) {
             console.error('Erro na requisição:', xhr.responseText);
@@ -22,14 +36,10 @@ $(document).ready(function() {
         $('.navbar ul li a').removeClass('toggleBackground');
         $('.navbar ul li a:contains("Emprestimo")').addClass('toggleBackground');
 
-        if($('#formEmprestarLivro').length > 0){
-            return;
-        }
         fetchAjax();
 
         $('.main-content').html(`
                     <form id="formEmprestarLivro">
-                        
                         <div class="container-form">
                             <section id="section-form-container" >
                                 <h3>Emprestar Livro</h3>
@@ -37,7 +47,7 @@ $(document).ready(function() {
                                     <div>
                                         <label for="clientePesquisa">Pesquisar Cliente:</label>
                                         <input type="text" id="clientePesquisa" placeholder="Pesquise o cliente...">
-                                        <ul id="clienteLista"></ul>
+                                        <div class="div-lista-relative"><ul id="clienteLista"></ul></div>
 
                                         <div class="container-form-cadastroCliente">
                                             <div>
@@ -62,10 +72,6 @@ $(document).ready(function() {
                                                 <input type="text" id="telefone" name="telefone" required>
                                             </div>
 
-                                            <div>
-                                                <label for="idade">Nascimento:</label>
-                                                <input type="date" id="idade" name="idade" required>
-                                            </div>
                                         </div>
                                         
                                         <label for="endereco">Endereço:</label>
@@ -76,12 +82,9 @@ $(document).ready(function() {
                                         <label for="livroPesquisa">Pesquisar Livro:</label>
                                         <input type="text" id="livroPesquisa" placeholder="Pesquise o livro...">
                                         <div class="div-lista-relative"><ul id="livroLista"></ul></div>
-                                        
-
-                                        
+     
                                         <div id="container-lista-livros"></div>
 
-                                       
                                         <div id="div-principal-preco-mes">
                                             <div id="contain-preco-mes">
                                                 <div id="div-mes">
@@ -97,7 +100,7 @@ $(document).ready(function() {
                                                     <p id="precoTotalContain"></p>
                                                 </div>
                                             </div>
-                                            
+                                            <button id="btnConfirmPagamento" type="submit">Confirmar Empréstimo</button>
                                         </div>
                                         
                                     </div>
@@ -106,10 +109,26 @@ $(document).ready(function() {
 
                             <section id="section-pagamento-container">
                                 <h3>Metodos de pegamento</h3>
-                                <div id="container-section-pagamento">FAZENDO HTML!!!</div>
+                                <div id="container-section-pagamento">
+                                   <div id="pix-section">
+                                        <h2>Pagamento via Pix</h2>
+                                        <div id="pix-qrcode">
+
+                                        </div>
+
+                                        <div id="area-link"> 
+                                            <input type="text"> </input>
+                                            <button>Copiar link</button>
+                                        </div>
+
+                                        <button id="confirm-payment">Verificar Pagamento</button>
+                                        <p id="payment-status"></p>
+                                    </div>
+                                   
+                                </div>
                             </section>
                         </div>
-                        <button type="submit">Confirmar Empréstimo</button>
+                        
                     </form>
         `);
     
@@ -117,17 +136,56 @@ $(document).ready(function() {
             console.log("clicou")
             $('.container-form-transp').remove();
         });
-
-
         
         $("#section-form-container h3").click(function() {
             $("#container-section-form").slideToggle(); 
             $("#container-section-form").toggleClass("expanded"); 
         });
 
-        $("#section-pagamento-container h3").click(function() {
+        $("#btnConfirmPagamento").click(function() {
+            e.preventDefault();
             $("#container-section-pagamento").slideToggle(); 
             $("#container-section-pagamento").toggleClass("expanded"); 
+
+            $.ajax({
+                url: '/gerar-qrcode',
+                type: 'GET',
+                success: function(data, textStatus, xhr) {
+                    var imgSrc = URL.createObjectURL(xhr.response);
+                    
+                    $('#pix-qrcode').html('<img src="' + imgSrc + '" alt="QR Code">');
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    alert('Erro ao gerar o QR Code');
+                },
+                xhrFields: {
+                    responseType: 'blob'
+                }
+            });
+        });
+
+        $("#formEmprestarLivro").off('submit').on('submit', function(e) {
+            e.preventDefault();
+            
+            $('#confirm-payment').click(function () {
+                $.ajax({
+                    url: '/gerar-qrcode',
+                    type: 'GET',
+                    success: function(data, textStatus, xhr) {
+                        var imgSrc = URL.createObjectURL(xhr.response);
+                        
+                        $('#pix-qrcode').html('<img src="' + imgSrc + '" alt="QR Code">');
+                    },
+                    error: function(xhr, textStatus, errorThrown) {
+                        alert('Erro ao gerar o QR Code');
+                    },
+                    xhrFields: {
+                        responseType: 'blob'
+                    }
+                });
+                
+            });
+           
         });
         
         // Adiciona evento para pesquisa de cliente (exemplo básico)
@@ -141,9 +199,10 @@ $(document).ready(function() {
                 let clientListHtml = "";
                 filteredClients.forEach(client => {
                     clientListHtml += `
-                        <li data-nome="${client.nome}" data-cpf="${client.cpf}" data-telefone="${client.telefone}">
+                        <li data-nome="${client.nome}" data-cpf="${client.cpf}" data-telefone="${client.telefone}" data-email="${client.email}" data-endereco="${client.endereco}" data-id="${client.id}">
                             <strong>Nome:</strong> ${client.nome} <br>
                             <strong>CPF:</strong> ${client.cpf} <br>
+                            <strong>Email:</strong> ${client.email} <br>
                             <strong>Telefone:</strong> ${client.telefone}
                         </li>
                     `;
@@ -154,9 +213,13 @@ $(document).ready(function() {
             }
     
             $('#clienteLista li').on('click', function() {
-                $('#nomeCliente').val($(this).data('nome'));
-                $('#cpfCliente').val($(this).data('cpf'));
-                $('#telefoneCliente').val($(this).data('telefone'));
+                $('#nomeCompleto').val($(this).data('nome'));
+                $('#email').val($(this).data('email'));
+                $('#telefone').val($(this).data('telefone'));
+                $('#cpf').val($(this).data('cpf'));
+                $('#endereco').val($(this).data('endereco'));
+                let clienteId = $(this).data('id');
+                
                 $('#clienteLista').html('');
             });
         });
@@ -197,11 +260,12 @@ $(document).ready(function() {
                 let nomeLivro = $(this).data('nome');
                 let nomeAutor = $(this).data('autor');
                 let generoLivro = $(this).data('genero');
-                let precoLivro = $(this).data('preco'); 
+                let precoLivro = 5.00; 
                 let precoFormatado = precoLivro.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                console.log(precoFormatado)
         
                 let html = `
-                    <div class="contain-livro" data-id="${idLivro}" data-precoUni="${precoLivro}">
+                    <div class="contain-livro" data-id="${idLivro}" data-precoUni="${precoFormatado}">
                         <div class="id-contain">
                             <span>Id</span>
                             <p class="idLivroEmprestimo">${idLivro}</p>
@@ -235,7 +299,11 @@ $(document).ready(function() {
                     </div>
                 `;
         
-                $("#container-lista-livros").append(html);
+                if ($("#container-lista-livros").find(`.contain-livro[data-id="${idLivro}"]`).length === 0) {
+                    $("#container-lista-livros").append(html);
+                } else {
+                    alert("Este livro já foi adicionado à lista.");
+                }
         
                 $('#livroLista').html('');
         
@@ -248,16 +316,10 @@ $(document).ready(function() {
                         default: return 0;
                     }
                 }
-                   
-                const calcularTaxaExtra = (quantidadeLivros)=>{
-                    return (quantidadeLivros - 1) * 1.00;
-                }
         
                 const calcularTotal = () => {
                     console.log("executou calcularTotal");
                     let totalGeral = 0;
-
-                    let quantidadeInput = parseInt($(this).find('.qtdDesejadaEmprestimo').val());
                 
                     let meses = parseInt($('#tempoAluguel').val());
                 
@@ -283,6 +345,7 @@ $(document).ready(function() {
                 
                             console.log(`Valor total com taxa para livro: ${valorTotalComTaxa}`);
                             $(this).find('.precoFormLivroEmprestimo').html(valorTotalComTaxa.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }));
+                            $(this).attr("data-precoUni", valorTotalComTaxa.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }));
                             
                             totalGeral += valorTotalComTaxa;
                         } else {
