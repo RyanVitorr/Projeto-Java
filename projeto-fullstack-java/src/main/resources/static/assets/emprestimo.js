@@ -41,7 +41,7 @@ $(document).ready(function() {
         $('.main-content').html(`
                     <form id="formEmprestarLivro">
                         <div class="container-form">
-                            <section id="section-form-container" >
+                            <section id="section-form-container" data-idCliente="">
                                 <h3>Emprestar Livro</h3>
                                 <div id="container-section-form">
                                     <div>
@@ -142,32 +142,71 @@ $(document).ready(function() {
             $("#container-section-form").toggleClass("expanded"); 
         });
 
-        $("#btnConfirmPagamento").click(function() {
+        $('#formEmprestarLivro').off('submit').on('submit', function(e){
             e.preventDefault();
-            $("#container-section-pagamento").slideToggle(); 
-            $("#container-section-pagamento").toggleClass("expanded"); 
 
-            $.ajax({
-                url: '/gerar-qrcode',
-                type: 'GET',
-                success: function(data, textStatus, xhr) {
-                    var imgSrc = URL.createObjectURL(xhr.response);
-                    
-                    $('#pix-qrcode').html('<img src="' + imgSrc + '" alt="QR Code">');
-                },
-                error: function(xhr, textStatus, errorThrown) {
-                    alert('Erro ao gerar o QR Code');
-                },
-                xhrFields: {
-                    responseType: 'blob'
-                }
+            let emprestimos = [];
+
+            const obterDataAtual = ()=>{
+                const hoje = new Date();
+                const dia = String(hoje.getDate()).padStart(2, '0');
+                const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+                const ano = hoje.getFullYear();
+                return `${dia}/${mes}/${ano}`;
+            }
+            
+            const calcularDataEntrega = (mesesPrazo)=>{
+                const dataEntrega = new Date();
+                dataEntrega.setMonth(dataEntrega.getMonth() + parseInt(mesesPrazo));
+                const dia = String(dataEntrega.getDate()).padStart(2, '0');
+                const mes = String(dataEntrega.getMonth() + 1).padStart(2, '0');
+                const ano = dataEntrega.getFullYear();
+                return `${dia}/${mes}/${ano}`;
+            }
+
+            // Dados do cliente
+            const idCliente = $('#section-form-container').attr('data-idCliente'); 
+            const tempoAluguel = $('#tempoAluguel').val();
+            const dataAluguel = obterDataAtual();
+            const dataPrevisaoEntrega = calcularDataEntrega(tempoAluguel);
+
+            // Obtenha os IDs e preços dos livros selecionados
+            let livrosSelecionados = [];
+            $('.contain-livro').each(function() {
+                const idLivro = $(this).attr('data-id');
+                const precoLivro = $(this).attr('data-precoUni');
+                livrosSelecionados.push({ idLivro, precoLivro });
             });
+
+            // Cria um objeto com os dados do empréstimo
+            let novoEmprestimo = {
+                idCliente,
+                livros: livrosSelecionados,
+                dataAluguel,
+                dataPrevisaoEntrega
+            };
+
+            // Adiciona o novo empréstimo ao array de empréstimos
+            emprestimos.push(novoEmprestimo);
+            console.log('Empréstimos:', JSON.parse(JSON.stringify(emprestimos)));
+            console.table(emprestimos);
+            emprestimos.forEach((emprestimo, index) => {
+                console.log(`Empréstimo ${index + 1}:`, emprestimo);
+            });
+            console.dir(emprestimos, { depth: null });
+            console.log(JSON.stringify(emprestimos, null, 2));
+
+
+            alert("Empréstimo registrado com sucesso!");
+        
         });
 
-        $("#formEmprestarLivro").off('submit').on('submit', function(e) {
-            e.preventDefault();
-            
-            $('#confirm-payment').click(function () {
+        /*
+            $("#btnConfirmPagamento").click(function() {
+                e.preventDefault();
+                $("#container-section-pagamento").slideToggle(); 
+                $("#container-section-pagamento").toggleClass("expanded"); 
+
                 $.ajax({
                     url: '/gerar-qrcode',
                     type: 'GET',
@@ -183,10 +222,34 @@ $(document).ready(function() {
                         responseType: 'blob'
                     }
                 });
-                
             });
-           
-        });
+        
+            
+
+            $("#formEmprestarLivro").off('submit').on('submit', function(e) {
+            
+                
+                $('#confirm-payment').click(function () {
+                    $.ajax({
+                        url: '/gerar-qrcode',
+                        type: 'GET',
+                        success: function(data, textStatus, xhr) {
+                            var imgSrc = URL.createObjectURL(xhr.response);
+                            
+                            $('#pix-qrcode').html('<img src="' + imgSrc + '" alt="QR Code">');
+                        },
+                        error: function(xhr, textStatus, errorThrown) {
+                            alert('Erro ao gerar o QR Code');
+                        },
+                        xhrFields: {
+                            responseType: 'blob'
+                        }
+                    });
+                    
+                });
+            
+            });
+        */
         
         // Adiciona evento para pesquisa de cliente (exemplo básico)
         $('#clientePesquisa').on('input', function() {
@@ -212,13 +275,14 @@ $(document).ready(function() {
                 $('#clienteLista').html('<li>Nenhum cliente encontrado</li>');
             }
     
-            $('#clienteLista li').on('click', function() {
+            $('#clienteLista li').off('click').on('click', function() {
                 $('#nomeCompleto').val($(this).data('nome'));
                 $('#email').val($(this).data('email'));
                 $('#telefone').val($(this).data('telefone'));
                 $('#cpf').val($(this).data('cpf'));
                 $('#endereco').val($(this).data('endereco'));
                 let clienteId = $(this).data('id');
+                $('#section-form-container').attr('data-idCliente', clienteId)
                 
                 $('#clienteLista').html('');
             });
