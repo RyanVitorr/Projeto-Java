@@ -17,6 +17,8 @@ public class Livro {
     private String descricao;
     private int qtdDisponivel; 
     private int qtdTotal;
+    private float preco;
+    private int qtdAlugada;
 
 
     // usa para pegar tds os dados do livro
@@ -57,6 +59,23 @@ public class Livro {
 
     public void setIdLivro(int idLivro) {
         this.idLivro = idLivro;
+    }
+
+    
+    public void setPreco(float preco) {
+        this.preco = preco;
+    }
+
+    public void setQtdAlugada(int qtdAlugada) {
+        this.qtdAlugada = qtdAlugada;
+    }
+
+    public float getPreco() {
+        return preco;
+    }
+
+    public int getQtdAlugada() {
+        return qtdAlugada;
     }
 
     public String getNome() {

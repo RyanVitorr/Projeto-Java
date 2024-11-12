@@ -41,4 +41,8 @@ public class EmprestimoService {
     public List<Emprestimo> historicoDash(Date dataEmprestimo) {
         return emprestimoDAO.historicoDash(dataEmprestimo);
     }
+
+    public Emprestimo novoEmprestimo(Emprestimo emprestimo){
+        return emprestimoDAO.novoEmprestimo(emprestimo);
+    }
 }

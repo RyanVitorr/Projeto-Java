@@ -142,52 +142,60 @@ $(document).ready(function() {
             $("#container-section-form").toggleClass("expanded"); 
         });
 
-        $('#formEmprestarLivro').off('submit').on('submit', function(e){
+        $('#formEmprestarLivro').off('submit').on('submit',async function(e){
             e.preventDefault();
+            console.log("clicou emprestar")
 
             let emprestimos = [];
 
-            const obterDataAtual = ()=>{
+           
+            const obterDataAtual = () => {
                 const hoje = new Date();
                 const dia = String(hoje.getDate()).padStart(2, '0');
                 const mes = String(hoje.getMonth() + 1).padStart(2, '0');
                 const ano = hoje.getFullYear();
-                return `${dia}/${mes}/${ano}`;
+                return `${ano}-${mes}-${dia}`;  
             }
+        
             
-            const calcularDataEntrega = (mesesPrazo)=>{
+            const calcularDataEntrega = (mesesPrazo) => {
                 const dataEntrega = new Date();
                 dataEntrega.setMonth(dataEntrega.getMonth() + parseInt(mesesPrazo));
                 const dia = String(dataEntrega.getDate()).padStart(2, '0');
                 const mes = String(dataEntrega.getMonth() + 1).padStart(2, '0');
                 const ano = dataEntrega.getFullYear();
-                return `${dia}/${mes}/${ano}`;
+                return `${ano}-${mes}-${dia}`; 
             }
 
+
             // Dados do cliente
-            const idCliente = $('#section-form-container').attr('data-idCliente'); 
+            const usuarioId = $('#section-form-container').attr('data-idCliente'); 
             const tempoAluguel = $('#tempoAluguel').val();
-            const dataAluguel = obterDataAtual();
-            const dataPrevisaoEntrega = calcularDataEntrega(tempoAluguel);
+            const dataEmprestimo = obterDataAtual();
+            const dataPrevDevolucao = calcularDataEntrega(tempoAluguel);
+            
 
             // Obtenha os IDs e preços dos livros selecionados
             let livrosSelecionados = [];
             $('.contain-livro').each(function() {
-                const idLivro = $(this).attr('data-id');
-                const precoLivro = $(this).attr('data-precoUni');
-                livrosSelecionados.push({ idLivro, precoLivro });
+                const livroId = $(this).attr('data-id'); 
+                console.log("id livro é : " + livroId);
+                const precoAnt = $(this).attr('data-precoUni');
+                const preco = parseFloat(precoAnt.replace("R$", "").replace(",", ".").trim());
+                const quantidade = $(this).attr('data-qtd');
+                livrosSelecionados.push({ livroId, preco, quantidade });
             });
 
-            // Cria um objeto com os dados do empréstimo
-            let novoEmprestimo = {
-                idCliente,
-                livros: livrosSelecionados,
-                dataAluguel,
-                dataPrevisaoEntrega
+            
+            let novoEmprestimoBase = {
+                usuarioId,
+                dataEmprestimo,
+                dataPrevDevolucao
             };
+            
 
             // Adiciona o novo empréstimo ao array de empréstimos
-            emprestimos.push(novoEmprestimo);
+            emprestimos.push(novoEmprestimoBase);
             console.log('Empréstimos:', JSON.parse(JSON.stringify(emprestimos)));
             console.table(emprestimos);
             emprestimos.forEach((emprestimo, index) => {
@@ -196,8 +204,34 @@ $(document).ready(function() {
             console.dir(emprestimos, { depth: null });
             console.log(JSON.stringify(emprestimos, null, 2));
 
-
-            alert("Empréstimo registrado com sucesso!");
+           
+            async function criarEmprestimo(livro) {
+                let novoEmprestimo = {
+                    ...novoEmprestimoBase,
+                    livroId: livro.livroId,
+                    preco: livro.preco,
+                    quantidade: livro.quantidade
+                };
+        
+                console.log('novo Empréstimo:', JSON.parse(JSON.stringify(novoEmprestimo)));
+        
+                try {
+                    let response = await $.ajax({
+                        url: '/emprestimos',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(novoEmprestimo),
+                    });
+                    console.log('Emprestimo criado:', response);
+                } catch (error) {
+                    console.error('Erro ao criar empréstimo:', error);
+                }
+            }
+        
+            // Processa os empréstimos de forma assíncrona e sequencial
+            for (let livro of livrosSelecionados) {
+                await criarEmprestimo(livro);
+            }
         
         });
 
@@ -262,7 +296,7 @@ $(document).ready(function() {
                 let clientListHtml = "";
                 filteredClients.forEach(client => {
                     clientListHtml += `
-                        <li data-nome="${client.nome}" data-cpf="${client.cpf}" data-telefone="${client.telefone}" data-email="${client.email}" data-endereco="${client.endereco}" data-id="${client.id}">
+                        <li data-nome="${client.nome}" data-cpf="${client.cpf}" data-telefone="${client.telefone}" data-email="${client.email}" data-endereco="${client.endereco}" data-id="${client.id}" data-qtd="1">
                             <strong>Nome:</strong> ${client.nome} <br>
                             <strong>CPF:</strong> ${client.cpf} <br>
                             <strong>Email:</strong> ${client.email} <br>
@@ -400,6 +434,7 @@ $(document).ready(function() {
                                 quantidade = 1;
                                 $(this).find('.qtdDesejadaEmprestimo').val(quantidade);
                             }
+
                             let precoPorMeses = calcularPrecoPorDuracao(meses);
                             let precoLivroTotal = quantidade * precoPorMeses;
                 
@@ -410,6 +445,7 @@ $(document).ready(function() {
                             console.log(`Valor total com taxa para livro: ${valorTotalComTaxa}`);
                             $(this).find('.precoFormLivroEmprestimo').html(valorTotalComTaxa.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }));
                             $(this).attr("data-precoUni", valorTotalComTaxa.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }));
+                            $(this).attr('data-qtd', quantidade);
                             
                             totalGeral += valorTotalComTaxa;
                         } else {

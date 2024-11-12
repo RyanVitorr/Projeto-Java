@@ -22,5 +22,7 @@ public interface EmprestimoDAO {
     // historico dash
     List<Emprestimo> historicoDash(Date dataEmprestimo);
 
+    Emprestimo novoEmprestimo(Emprestimo emprestimo);
+
 }
 

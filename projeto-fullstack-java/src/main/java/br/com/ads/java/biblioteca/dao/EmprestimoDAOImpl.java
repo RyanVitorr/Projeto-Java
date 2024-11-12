@@ -7,6 +7,8 @@ import br.com.ads.java.biblioteca.model.Multa;
 import br.com.ads.java.biblioteca.utils.DatabaseUtil;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Repository;
@@ -248,6 +250,60 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
         return emprestimos;
     }
     
+    @Override
+    public Emprestimo novoEmprestimo(Emprestimo emprestimo) {
+        if (emprestimo == null) {
+            System.out.println("Erro: objeto 'emprestimo' é nulo.");
+            return null;  
+        }
     
+        System.out.println("Data do Empréstimo: " + emprestimo.getDataEmprestimo());
+        System.out.println("ID do Usuário: " + emprestimo.getUsuarioId());
+    
+        LocalDate dataAluguel = emprestimo.getDataEmprestimo();
+        LocalDate dataPrevisaoEntrega = emprestimo.getDataPrevDevolucao();
+    
+        if (dataAluguel == null) {
+            System.out.println("Erro: dataAluguel está nula.");
+            return null;  
+        }
+    
+        if (dataPrevisaoEntrega == null) {
+            System.out.println("Erro: dataPrevisaoEntrega está nula.");
+            return null;  
+        }
+    
+        java.sql.Date dataAluguelSQL = java.sql.Date.valueOf(dataAluguel);
+        java.sql.Date dataPrevisaoEntregaSQL = java.sql.Date.valueOf(dataPrevisaoEntrega);
+    
+        String sql = "INSERT INTO emprestimos (id_usuario, id_livros, preco, data_emprestimo, data_previ_devolucao, quantidade) VALUES (?, ?, ?, ?, ?, ?)";
+    
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, emprestimo.getUsuarioId());
+            stmt.setInt(2, emprestimo.getLivroId());
+            stmt.setDouble(3, emprestimo.getPreco());
+            stmt.setDate(4, dataAluguelSQL);
+            stmt.setDate(5, dataPrevisaoEntregaSQL);
+            stmt.setInt(6, emprestimo.getQuantidade());
+    
+            int linhasAfetadas = stmt.executeUpdate();
+    
+            if (linhasAfetadas > 0) {
+                System.out.println("Empréstimo registrado com sucesso!");
+                return emprestimo; 
+            } else {
+                System.out.println("Erro ao registrar o empréstimo.");
+                return null;
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao registrar o empréstimo: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;  
+    }
+    
+
+
+
 }
 

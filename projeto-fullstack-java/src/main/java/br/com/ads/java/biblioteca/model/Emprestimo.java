@@ -21,6 +21,11 @@ public class Emprestimo {
     private Livro livro;     
     private Multa multa; 
 
+
+
+
+    // novo emprestimo
+    public Emprestimo(){}
     
     // dados historico emprestimo
     public Emprestimo(int idEmprestimo, Usuario usuario, Livro livro, float preco, LocalDate dataEmprestimo, LocalDate dataPrevDevolucao, LocalDate dataDevolucao, int quantidade, float valorMulta) {
@@ -46,8 +51,8 @@ public class Emprestimo {
         this.quantidade = quantidade;
     }
 
-      // dados api idusuario
-      public Emprestimo(int idEmprestimo, Livro livro, float preco, LocalDate dataEmprestimo, LocalDate dataPrevDevolucao, LocalDate dataDevolucao, int quantidade) {
+    // dados api idusuario
+    public Emprestimo(int idEmprestimo, Livro livro, float preco, LocalDate dataEmprestimo, LocalDate dataPrevDevolucao, LocalDate dataDevolucao, int quantidade) {
         this.idEmprestimo = idEmprestimo;
         this.livro = livro;
         this.preco = preco;
@@ -221,11 +226,9 @@ public class Emprestimo {
     
     @Override
     public String toString() {
-        return "Emprestimo [idEmprestimo=" + idEmprestimo + ", usuario=" + usuario + ", livro=" + livro + ", multa=" + multa + ", livroId="
+        return "Emprestimo [idEmprestimo=" + idEmprestimo + ", usuario=" + usuario + ", livroId="
                 + livroId + ", usuarioId=" + usuarioId + ", dataEmprestimo=" + dataEmprestimo + ", dataPrevDevolucao="
-                + dataPrevDevolucao + ", totalLivros=" + totalLivros + ", livrosAtrasados=" + livrosAtrasados
-                + ", totaLivrosAlugados=" + totaLivrosAlugados + ", preco=" + preco + ", dataDevolucao=" + dataDevolucao
-                + ", quantidade=" + quantidade + ", lucroTotal=" + lucroTotal + ", totalUsuarios=" + totalUsuarios +"]";
+                + dataPrevDevolucao + ", totaLivrosAlugados=" + totaLivrosAlugados + ", preco=" + preco + ", quantidade=" + quantidade + "]";
     }
 
     

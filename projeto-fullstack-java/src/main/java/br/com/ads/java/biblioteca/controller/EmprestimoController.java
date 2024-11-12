@@ -2,6 +2,7 @@
 package br.com.ads.java.biblioteca.controller;
 
 import br.com.ads.java.biblioteca.model.Emprestimo;
+import br.com.ads.java.biblioteca.model.Livro;
 import br.com.ads.java.biblioteca.service.EmprestimoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -14,6 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.sql.Date;
 import java.util.List;
 import java.util.Collections;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RestController
 @RequestMapping("/emprestimos")
@@ -73,4 +77,11 @@ public class EmprestimoController {
     public List<Emprestimo> historicoDash(@RequestParam(value = "dataEmprestimo", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date dataEmprestimo) {
         return emprestimoService.historicoDash(dataEmprestimo);
     }
+
+    @PostMapping
+    public Emprestimo novoEmprestimo(@RequestBody Emprestimo emprestimo) {
+        System.out.println(emprestimo);
+        return emprestimoService.novoEmprestimo(emprestimo);
+    }
+    
 }
