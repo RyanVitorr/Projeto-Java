@@ -299,7 +299,7 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
             System.out.println("Erro ao registrar o empréstimo: " + e.getMessage());
             e.printStackTrace();
         }
-        return null;  
+        return emprestimo;  
     }
     
 

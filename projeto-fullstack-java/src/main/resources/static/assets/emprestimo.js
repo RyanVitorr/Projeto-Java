@@ -223,6 +223,7 @@ $(document).ready(function() {
                         data: JSON.stringify(novoEmprestimo),
                     });
                     console.log('Emprestimo criado:', response);
+                    alert('Empréstimo criado com sucesso!');
                 } catch (error) {
                     console.error('Erro ao criar empréstimo:', error);
                 }
