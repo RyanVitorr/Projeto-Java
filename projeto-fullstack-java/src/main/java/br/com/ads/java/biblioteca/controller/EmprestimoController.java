@@ -1,18 +1,14 @@
 // Classe EmprestimoController 
 package br.com.ads.java.biblioteca.controller;
-
 import br.com.ads.java.biblioteca.model.Emprestimo;
-import br.com.ads.java.biblioteca.model.Livro;
 import br.com.ads.java.biblioteca.service.EmprestimoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import java.sql.Date;
 import java.util.List;
 import java.util.Collections;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,8 +23,8 @@ public class EmprestimoController {
     private EmprestimoService emprestimoService;
 
     // idlivro
-    @GetMapping("/porLivro")
-    public ResponseEntity<List<Emprestimo>> buscarEmprestimosPorIdLivro(@RequestParam("idLivro") int idLivro) {
+    @GetMapping("/livro/{idLivro}")
+    public ResponseEntity<List<Emprestimo>> buscarEmprestimosPorIdLivro(@PathVariable int idLivro) {
         System.out.println("Parâmetro idLivro recebido: " + idLivro);
         try {
             List<Emprestimo> emprestimos = emprestimoService.buscarEmprestimosPorIdLivro(idLivro);
@@ -46,8 +42,8 @@ public class EmprestimoController {
     }
     
     // idusuario
-    @GetMapping("/porCliente")
-    public List<Emprestimo> buscarEmprestimosPorIdUsuario(@RequestParam("clienteId") int clienteId) {
+    @GetMapping("/cliente/{clienteId}")
+    public List<Emprestimo> buscarEmprestimosPorIdUsuario(@PathVariable int clienteId) {
         return emprestimoService.buscarEmprestimosPorIdUsuario(clienteId);
     }
 
@@ -68,20 +64,23 @@ public class EmprestimoController {
 
     // dados dash
     @GetMapping("/dadosDash")
-    public List<Emprestimo> dadosDash(@RequestParam(value = "dataEmprestimo", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date dataEmprestimo) {
-        return emprestimoService.buscarDadosDash(dataEmprestimo);
+    public List<Emprestimo> dadosDash(){
+        return emprestimoService.buscarDadosDash();
     }
 
     // historico
     @GetMapping("/historico")
-    public List<Emprestimo> historicoDash(@RequestParam(value = "dataEmprestimo", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date dataEmprestimo) {
-        return emprestimoService.historicoDash(dataEmprestimo);
+    public List<Emprestimo> historicoDash() {
+        return emprestimoService.historicoDash();
     }
 
-    @PostMapping
-    public Emprestimo novoEmprestimo(@RequestBody Emprestimo emprestimo) {
-        System.out.println(emprestimo);
-        return emprestimoService.novoEmprestimo(emprestimo);
+    @PostMapping("/{idUsuario}/{idLivro}")
+    public Emprestimo novoEmprestimo(
+            @PathVariable Long idUsuario,
+            @PathVariable Long idLivro,
+            @RequestBody Emprestimo emprestimo) {
+        System.out.println("ID Usuário: " + idUsuario + ", ID Livro: " + idLivro);
+        return emprestimoService.novoEmprestimo(idUsuario, idLivro, emprestimo);
     }
     
 }

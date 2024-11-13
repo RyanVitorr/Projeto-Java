@@ -4,8 +4,6 @@ import br.com.ads.java.biblioteca.model.Emprestimo;
 import br.com.ads.java.biblioteca.dao.EmprestimoDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.sql.Date;
 import java.util.List;
 
 @Service
@@ -33,16 +31,16 @@ public class EmprestimoService {
     }
 
     // dados dash
-    public List<Emprestimo> buscarDadosDash(Date dataEmprestimo) {
-        return emprestimoDAO.buscarDadosDash(dataEmprestimo);
+    public List<Emprestimo> buscarDadosDash() {
+        return emprestimoDAO.buscarDadosDash();
     }
 
     // historico dash
-    public List<Emprestimo> historicoDash(Date dataEmprestimo) {
-        return emprestimoDAO.historicoDash(dataEmprestimo);
+    public List<Emprestimo> historicoDash() {
+        return emprestimoDAO.historicoDash();
     }
 
-    public Emprestimo novoEmprestimo(Emprestimo emprestimo){
-        return emprestimoDAO.novoEmprestimo(emprestimo);
+    public Emprestimo novoEmprestimo(long idUsuario, long idLivro, Emprestimo emprestimo){
+        return emprestimoDAO.novoEmprestimo(idUsuario, idLivro, emprestimo);
     }
 }

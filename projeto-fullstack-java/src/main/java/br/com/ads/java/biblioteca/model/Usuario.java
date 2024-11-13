@@ -47,9 +47,10 @@ public class Usuario {
         
     }
 
-    public Usuario(String nome, String email) {
+    public Usuario(String nome, String email, int id) {
         this.nome = nome;
         this.email = email;
+        this.id = id;
     }
     
     // Getters e Setters

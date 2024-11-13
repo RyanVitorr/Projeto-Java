@@ -1,8 +1,6 @@
 // Interface EmprestimoDAO 
 package br.com.ads.java.biblioteca.dao;
 import br.com.ads.java.biblioteca.model.Emprestimo;
-
-import java.sql.Date;
 import java.util.List;
 
 public interface EmprestimoDAO {
@@ -17,12 +15,12 @@ public interface EmprestimoDAO {
     List<Emprestimo> buscarEmprestimos();
 
     // dados dash
-    List<Emprestimo> buscarDadosDash(Date dataEmprestimo);
+    List<Emprestimo> buscarDadosDash();
 
     // historico dash
-    List<Emprestimo> historicoDash(Date dataEmprestimo);
+    List<Emprestimo> historicoDash();
 
-    Emprestimo novoEmprestimo(Emprestimo emprestimo);
+    Emprestimo novoEmprestimo(long idUsuario, long idLivro, Emprestimo emprestimo);
 
 }
 

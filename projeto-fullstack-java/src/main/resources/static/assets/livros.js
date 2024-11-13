@@ -297,10 +297,9 @@ $(document).ready(function() {
         
                 return new Promise((resolve, reject) => {
                     $.ajax({
-                        url: 'emprestimos/porLivro',
-                        type: 'GET',
+                        url: `emprestimos/livro/${bookId}`,
+                        method: 'GET',
                         cache: false,
-                        data: { idLivro: bookId },
                         success: function(data) {
                             console.log("Dados recebidos:", data);
                             resolve(data);

@@ -11,12 +11,6 @@ $(document).ready(function () {
         <div class="dashboard-container">
             <div class="dashboard-header">
                 <h1>Dashboard Biblioteca</h1>
-                <div class="date-filter">
-                    <label for="dateRange">Filtrar por Data:</label>
-                    <input type="date" id="startDate" placeholder="Data de Início"> 
-                    <input type="date" id="endDate" placeholder="Data de Fim">
-                    <button id="filterBtn">Filtrar</button>
-                </div>
             </div>
 
             <div class="stats-container">
@@ -86,23 +80,21 @@ $(document).ready(function () {
 
   
     function updateDashboard(data, historico) {
-       console.log("chamou update")
-       console.log("data é: " + data);
-       console.log("historico é: " + historico);
+        console.log("chamou update");
+        console.log("data é: " + data);
+        console.log("historico é: " + historico);
+    
         if (data && data.length > 0) {
             $('#totalLivros').text(data[0].totalLivros);
             $('#totalLivrosAlugados').text(data[0].totaLivrosAlugados);
             $('#totalRecebido').text(`R$ ${data[0].lucroTotal.toFixed(2)}`);
             $('#totalAtraso').text(data[0].livrosAtrasados);
             $('#totalClientes').text(data[0].totalUsuarios);
-            
-            
         }
-        
-       
+    
         if (historico && Array.isArray(historico)) {
             let totalMulta = 0;
-            console.log("verificou historico")
+            console.log("verificou historico");
             historico.forEach(emprestimo => {
                 console.log('Empréstimo:', emprestimo); 
                 const row = `
@@ -122,15 +114,16 @@ $(document).ready(function () {
                 totalMulta = totalMulta + emprestimo.valorMulta;
                 $('#tbody').append(row);
             });
-
+    
             $('#totalAreceber').text(`R$ ${totalMulta.toFixed(2)}`);
         }
     }
     
     function fetchDashboardData(dataEmprestimo) {
+        console.log("no fetch data: " + dataEmprestimo)
         $.ajax({
             url: '/emprestimos/dadosDash', 
-            type: 'GET',
+            method: 'GET',  
             data: {
                 dataEmprestimo: dataEmprestimo || null, 
             },
@@ -143,11 +136,11 @@ $(document).ready(function () {
             }
         });
     }
-
+    
     function fetchDashboardHistorico(dataEmprestimo) {
         $.ajax({
             url: '/emprestimos/historico', 
-            type: 'GET',
+            method: 'GET',  
             data: {
                 dataEmprestimo: dataEmprestimo || null, 
             },
@@ -159,16 +152,18 @@ $(document).ready(function () {
             }
         });
     }
-
+    
     // Função para filtrar por data
     $('.main-content').on('click', '#filterBtn', function () {
-        const startDate = $('#startDate').val();
-        const endDate = $('#endDate').val();
-
-        
-        fetchDashboardData(startDate);
-        fetchDashboardHistorico(startDate);
+        const startDate = $('#startDate').val();  
+        console.log(startDate);
+    
+        if (startDate) {
+            fetchDashboardData(startDate);  
+            fetchDashboardHistorico(startDate);  
+        } else {
+            console.error("Data de início não selecionada.");
+        }
     });
-
     generetHtml();
 });

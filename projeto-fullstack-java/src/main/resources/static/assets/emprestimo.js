@@ -217,7 +217,7 @@ $(document).ready(function() {
         
                 try {
                     let response = await $.ajax({
-                        url: '/emprestimos',
+                        url: `/emprestimos/${novoEmprestimo.usuarioId}/${novoEmprestimo.livroId}`,
                         type: 'POST',
                         contentType: 'application/json',
                         data: JSON.stringify(novoEmprestimo),

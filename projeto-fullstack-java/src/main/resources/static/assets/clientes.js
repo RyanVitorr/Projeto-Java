@@ -281,10 +281,9 @@ $(document).ready(function() {
 
                 return new Promise((resolve, reject) => {
                     $.ajax({
-                        url: 'emprestimos/porCliente',
-                        type: 'GET',
+                        url: `emprestimos/cliente/${clienteId}`,
+                        method: 'GET',
                         cache: false,
-                        data: { clienteId: clienteId },
                         success: function(data) {
                             console.log("Dados recebidos:", data);  
                             resolve(data);      
