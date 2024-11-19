@@ -393,7 +393,10 @@ $(document).ready(function() {
                         <div class="qtd-contain">
                             <span>Quantidade:</span>
                             <input type="number" class="qtdDesejadaEmprestimo" name="qtdDesejadaEmprestimo" min="1" value="1">
+                            
                         </div>
+                        <div><span class="excluir-card-livro">X</span></div>
+                        
         
                     </div>
                 `;

@@ -154,9 +154,6 @@ $(document).ready(function() {
                         <tbody class="list"></tbody>
                     </table>
                 </div>
-
-
-               
             </div>
         `);
 

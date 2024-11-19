@@ -314,6 +314,7 @@ form label {
     border-radius: 8px;
     padding: 5px;
     box-shadow: 0 4px 8px rgb(114, 134, 114);
+    position: relative;
 }
 .contain-livro > div {
     display: flex;
@@ -321,6 +322,15 @@ form label {
     align-items: center;
     justify-content: center;
     width: 40%;
+}
+.contain-livro > div:nth-child(7){
+    width: 5rem;
+    height: 100%;
+    justify-content: flex-start;
+    cursor: pointer;
+}
+.contain-livro div:nth-child(7) > span{
+    padding: 0;
 }
 
 .qtdDesejadaEmprestimo {
@@ -352,6 +362,11 @@ form label {
     font-size: 1.5vmin;
     border-bottom: none;
     color: black;
+}
+
+.excluir-card-livro {
+   padding: 1rem;
+   text-align: top;
 }
 
 #div-principal-preco-mes {
