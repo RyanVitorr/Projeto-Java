@@ -180,8 +180,12 @@ $(document).ready(function() {
             $('.contain-livro').each(function() {
                 const livroId = $(this).attr('data-id'); 
                 console.log("id livro é : " + livroId);
+
                 const precoAnt = $(this).attr('data-precoUni');
-                const preco = parseFloat(precoAnt.replace("R$", "").replace(",", ".").trim());
+                const preco = parseFloat(precoAnt.replace("R$", "").replace(/\./g, "").replace(",", ".").trim());
+
+                console.log('preço ANT: ' + precoAnt);
+                console.log('preco: ' + preco);
                 const quantidade = $(this).attr('data-qtd');
                 livrosSelecionados.push({ livroId, preco, quantidade });
             });
@@ -338,16 +342,17 @@ $(document).ready(function() {
             if (filteredLivros.length > 0) {
                 let livroListHtml = "";
                 filteredLivros.forEach(livro => {
-                    livroListHtml += `
-                        <li data-id="${livro.idLivro}" data-nome="${livro.nome}" data-autor="${livro.autor}" data-idade="${livro.idadeIndicativa}" data-genero="${livro.genero}" data-preco="${livro.preco}" data-qtd="${livro.qtdDisponivel}">
-                            <strong>Nome:</strong> ${livro.nome} <br>
-                            <strong>Autor:</strong> ${livro.autor} <br>
-                            <strong>Idade Indicativa:</strong> ${livro.idadeIndicativa} <br>
-                            <strong>Gênero:</strong> ${livro.genero} <br>
-                            <strong>Preço:</strong> ${livro.preco} <br>
-                            <strong>Qtd Disponível:</strong> ${livro.qtdDisponivel}<br>
-                        </li>
-                    `;
+                    if (livro.qtdDisponivel > 0) {
+                        livroListHtml += `
+                            <li data-id="${livro.idLivro}" data-nome="${livro.nome}" data-autor="${livro.autor}" data-idade="${livro.idadeIndicativa}" data-genero="${livro.genero}" data-preco="${livro.preco}" data-qtd="${livro.qtdDisponivel}">
+                                <strong>Nome:</strong> ${livro.nome} <br>
+                                <strong>Autor:</strong> ${livro.autor} <br>
+                                <strong>Idade Indicativa:</strong> ${livro.idadeIndicativa} <br>
+                                <strong>Gênero:</strong> ${livro.genero} <br>
+                                <strong>Qtd Disponível:</strong> ${livro.qtdDisponivel}<br>
+                            </li>
+                        `;
+                    }
                 });
                 $('#livroLista').html(livroListHtml);  
             } else {
@@ -360,11 +365,12 @@ $(document).ready(function() {
                 let nomeAutor = $(this).data('autor');
                 let generoLivro = $(this).data('genero');
                 let precoLivro = 5.00; 
+                let qtdDisponivel = $(this).data('qtd')
                 let precoFormatado = precoLivro.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
                 console.log(precoFormatado)
         
                 let html = `
-                    <div class="contain-livro" data-id="${idLivro}" data-precoUni="${precoFormatado}">
+                    <div class="contain-livro" data-id="${idLivro}" data-precoUni="${precoFormatado}" data-disponivel="${qtdDisponivel}">
                         <div class="id-contain">
                             <span>Id</span>
                             <p class="idLivroEmprestimo">${idLivro}</p>
@@ -432,11 +438,14 @@ $(document).ready(function() {
                 
                     $('.contain-livro').each(function(index) {
                         let quantidade = parseInt($(this).find('.qtdDesejadaEmprestimo').val());
+                        let disponivel = $(this).attr('data-disponivel');
                         
                         if (!isNaN(quantidade)) { 
-                            if(quantidade < 1){
-                                quantidade = 1;
-                                $(this).find('.qtdDesejadaEmprestimo').val(quantidade);
+                            if(quantidade > disponivel){
+                                alert(`quantidade desejada é maior que a quantidade de livro disponivel`);
+                                $(this).find('.qtdDesejadaEmprestimo').val(disponivel);
+                                quantidade = disponivel;
+                                
                             }
 
                             let precoPorMeses = calcularPrecoPorDuracao(meses);
@@ -445,6 +454,7 @@ $(document).ready(function() {
                             
                             let taxaExtra = (quantidade - 1) * 1.50; 
                             let valorTotalComTaxa = precoLivroTotal + taxaExtra;
+                            console.log(valorTotalComTaxa);
                 
                             console.log(`Valor total com taxa para livro: ${valorTotalComTaxa}`);
                             $(this).find('.precoFormLivroEmprestimo').html(valorTotalComTaxa.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }));
@@ -458,11 +468,15 @@ $(document).ready(function() {
                     });
                     
                     $('#precoTotalContain').html(`${totalGeral.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`);
+                    
                 };
         
-                
+                $('#tempoAluguel').on('change', function(){
+                    console.log("clicou");
+                    calcularTotal();
+        
+                });
                 $('#container-lista-livros').off('input').on('input', '.qtdDesejadaEmprestimo', calcularTotal);
-                $('#container-lista-livros').off('change').on('change', '#tempoAluguel', calcularTotal);
                 calcularTotal();
         
             });

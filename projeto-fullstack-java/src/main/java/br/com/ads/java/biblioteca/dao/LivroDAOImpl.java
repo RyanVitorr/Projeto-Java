@@ -43,7 +43,7 @@ public class LivroDAOImpl implements LivroDAO {
     // cadastrar novo livro
     @Override
     public Livro salvar(Livro livro) { 
-        String sql = "INSERT INTO livros (nome, autor, genero, idade_indicativa, descricao, qtd_disponivel, qtd_total) VALUES (?, ?, ?, ?, ?, ?, ?, ?) " +
+        String sql = "INSERT INTO livros (nome, autor, genero, idade_indicativa, descricao, qtd_disponivel, qtd_total) VALUES (?, ?, ?, ?, ?, ?, ?) " +
                         "ON CONFLICT (nome, autor) DO NOTHING";
         try (PreparedStatement stmt = connection.prepareStatement(sql)){
             stmt.setString(1, livro.getNome());

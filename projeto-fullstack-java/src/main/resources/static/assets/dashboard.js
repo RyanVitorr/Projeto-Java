@@ -95,6 +95,8 @@ $(document).ready(function () {
         if (historico && Array.isArray(historico)) {
             let totalMulta = 0;
             console.log("verificou historico");
+            historico.sort((a, b) => b.livro.idLivro - a.livro.idLivro);
+            historico.sort((a, b) => b.idEmprestimo - a.idEmprestimo);
             historico.forEach(emprestimo => {
                 console.log('Empréstimo:', emprestimo); 
                 const row = `

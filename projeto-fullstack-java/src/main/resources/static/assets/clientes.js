@@ -93,15 +93,7 @@ $(document).ready(function() {
         $('#conteudo-principal').html(`
             <div class="table-wrapper">
                 <div id="div-filter">
-                    <div class="filter-exibir-container">
-                        <label for="entries">Exibir</label>
-                        <select id="entries">
-                            <option value="10">10</option>
-                            <option value="20">20</option>
-                            <option value="30">30</option>
-                        </select>
-                        <span>resultados por página</span>
-                    </div>
+                   
                     <div class="pesquisa-container"><input type="text" id="search" placeholder="Buscar..."></div>
                 </div>
                 <div class="table-container">
@@ -342,7 +334,7 @@ $(document).ready(function() {
                                 <td>${livro.preco}</td>
                                 <td>${livro.quantidade}</td>
                                 <td>${livro.dataEmprestimo}</td>
-                                <td>${livro.dataDevolucao}</td>
+                                <td class="td-data-devolucao">${livro.dataDevolucao == null ? "<button class='devolver-livro'>Devolver</button>" : livro.dataDevolucao}</td>
                                 <td>${livro.dataPrevDevolucao}</td>
                             </tr>`);
                         });
@@ -350,6 +342,14 @@ $(document).ready(function() {
                         console.log(`Nenhum livro encontrado para o cliente ID: ${cliente.id}`);
                     }
                 }
+
+                $(".devolver-livro").off('click').on('click', function(){
+                    const dataAtual = new Date();
+                    console.log("Data atual: ", dataAtual);
+                    const dataFormatada = dataAtual.toISOString().split('T')[0];
+                    console.log("Data formatada: ", dataFormatada);
+                    $(this).parent().html(dataFormatada); 
+                });
         
                 // Adiciona eventos de clique nas linhas dos clientes
                 $('.row').off('click').on('click', function(event) {
@@ -457,30 +457,35 @@ $(document).ready(function() {
             });
             $("#confirmBtnConfirm").off('click').on('click', function() {
                 $.ajax({
-                    url: `usuarios/${clientAjax.id}`,
-                    type: 'PUT',
+                    url: `usuarios/${data.id}`,
+                    type: 'DELETE',
                     contentType: 'application/json', 
-                    data: JSON.stringify(clientAjax), 
                     success: function(response) {
                         if(!response){
                             alert("Dados invalidos!");
                         }else {
-                            console.log('Cliente atualizado com sucesso:', data.id);
-                            alert("Cliente atualizado com sucesso!");
-                            alert(``)
-                            const index = dataClientes.findIndex(cliente => cliente.id === response.id);
+                            console.log('Cliente excluido com sucesso:', data.id);
+                            alert(`Cliente excluido com sucesso!`);
+                            
+                            
+                            const index = dataClientes.findIndex(cliente => cliente.id == data.id);
                             if (index !== -1) {
-                               
-                                dataClientes[index] = { ...dataClientes[index], ...response };
+                              
+                                dataClientes.splice(index, 1);
+                                console.log(`Cliente com ID ${data.id} removido do array.`);
+                                $('.container-form-transp').remove();
                             } else {
                                 console.log("Cliente com o ID fornecido não encontrado.");
+                                $('.container-form-transp').remove();
                             }
+
                             renderClientes(dataClientes);
-                            $('.container-form-transp').remove();
+                            
                         }
                     },
                     error: function(xhr, status, error) {
                         console.error('Erro na requisição:', xhr.responseText);   
+                        alert(`Erro na requisição: ${xhr.responseText}`);
                     }
                 });
                 

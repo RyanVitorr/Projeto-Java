@@ -125,15 +125,6 @@ $(document).ready(function() {
         $('#conteudo-principal').html(`
             <div class="table-wrapper">
                 <div id="div-filter">
-                    <div class="filter-exibir-container">
-                        <label for="entries">Exibir</label>
-                        <select id="entries">
-                            <option value="10">10</option>
-                            <option value="20">20</option>
-                            <option value="30">30</option>
-                        </select>
-                        <span>resultados por página</span>
-                    </div>
                     <div class="pesquisa-container"><input type="text" id="search" placeholder="Buscar..."></div>
                 </div>
                 <div class="table-container">
@@ -170,8 +161,10 @@ $(document).ready(function() {
                     type: 'GET',
                     cache: false,
                     success: function(data) {
-                        console.log(data);
+                        
                         dataLivros = data;
+                        dataLivros.sort((a, b) => b.idLivro - a.idLivro);
+                        console.log(dataLivros);
                         resolve(data);
                     },
                     error: function(xhr, status, error) {
@@ -201,7 +194,7 @@ $(document).ready(function() {
             const bookQuantityTotal = $('#qtdTotal').val();
             
             let newBook = {
-                id: dataLivros.length + 1, 
+                idLivro: dataLivros.length + 1, 
                 nome: bookName,
                 autor: bookAuthor,
                 genero: bookGenre,
@@ -235,6 +228,7 @@ $(document).ready(function() {
                                 console.log('Livro cadastrado com sucesso:', response);
                                 alert("Livro cadastrado com sucesso!");
                                 dataLivros.push(newBook);
+                                dataLivros.sort((a, b) => b.idLivro - a.idLivro);
                                 renderBooks(dataLivros);
                             }
                             
@@ -268,6 +262,7 @@ $(document).ready(function() {
                                     alert("Livro com o ID fornecido não encontrado.");
                                     return;
                                 }
+                                dataLivros.sort((a, b) => b.idLivro - a.idLivro);
                                 renderBooks(dataLivros);
                             }
                             

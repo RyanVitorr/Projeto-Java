@@ -185,8 +185,6 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
     
         return emprestimos;
     }
-    
-    
 
     // historico dash
     @Override
@@ -206,15 +204,13 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
                         rs.getInt("id"),
                         rs.getString("nome")
                     );
-    
-                    
+     
                     Usuario usuario = new Usuario(
                         rs.getString("nome_usuario"),
                         rs.getString("email"),
                         rs.getInt("idU")
                     );
     
-
                     Multa multa = new Multa();
                     multa.setDataPrevDevolucao(rs.getDate("data_previ_devolucao"));
                     multa.setDataDevolucao(rs.getDate("data_devolucao"));
@@ -245,57 +241,67 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
     public Emprestimo novoEmprestimo(long idUsuario, long idLivro, Emprestimo emprestimo) {
         if (emprestimo == null) {
             System.out.println("Erro: objeto 'emprestimo' é nulo.");
-            return null;  
+            return null;
         }
-
+    
         System.out.println("Data do Empréstimo: " + emprestimo.getDataEmprestimo());
         System.out.println("ID do Usuário: " + idUsuario);
         System.out.println("ID do Livro: " + idLivro);
     
-        System.out.println("Data do Empréstimo: " + emprestimo.getDataEmprestimo());
-        System.out.println("ID do Usuário: " + emprestimo.getUsuarioId());
-    
         LocalDate dataAluguel = emprestimo.getDataEmprestimo();
         LocalDate dataPrevisaoEntrega = emprestimo.getDataPrevDevolucao();
     
-        if (dataAluguel == null) {
-            System.out.println("Erro: dataAluguel está nula.");
-            return null;  
-        }
-    
-        if (dataPrevisaoEntrega == null) {
-            System.out.println("Erro: dataPrevisaoEntrega está nula.");
-            return null;  
+        if (dataAluguel == null || dataPrevisaoEntrega == null) {
+            System.out.println("Erro: data do empréstimo ou data de previsão de entrega estão nulas.");
+            return null;
         }
     
         java.sql.Date dataAluguelSQL = java.sql.Date.valueOf(dataAluguel);
         java.sql.Date dataPrevisaoEntregaSQL = java.sql.Date.valueOf(dataPrevisaoEntrega);
     
-        String sql = "INSERT INTO emprestimos (id_usuario, id_livros, preco, data_emprestimo, data_previ_devolucao, quantidade) VALUES (?, ?, ?, ?, ?, ?)";
+        String sqlInsert = "INSERT INTO emprestimos (id_usuario, id_livros, preco, data_emprestimo, data_previ_devolucao, quantidade) VALUES (?, ?, ?, ?, ?, ?)";
+        String sqlUpdate = "UPDATE livros SET qtd_disponivel = qtd_disponivel - ? WHERE id = ?";
     
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setLong(1, idUsuario);
-            stmt.setLong(2, idLivro); 
-            stmt.setDouble(3, emprestimo.getPreco());
-            stmt.setDate(4, dataAluguelSQL);
-            stmt.setDate(5, dataPrevisaoEntregaSQL);
-            stmt.setInt(6, emprestimo.getQuantidade());
+        try {
+
+            try (PreparedStatement stmtInsert = connection.prepareStatement(sqlInsert)) {
+                stmtInsert.setLong(1, idUsuario);
+                stmtInsert.setLong(2, idLivro);
+                stmtInsert.setDouble(3, emprestimo.getPreco());
+                stmtInsert.setDate(4, dataAluguelSQL);
+                stmtInsert.setDate(5, dataPrevisaoEntregaSQL);
+                stmtInsert.setInt(6, emprestimo.getQuantidade());
     
-            int linhasAfetadas = stmt.executeUpdate();
-    
-            if (linhasAfetadas > 0) {
-                System.out.println("Empréstimo registrado com sucesso!");
-                return emprestimo; 
-            } else {
-                System.out.println("Erro ao registrar o empréstimo.");
-                return null;
+                int linhasAfetadas = stmtInsert.executeUpdate();
+                if (linhasAfetadas == 0) {
+                    System.out.println("Erro: Nenhum registro de empréstimo foi inserido.");
+                    connection.rollback(); 
+                    return null;
+                }
             }
+    
+            try (PreparedStatement stmtUpdate = connection.prepareStatement(sqlUpdate)) {
+                stmtUpdate.setInt(1, emprestimo.getQuantidade());
+                stmtUpdate.setLong(2, idLivro);
+    
+                int linhasAfetadas = stmtUpdate.executeUpdate();
+                if (linhasAfetadas == 0) {
+                    System.out.println("Erro: Nenhum registro de livro foi atualizado. Pode não haver estoque suficiente.");
+                    connection.rollback(); 
+                    return null;
+                }
+            }
+    
+            System.out.println("Empréstimo registrado e estoque atualizado com sucesso!");
+            return emprestimo;
+    
         } catch (SQLException e) {
-            System.out.println("Erro ao registrar o empréstimo: " + e.getMessage());
+            System.out.println("Erro durante a transação: " + e.getMessage());
             e.printStackTrace();
+            return null;
         }
-        return emprestimo;  
     }
+    
 
 }
 
