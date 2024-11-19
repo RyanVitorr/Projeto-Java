@@ -119,11 +119,6 @@ $(document).ready(function() {
                         <tbody class="list"></tbody>
                     </table>
                 </div>
-                <div class="pagination">
-                    <button class="prev">Anterior</button>
-                    <span>Página <span id="current-page">1</span></span>
-                    <button class="next">Próxima</button>
-                </div>
             </div>
         `);
 
@@ -274,122 +269,139 @@ $(document).ready(function() {
 
         // Função para renderizar os clientes e seus livros relacionados na tabela
         async function renderClientes(clientsItems) {
-
             // Função para buscar livros de cada cliente
             async function fetchLivrosForClientes(clienteId) {
-                console.log("clienteId:", clienteId); 
-
+                console.log("clienteId:", clienteId);
+        
                 return new Promise((resolve, reject) => {
                     $.ajax({
                         url: `emprestimos/cliente/${clienteId}`,
                         method: 'GET',
                         cache: false,
                         success: function(data) {
-                            console.log("Dados recebidos:", data);  
-                            resolve(data);      
+                            console.log("Dados recebidos:", data);
+                            resolve(data);
                         },
                         error: function(xhr, status, error) {
-                            console.error('Erro na requisição:', xhr.responseText); 
-                            reject(error);     
+                            console.error('Erro na requisição:', xhr.responseText);
+                            reject(error);
                         }
                     });
                 });
             }
-
-            $(".list").html('');  // Limpa a lista de clientes
-
-            // Adicionar cada cliente como uma nova linha na tabela
-            for (let cliente of clientsItems) {
-                let row = `
-                    <tr class="row" data-id="${cliente.id}" data-nome="${cliente.nome}" data-cpf="${cliente.cpf}" data-email="${cliente.email}" data-idade="${cliente.dataNascimento
-                    }" data-telefone="${cliente.telefone}" data-endereco="${cliente.endereco}">
-                        <td>${cliente.nome}</td>
-                        <td>${cliente.cpf}</td>
-                        <td>${cliente.email}</td>
-                        <td>${cliente.telefone}</td>
-                        <td>${cliente.endereco}</td>          
-                        <td class="td-perso">
-                            <button class="btn-edit">✏️</button>
-                            <button class="btn-delete">🗑️</button>
-                        </td>
-                    </tr>
-                `;
-                $(".list").append(row);
-
-                // Buscar livros para cada cliente e adicionar a tabela
-                const data = await fetchLivrosForClientes(cliente.id);
-                if (data.length > 0) {
-                    $('.list').append(`<tr class="customer-table" style="display: none;">
-                        <td colspan="8">
-                            <table class="table customer-list-table">
-                                <thead>
-                                    <tr>
-                                        <th>Nome do Livro</th>
-                                        <th>Autor</th>
-                                        <th>Gênero</th>
-                                        <th>Descrição</th>
-                                        <th>Preço</th>
-                                        <th>Quantidade</th>
-                                        <th>Data Empréstimo</th>
-                                        <th>Data Devolução</th>
-                                        <th>Data Prev. Devolução</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="customer-list list-${cliente.id}"></tbody>
-                            </table>
-                        </td>
-                    </tr>`);
-                    data.forEach(livro => {
-                        $(`.list-${cliente.id}`).append(`<tr>
-                            <td>${livro.livro.nome}</td>
-                            <td>${livro.livro.autor}</td>
-                            <td>${livro.livro.genero}</td>
-                            <td>${livro.livro.descricao}</td>
-                            <td>${livro.preco}</td>
-                            <td>${livro.quantidade}</td>
-                            <td>${livro.dataEmprestimo}</td>
-                            <td>${livro.dataDevolucao}</td>
-                            <td>${livro.dataPrevDevolucao}</td>
+        
+            // Função para exibir clientes
+            async function displayAllClientes(filteredClients = clientsItems) {
+                $(".list").html(''); // Limpa a lista de clientes
+        
+                for (let cliente of filteredClients) {
+                    let row = `
+                        <tr class="row" data-id="${cliente.id}" data-nome="${cliente.nome}" data-cpf="${cliente.cpf}" data-email="${cliente.email}" data-idade="${cliente.dataNascimento}" data-telefone="${cliente.telefone}" data-endereco="${cliente.endereco}">
+                            <td>${cliente.nome}</td>
+                            <td>${cliente.cpf}</td>
+                            <td>${cliente.email}</td>
+                            <td>${cliente.telefone}</td>
+                            <td>${cliente.endereco}</td>          
+                            <td class="td-perso">
+                                <button class="btn-edit">✏️</button>
+                                <button class="btn-delete">🗑️</button>
+                            </td>
+                        </tr>
+                    `;
+                    $(".list").append(row);
+        
+                    // Buscar livros para cada cliente e adicionar à tabela
+                    const data = await fetchLivrosForClientes(cliente.id);
+                    if (data.length > 0) {
+                        $('.list').append(`<tr class="customer-table" style="display: none;">
+                            <td colspan="8">
+                                <table class="table customer-list-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Nome do Livro</th>
+                                            <th>Autor</th>
+                                            <th>Gênero</th>
+                                            <th>Descrição</th>
+                                            <th>Preço</th>
+                                            <th>Quantidade</th>
+                                            <th>Data Empréstimo</th>
+                                            <th>Data Devolução</th>
+                                            <th>Data Prev. Devolução</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="customer-list list-${cliente.id}"></tbody>
+                                </table>
+                            </td>
                         </tr>`);
-                    });
-                } else {
-                    console.log(`Nenhum livro encontrado para o cliente ID: ${cliente.id}`);
+                        data.forEach(livro => {
+                            $(`.list-${cliente.id}`).append(`<tr>
+                                <td>${livro.livro.nome}</td>
+                                <td>${livro.livro.autor}</td>
+                                <td>${livro.livro.genero}</td>
+                                <td>${livro.livro.descricao}</td>
+                                <td>${livro.preco}</td>
+                                <td>${livro.quantidade}</td>
+                                <td>${livro.dataEmprestimo}</td>
+                                <td>${livro.dataDevolucao}</td>
+                                <td>${livro.dataPrevDevolucao}</td>
+                            </tr>`);
+                        });
+                    } else {
+                        console.log(`Nenhum livro encontrado para o cliente ID: ${cliente.id}`);
+                    }
                 }
+        
+                // Adiciona eventos de clique nas linhas dos clientes
+                $('.row').off('click').on('click', function(event) {
+                    if ($(event.target).is('.btn-edit')) {
+                        event.stopPropagation();
+        
+                        let row = $(event.target).closest('.row');
+                        let clientData = {
+                            id: row.attr('data-id'),
+                            nome: row.attr('data-nome'),
+                            cpf: row.attr('data-cpf'),
+                            email: row.attr('data-email'),
+                            idade: row.attr('data-idade'),
+                            telefone: row.attr('data-telefone'),
+                            endereco: row.attr('data-endereco'),
+                        };
+                        editar(clientData);
+                        return;
+                    } else if ($(event.target).is('.btn-delete')) {
+                        event.stopPropagation();
+                        let row = $(event.target).closest('.row');
+                        let clientData = {
+                            id: row.attr('data-id'),
+                            email: row.attr('data-email'),
+                            nome: row.attr('data-nome')
+                        };
+                        excluir(clientData);
+                        return;
+                    }
+        
+                    let customerRow = $(this).next('.customer-table');
+                    customerRow.toggle(); // Alterna a visibilidade da linha de detalhes dos livros
+                });
             }
-
-            // Adiciona eventos de clique nas linhas dos clientes
-            $('.row').off('click').on('click', function(event) {
-                if ($(event.target).is('.btn-edit')) {
-                    event.stopPropagation();
-                    
-                    let row = $(event.target).closest('.row');
-                    let clientData = {
-                        id: row.attr('data-id'),
-                        nome: row.attr('data-nome'),
-                        cpf: row.attr('data-cpf'),
-                        email: row.attr('data-email'),
-                        idade: row.attr('data-idade'),
-                        telefone: row.attr('data-telefone'),
-                        endereco: row.attr('data-endereco'),
-                    };
-                    editar(clientData);
-                    return;
-                } else if ($(event.target).is('.btn-delete')) {
-                    event.stopPropagation();
-                    let row = $(event.target).closest('.row');
-                    let clientData = {
-                        id: row.attr('data-id'),
-                        email: row.attr('data-email'),
-                        nome: row.attr('data-nome')
-                    };
-                    excluir(clientData);
-                    return;
-                }
-                
-                let customerRow = $(this).next('.customer-table');
-                customerRow.toggle(); // Alterna a visibilidade da linha de detalhes dos livros
+        
+            // Atualiza a exibição inicial com todos os itens
+            displayAllClientes(clientsItems);
+        
+            // Filtrar e exibir todos os clientes correspondentes ao termo de busca
+            function filterClientes(term) {
+                return clientsItems.filter(cliente => 
+                    cliente.nome.toLowerCase().includes(term.toLowerCase())
+                );
+            }
+        
+            $("#search").off("input").on("input", function() {
+                const searchTerm = $(this).val().trim();
+                const filteredClients = filterClientes(searchTerm);
+                displayAllClientes(filteredClients);
             });
         }
+        
 
         // Função para editar o cliente
         const editar = (data) => {
@@ -444,7 +456,34 @@ $(document).ready(function() {
                 $('.container-form-transp').remove();
             });
             $("#confirmBtnConfirm").off('click').on('click', function() {
-                $('.container-form-transp').remove();
+                $.ajax({
+                    url: `usuarios/${clientAjax.id}`,
+                    type: 'PUT',
+                    contentType: 'application/json', 
+                    data: JSON.stringify(clientAjax), 
+                    success: function(response) {
+                        if(!response){
+                            alert("Dados invalidos!");
+                        }else {
+                            console.log('Cliente atualizado com sucesso:', data.id);
+                            alert("Cliente atualizado com sucesso!");
+                            alert(``)
+                            const index = dataClientes.findIndex(cliente => cliente.id === response.id);
+                            if (index !== -1) {
+                               
+                                dataClientes[index] = { ...dataClientes[index], ...response };
+                            } else {
+                                console.log("Cliente com o ID fornecido não encontrado.");
+                            }
+                            renderClientes(dataClientes);
+                            $('.container-form-transp').remove();
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Erro na requisição:', xhr.responseText);   
+                    }
+                });
+                
             });
         }
 

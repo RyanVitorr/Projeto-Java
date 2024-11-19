@@ -74,21 +74,19 @@ public class LivroDAOImpl implements LivroDAO {
 
     // excluir livro
     @Override
-    public void excluir(int idLivro) throws SQLException{
+    public void excluir(long idLivro) throws SQLException {
         String sql = "DELETE FROM livros WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, idLivro);
+            stmt.setLong(1, idLivro);
             int rowsAffected = stmt.executeUpdate();
     
             if (rowsAffected == 0) {
                 throw new SQLException("Nenhum livro encontrado com o ID fornecido.");
             }
         } catch (SQLException e) {
-            
             if (e.getMessage().contains("violação de chave estrangeira")) {
                 throw new SQLException("Erro: Este livro está vinculado a registros de empréstimos e não pode ser excluído.");
             }
-           
             throw e;
         }
     }

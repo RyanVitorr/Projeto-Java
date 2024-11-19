@@ -9,7 +9,7 @@ public interface LivroDAO {
     
     Livro salvar(Livro Livro);
   
-    void excluir(int idLivro) throws SQLException;
+    void excluir(long idLivro) throws SQLException;
 
     Livro atualizar(long id, Livro livro);
 

@@ -25,7 +25,6 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
         List<Emprestimo> emprestimos = new ArrayList<>();
         String sql = "SELECT * FROM emprestimos";
 
-
         try (Statement stmt = connection.createStatement(); 
             ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
@@ -40,9 +39,9 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
                 ));
             }
 
-        } catch (SQLException e) {
+        } catch (SQLException error) {
             
-            throw new RuntimeException("Erro ao buscar os empréstimos no banco de dados", e);
+            throw new RuntimeException("Erro ao buscar os empréstimos no banco de dados", error);
         }
 
         return emprestimos;
@@ -59,6 +58,7 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, idUsuario);
+            
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
@@ -296,9 +296,6 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
         }
         return emprestimo;  
     }
-    
-
-
 
 }
 

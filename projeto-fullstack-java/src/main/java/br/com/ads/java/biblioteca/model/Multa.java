@@ -78,7 +78,7 @@ public class Multa {
             LocalDate dataAtual = LocalDate.now();
             LocalDate dataPrev = dataPrevDevolucao.toLocalDate();
 
-            long diasAtraso = ChronoUnit.DAYS.between(dataPrev, dataAtual);
+            long diasAtraso = ChronoUnit.DAYS.between(dataPrev, dataAtual); 
 
             if (diasAtraso > 0) {
                 return diasAtraso * valorDia; 
@@ -93,8 +93,5 @@ public class Multa {
         return "Multa [dataDevolucao=" + dataDevolucao + ", dataPrevDevolucao=" + dataPrevDevolucao + ", valorDia="
                 + valorDia + ", valorMulta=" + valorMulta + ", valorTotalMulta=" + valorTotalMulta + "]";
     }
-
-
-
 
 }

@@ -156,11 +156,7 @@ $(document).ready(function() {
                 </div>
 
 
-                <div class="pagination">
-                    <button class="prev">Anterior</button>
-                    <span>Página <span id="current-page">1</span></span>
-                    <button class="next">Próxima</button>
-                </div>
+               
             </div>
         `);
 
@@ -436,6 +432,54 @@ $(document).ready(function() {
             });
         }
         
+        const excluir = (data) => {
+            $('#formContainer').html(`
+                <div class="container-form-transp"> 
+                    <div class="container-excluir">
+                        <h3>Você deseja excluir o livro "${data.nome}" do banco de dados?</h3>
+                        <div>
+                            <button id="confirmBtnConfirm">SIM</button>
+                            <button id="cancelBtnConfirtmCancel">NÃO</button>
+                        </div>
+                    </div>
+                </div>
+            `);
+            $("#cancelBtnConfirtmCancel").off('click').on('click', function() {
+                $('.container-form-transp').remove();
+            });
+            $("#confirmBtnConfirm").off('click').on('click', function() {
+                $.ajax({
+                    url: `livro/${data.id}`,
+                    type: 'DELETE',
+                    contentType: 'application/json', 
+                    success: function(response) {
+                        if(!response){
+                            alert("Dados invalidos!");
+                        }else {
+                            console.log('Livro excluido com sucesso::', data.id);
+                            alert(`livro excluido com sucesso!`);
+                            
+                            $('.container-form-transp').remove();
+                            const index = dataLivros.findIndex(livro => livro.id === data.id);
+                            if (index !== -1) {
+                              
+                                dataLivros.splice(index, 1);
+                                console.log(`Livro com ID ${data.id} removido do array.`);
+                            } else {
+                                console.log("Livro com o ID fornecido não encontrado.");
+                            }
+
+                            renderBooks(dataLivros);
+                            
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Erro na requisição:', xhr.responseText);   
+                        alert(`Erro na requisição: ${xhr.responseText}`);
+                    }
+                });
+            });
+        }
 
     });
 });

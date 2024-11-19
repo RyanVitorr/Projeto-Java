@@ -1,8 +1,5 @@
 package br.com.ads.java.biblioteca.dao;
-import br.com.ads.java.biblioteca.model.Emprestimo;
-import br.com.ads.java.biblioteca.model.Livro;
 import br.com.ads.java.biblioteca.model.Multa;
-import br.com.ads.java.biblioteca.model.Usuario;
 import br.com.ads.java.biblioteca.utils.DatabaseUtil;
 import java.sql.*;
 import java.util.ArrayList;

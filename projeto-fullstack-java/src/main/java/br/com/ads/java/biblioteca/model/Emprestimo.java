@@ -61,9 +61,6 @@ public class Emprestimo {
         this.dataDevolucao = dataDevolucao;
         this.quantidade = quantidade;
     }
-
-
-
     // dados dashboard
     public Emprestimo(int totalLivros, int livrosAtrasados, int totaLivrosAlugados, float lucroTotal, int totalUsuarios) {
         this.totalLivros = totalLivros;
