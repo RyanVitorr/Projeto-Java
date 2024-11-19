@@ -102,4 +102,27 @@ public class UsuarioDAOImpl implements UsuarioDAO {
         return usuario;
     }
     
+    @Override
+    public void excluirUsuario(long id) throws SQLException{
+        String sql = "DELETE FROM usuarios WHERE id_usuario = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setLong(1, id);
+            int rowsAffected = stmt.executeUpdate();
+    
+            if (rowsAffected == 0) {
+                throw new SQLException("Nenhum usuario encontrado com o ID fornecido.");
+            }
+        } catch (SQLException e) {
+            
+            if (e.getMessage().contains("violação de chave estrangeira")) {
+                throw new SQLException("Erro: Este usuario está vinculado a registros de empréstimos e não pode ser excluído.");
+            }
+           
+            throw e;
+        }
+    }
+
+
+
+
 }

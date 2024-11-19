@@ -1,5 +1,6 @@
 // Classe UsuarioService 
 package br.com.ads.java.biblioteca.service; 
+import java.sql.SQLException;
 import java.util.List;
 import br.com.ads.java.biblioteca.dao.UsuarioDAO; 
 import br.com.ads.java.biblioteca.model.Usuario; 
@@ -24,4 +25,8 @@ public class UsuarioService {
         return usuarioDAO.atualizar(id, usuario);
     }
 
+    public void excluirUsuario(long id)throws SQLException{
+         usuarioDAO.excluirUsuario(id);
+    }
+    
 }
