@@ -22,5 +22,7 @@ public interface EmprestimoDAO {
 
     Emprestimo novoEmprestimo(long idUsuario, long idLivro, Emprestimo emprestimo);
 
+    Emprestimo dataDevolucao(long idEmprestimo, Date dataDevolucao Emprestimo emprestimo);
+
 }
 

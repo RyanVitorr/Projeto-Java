@@ -305,3 +305,29 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
 
 }
 
+@Override
+    public Emprestimo dataDevolucao(long idEmprestimo, Date dataDevolucao Emprestimo emprestimo){
+     String sqlUpdate = "UPDATE emprestimo SET qtd_disponivel = qtd_disponivel = ? WHERE id = ?";
+    
+        try (PreparedStatement stmtUpdate = connection.prepareStatement(sqlUpdate)){
+                stmtUpdate.setDate(1, dataDevolucao());
+                stmtUpdate.setLong(2, idEmprestimo);
+    
+                int linhasAfetadas = stmtUpdate.executeUpdate();
+                if (linhasAfetadas == 0) 
+                    System.out.println("Erro: Nenhum registro de empretimo foi atualizado.");
+                    connection.rollback(); 
+                    return null;
+             
+            
+        
+                 System.out.println("Empréstimo registrado e estoque atualizado com sucesso!");
+                 return emprestimo;
+        }
+        catch (SQLException e) {
+            System.out.println("Erro durante a transação: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
