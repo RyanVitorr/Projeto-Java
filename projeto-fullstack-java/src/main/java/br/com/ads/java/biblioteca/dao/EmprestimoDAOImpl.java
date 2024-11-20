@@ -306,11 +306,11 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
 }
 
 @Override
-    public Emprestimo dataDevolucao(long idEmprestimo, Date dataDevolucao Emprestimo emprestimo){
+    public Emprestimo dataDevolucao(long idEmprestimo, LocalDate dataDevolucao, Emprestimo emprestimo){
      String sqlUpdate = "UPDATE emprestimo SET qtd_disponivel = qtd_disponivel = ? WHERE id = ?";
     
         try (PreparedStatement stmtUpdate = connection.prepareStatement(sqlUpdate)){
-                stmtUpdate.setDate(1, dataDevolucao());
+                stmtUpdate.setDate(1, dataDevolucao);
                 stmtUpdate.setLong(2, idEmprestimo);
     
                 int linhasAfetadas = stmtUpdate.executeUpdate();
