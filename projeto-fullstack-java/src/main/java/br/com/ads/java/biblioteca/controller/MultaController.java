@@ -1,17 +1,10 @@
 package br.com.ads.java.biblioteca.controller;
-import br.com.ads.java.biblioteca.model.Emprestimo;
 import br.com.ads.java.biblioteca.model.Multa;
-import br.com.ads.java.biblioteca.service.EmprestimoService;
 import br.com.ads.java.biblioteca.service.MultaService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Collections;
 

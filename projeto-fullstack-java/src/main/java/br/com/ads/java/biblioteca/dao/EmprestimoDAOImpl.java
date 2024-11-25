@@ -1,9 +1,6 @@
 // Implementação EmprestimoDAOImpl 
 package br.com.ads.java.biblioteca.dao;
-import br.com.ads.java.biblioteca.model.Emprestimo;
-import br.com.ads.java.biblioteca.model.Livro;
-import br.com.ads.java.biblioteca.model.Usuario;
-import br.com.ads.java.biblioteca.model.Multa;
+import br.com.ads.java.biblioteca.model.*;
 import br.com.ads.java.biblioteca.utils.DatabaseUtil;
 import java.sql.*;
 import java.time.LocalDate;
@@ -301,33 +298,31 @@ public class EmprestimoDAOImpl implements EmprestimoDAO {
             return null;
         }
     }
+
+    @Override
+    public void dataDevolucao(long idEmprestimo, LocalDate dataDevolucao) {
+        String sqlUpdate = "UPDATE emprestimoS SET data_devolucao = ? WHERE id_emprestimo = ?";
+
+        java.sql.Date dataDevolucaoFormat = java.sql.Date.valueOf(dataDevolucao);
+
+        try (PreparedStatement stmtUpdate = connection.prepareStatement(sqlUpdate)) {
+            stmtUpdate.setDate(1, dataDevolucaoFormat);
+            stmtUpdate.setLong(2, idEmprestimo);
+
+            int linhasAfetadas = stmtUpdate.executeUpdate();
+            if (linhasAfetadas == 0) {
+                System.out.println("Erro: Nenhum registro de empréstimo foi atualizado.");
+                
+            }
+
+            System.out.println("data devolução atualizado com sucesso!");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     
 
 }
 
-@Override
-    public Emprestimo dataDevolucao(long idEmprestimo, LocalDate dataDevolucao, Emprestimo emprestimo){
-     String sqlUpdate = "UPDATE emprestimo SET qtd_disponivel = qtd_disponivel = ? WHERE id = ?";
-    
-        try (PreparedStatement stmtUpdate = connection.prepareStatement(sqlUpdate)){
-                stmtUpdate.setDate(1, dataDevolucao);
-                stmtUpdate.setLong(2, idEmprestimo);
-    
-                int linhasAfetadas = stmtUpdate.executeUpdate();
-                if (linhasAfetadas == 0) 
-                    System.out.println("Erro: Nenhum registro de empretimo foi atualizado.");
-                    connection.rollback(); 
-                    return null;
-             
-            
-        
-                 System.out.println("Empréstimo registrado e estoque atualizado com sucesso!");
-                 return emprestimo;
-        }
-        catch (SQLException e) {
-            System.out.println("Erro durante a transação: " + e.getMessage());
-            e.printStackTrace();
-            return null;
-        }
-    }
+
     

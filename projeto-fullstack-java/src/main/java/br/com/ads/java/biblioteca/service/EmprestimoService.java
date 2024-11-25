@@ -1,9 +1,10 @@
 // Classe EmprestimoService
 package br.com.ads.java.biblioteca.service;
-import br.com.ads.java.biblioteca.model.Emprestimo; 
+import br.com.ads.java.biblioteca.model.Emprestimo;
 import br.com.ads.java.biblioteca.dao.EmprestimoDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -42,5 +43,9 @@ public class EmprestimoService {
 
     public Emprestimo novoEmprestimo(long idUsuario, long idLivro, Emprestimo emprestimo){
         return emprestimoDAO.novoEmprestimo(idUsuario, idLivro, emprestimo);
+    }
+
+    public void dataDevolucao(long idEmprestimo, LocalDate dataDevolucao){
+        emprestimoDAO.dataDevolucao(idEmprestimo, dataDevolucao);
     }
 }

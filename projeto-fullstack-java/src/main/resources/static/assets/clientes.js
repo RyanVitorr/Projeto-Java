@@ -326,7 +326,7 @@ $(document).ready(function() {
                             </td>
                         </tr>`);
                         data.forEach(livro => {
-                            $(`.list-${cliente.id}`).append(`<tr>
+                            $(`.list-${cliente.id}`).append(`<tr ">
                                 <td>${livro.livro.nome}</td>
                                 <td>${livro.livro.autor}</td>
                                 <td>${livro.livro.genero}</td>
@@ -334,7 +334,7 @@ $(document).ready(function() {
                                 <td>${livro.preco}</td>
                                 <td>${livro.quantidade}</td>
                                 <td>${livro.dataEmprestimo}</td>
-                                <td class="td-data-devolucao">${livro.dataDevolucao == null ? "<button class='devolver-livro'>Devolver</button>" : livro.dataDevolucao}</td>
+                                <td class="td-data-devolucao">${livro.dataDevolucao == null ? `<button data-id='${livro.idEmprestimo}' class='devolver-livro'>Devolver</button>` : livro.dataDevolucao}</td>
                                 <td>${livro.dataPrevDevolucao}</td>
                             </tr>`);
                         });
@@ -343,12 +343,34 @@ $(document).ready(function() {
                     }
                 }
 
-                $(".devolver-livro").off('click').on('click', function(){
+                $(".devolver-livro").off('click').on('click', function(e){
                     const dataAtual = new Date();
                     console.log("Data atual: ", dataAtual);
                     const dataFormatada = dataAtual.toISOString().split('T')[0];
-                    console.log("Data formatada: ", dataFormatada);
-                    $(this).parent().html(dataFormatada); 
+                    console.log("Data formatada: " + dataFormatada);
+                    let idEmprestimo = $(this).data('id');
+                    console.log(idEmprestimo);
+                    console.log("data-idEmprestimo:", $(this).data('id'));
+                    console.log($(this));
+                    $(this).parent().html(dataFormatada);
+                    
+
+                    $.ajax({
+                        url: `emprestimos/${idEmprestimo}`,
+                        type: 'PUT',
+                        contentType: 'application/json',
+                        data: JSON.stringify(dataFormatada),
+                        success: function(response) {
+                            
+                            console.log('Emprestimo atualizado com sucesso!');
+                            alert(`Emprestimo atualizado com sucesso!`);                              
+                            
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Erro na requisição:', xhr.responseText);   
+                            alert(`Erro na requisição: ${xhr.responseText}`);
+                        }
+                    });
                 });
         
                 // Adiciona eventos de clique nas linhas dos clientes

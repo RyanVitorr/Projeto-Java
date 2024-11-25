@@ -5,15 +5,12 @@ import br.com.ads.java.biblioteca.service.EmprestimoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import java.util.List;
-import java.util.Collections;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.time.LocalDate;
+import java.util.*;
 
 @RestController
 @RequestMapping("/emprestimos")
@@ -81,6 +78,11 @@ public class EmprestimoController {
             @RequestBody Emprestimo emprestimo) {
         System.out.println("ID Usuário: " + idUsuario + ", ID Livro: " + idLivro);
         return emprestimoService.novoEmprestimo(idUsuario, idLivro, emprestimo);
+    }
+
+    @PutMapping("/{idEmprestimo}")
+    public void dataDevolucao(@PathVariable Long idEmprestimo, @RequestBody @JsonFormat(pattern = "yyyy-MM-dd") LocalDate dataDevolucao){
+        emprestimoService.dataDevolucao(idEmprestimo, dataDevolucao);
     }
     
 }

@@ -107,26 +107,7 @@ $(document).ready(function() {
                                 </div>
                             </section>
 
-                            <section id="section-pagamento-container">
-                                <h3>Metodos de pegamento</h3>
-                                <div id="container-section-pagamento">
-                                   <div id="pix-section">
-                                        <h2>Pagamento via Pix</h2>
-                                        <div id="pix-qrcode">
-
-                                        </div>
-
-                                        <div id="area-link"> 
-                                            <input type="text"> </input>
-                                            <button>Copiar link</button>
-                                        </div>
-
-                                        <button id="confirm-payment">Verificar Pagamento</button>
-                                        <p id="payment-status"></p>
-                                    </div>
-                                   
-                                </div>
-                            </section>
+                        
                         </div>
                         
                     </form>
