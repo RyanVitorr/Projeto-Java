@@ -113,7 +113,9 @@ $(document).ready(function () {
                         <td>R$ ${emprestimo.valorMulta.toFixed(2)}</td>
                     </tr>
                 `;
-                totalMulta = totalMulta + emprestimo.valorMulta;
+                if (!emprestimo.dataDevolucao) {
+                    totalMulta += emprestimo.valorMulta;
+                }
                 $('#tbody').append(row);
             });
     

@@ -122,154 +122,6 @@ $(document).ready(function() {
             $("#container-section-form").slideToggle(); 
             $("#container-section-form").toggleClass("expanded"); 
         });
-
-        $('#formEmprestarLivro').off('submit').on('submit',async function(e){
-            e.preventDefault();
-            console.log("clicou emprestar")
-
-            let emprestimos = [];
-
-           
-            const obterDataAtual = () => {
-                const hoje = new Date();
-                const dia = String(hoje.getDate()).padStart(2, '0');
-                const mes = String(hoje.getMonth() + 1).padStart(2, '0');
-                const ano = hoje.getFullYear();
-                return `${ano}-${mes}-${dia}`;  
-            }
-        
-            
-            const calcularDataEntrega = (mesesPrazo) => {
-                const dataEntrega = new Date();
-                dataEntrega.setMonth(dataEntrega.getMonth() + parseInt(mesesPrazo));
-                const dia = String(dataEntrega.getDate()).padStart(2, '0');
-                const mes = String(dataEntrega.getMonth() + 1).padStart(2, '0');
-                const ano = dataEntrega.getFullYear();
-                return `${ano}-${mes}-${dia}`; 
-            }
-
-
-            // Dados do cliente
-            const usuarioId = $('#section-form-container').attr('data-idCliente'); 
-            const tempoAluguel = $('#tempoAluguel').val();
-            const dataEmprestimo = obterDataAtual();
-            const dataPrevDevolucao = calcularDataEntrega(tempoAluguel);
-            
-
-            // Obtenha os IDs e preços dos livros selecionados
-            let livrosSelecionados = [];
-            $('.contain-livro').each(function() {
-                const livroId = $(this).attr('data-id'); 
-                console.log("id livro é : " + livroId);
-
-                const precoAnt = $(this).attr('data-precoUni');
-                const preco = parseFloat(precoAnt.replace("R$", "").replace(/\./g, "").replace(",", ".").trim());
-
-                console.log('preço ANT: ' + precoAnt);
-                console.log('preco: ' + preco);
-                const quantidade = $(this).attr('data-qtd');
-                livrosSelecionados.push({ livroId, preco, quantidade });
-            });
-
-            
-            let novoEmprestimoBase = {
-                usuarioId,
-                dataEmprestimo,
-                dataPrevDevolucao
-            };
-            
-
-            // Adiciona o novo empréstimo ao array de empréstimos
-            emprestimos.push(novoEmprestimoBase);
-            console.log('Empréstimos:', JSON.parse(JSON.stringify(emprestimos)));
-            console.table(emprestimos);
-            emprestimos.forEach((emprestimo, index) => {
-                console.log(`Empréstimo ${index + 1}:`, emprestimo);
-            });
-            console.dir(emprestimos, { depth: null });
-            console.log(JSON.stringify(emprestimos, null, 2));
-
-           
-            async function criarEmprestimo(livro) {
-                let novoEmprestimo = {
-                    ...novoEmprestimoBase,
-                    livroId: livro.livroId,
-                    preco: livro.preco,
-                    quantidade: livro.quantidade
-                };
-        
-                console.log('novo Empréstimo:', JSON.parse(JSON.stringify(novoEmprestimo)));
-        
-                try {
-                    let response = await $.ajax({
-                        url: `/emprestimos/${novoEmprestimo.usuarioId}/${novoEmprestimo.livroId}`,
-                        type: 'POST',
-                        contentType: 'application/json',
-                        data: JSON.stringify(novoEmprestimo),
-                    });
-                    console.log('Emprestimo criado:', response);
-                    alert('Empréstimo criado com sucesso!');
-                } catch (error) {
-                    console.error('Erro ao criar empréstimo:', error);
-                }
-            }
-        
-            // Processa os empréstimos de forma assíncrona e sequencial
-            for (let livro of livrosSelecionados) {
-                await criarEmprestimo(livro);
-            }
-        
-        });
-
-        /*
-            $("#btnConfirmPagamento").click(function() {
-                e.preventDefault();
-                $("#container-section-pagamento").slideToggle(); 
-                $("#container-section-pagamento").toggleClass("expanded"); 
-
-                $.ajax({
-                    url: '/gerar-qrcode',
-                    type: 'GET',
-                    success: function(data, textStatus, xhr) {
-                        var imgSrc = URL.createObjectURL(xhr.response);
-                        
-                        $('#pix-qrcode').html('<img src="' + imgSrc + '" alt="QR Code">');
-                    },
-                    error: function(xhr, textStatus, errorThrown) {
-                        alert('Erro ao gerar o QR Code');
-                    },
-                    xhrFields: {
-                        responseType: 'blob'
-                    }
-                });
-            });
-        
-            
-
-            $("#formEmprestarLivro").off('submit').on('submit', function(e) {
-            
-                
-                $('#confirm-payment').click(function () {
-                    $.ajax({
-                        url: '/gerar-qrcode',
-                        type: 'GET',
-                        success: function(data, textStatus, xhr) {
-                            var imgSrc = URL.createObjectURL(xhr.response);
-                            
-                            $('#pix-qrcode').html('<img src="' + imgSrc + '" alt="QR Code">');
-                        },
-                        error: function(xhr, textStatus, errorThrown) {
-                            alert('Erro ao gerar o QR Code');
-                        },
-                        xhrFields: {
-                            responseType: 'blob'
-                        }
-                    });
-                    
-                });
-            
-            });
-        */
         
         // Adiciona evento para pesquisa de cliente (exemplo básico)
         $('#clientePesquisa').on('input', function() {
@@ -387,6 +239,15 @@ $(document).ready(function() {
         
                     </div>
                 `;
+
+
+                $("#container-lista-livros").off('click', '.excluir-card-livro').on('click', '.excluir-card-livro', function () {
+                    $(this).closest('.contain-livro').remove();
+                
+                   
+                    calcularTotal();
+                });
+                
         
                 if ($("#container-lista-livros").find(`.contain-livro[data-id="${idLivro}"]`).length === 0) {
                     $("#container-lista-livros").append(html);
@@ -462,8 +323,118 @@ $(document).ready(function() {
         
             });
 
-           
+        
         });
+
+        $('#formEmprestarLivro').off('submit').on('submit',async function(e){
+            e.preventDefault();
+            console.log("clicou emprestar")
+
+            let emprestimos = [];
+
+           
+            const obterDataAtual = () => {
+                const hoje = new Date();
+                const dia = String(hoje.getDate()).padStart(2, '0');
+                const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+                const ano = hoje.getFullYear();
+                return `${ano}-${mes}-${dia}`;  
+            }
+        
+            
+            const calcularDataEntrega = (mesesPrazo) => {
+                const dataEntrega = new Date();
+                dataEntrega.setMonth(dataEntrega.getMonth() + parseInt(mesesPrazo));
+                const dia = String(dataEntrega.getDate()).padStart(2, '0');
+                const mes = String(dataEntrega.getMonth() + 1).padStart(2, '0');
+                const ano = dataEntrega.getFullYear();
+                return `${ano}-${mes}-${dia}`; 
+            }
+
+
+            // Dados do cliente
+            const usuarioId = $('#section-form-container').attr('data-idCliente'); 
+            const tempoAluguel = $('#tempoAluguel').val();
+            const dataEmprestimo = obterDataAtual();
+            const dataPrevDevolucao = calcularDataEntrega(tempoAluguel);
+            
+
+            // Obtenha os IDs e preços dos livros selecionados
+            let livrosSelecionados = [];
+            $('.contain-livro').each(function() {
+                const livroId = $(this).attr('data-id'); 
+                console.log("id livro é : " + livroId);
+
+                const precoAnt = $(this).attr('data-precoUni');
+                const preco = parseFloat(precoAnt.replace("R$", "").replace(/\./g, "").replace(",", ".").trim());
+
+                console.log('preço ANT: ' + precoAnt);
+                console.log('preco: ' + preco);
+                const quantidade = $(this).attr('data-qtd');
+                livrosSelecionados.push({ livroId, preco, quantidade });
+            });
+
+            
+            let novoEmprestimoBase = {
+                usuarioId,
+                dataEmprestimo,
+                dataPrevDevolucao
+            };
+            
+
+            // Adiciona o novo empréstimo ao array de empréstimos
+            emprestimos.push(novoEmprestimoBase);
+            console.log('Empréstimos:', JSON.parse(JSON.stringify(emprestimos)));
+            console.table(emprestimos);
+            emprestimos.forEach((emprestimo, index) => {
+                console.log(`Empréstimo ${index + 1}:`, emprestimo);
+            });
+            console.dir(emprestimos, { depth: null });
+            console.log(JSON.stringify(emprestimos, null, 2));
+
+           
+            async function criarEmprestimo(livro) {
+                let novoEmprestimo = {
+                    ...novoEmprestimoBase,
+                    livroId: livro.livroId,
+                    preco: livro.preco,
+                    quantidade: livro.quantidade
+                };
+        
+                console.log('novo Empréstimo:', JSON.parse(JSON.stringify(novoEmprestimo)));
+        
+                try {
+                    let response = await $.ajax({
+                        url: `/emprestimos/${novoEmprestimo.usuarioId}/${novoEmprestimo.livroId}`,
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(novoEmprestimo),
+                    });
+                    console.log('Emprestimo criado:', response);
+                    alert('Empréstimo criado com sucesso!');
+                    $("#container-lista-livros").html('');
+                    $('#nomeCompleto').val('');
+                    $('#email').val('');
+                    $('#telefone').val('');
+                    $('#cpf').val('');
+                    $('#endereco').val('');
+                    let clienteId = '';
+                    $('#livroPesquisa').val('');
+                    $('#clientePesquisa').val('');
+                    calcularTotal();
+                } catch (error) {
+                    console.error('Erro ao criar empréstimo:', error);
+                }
+            }
+        
+            // Processa os empréstimos de forma assíncrona e sequencial
+            for (let livro of livrosSelecionados) {
+                await criarEmprestimo(livro);
+            }
+        
+        });
+
+
     }); 
 
 });
